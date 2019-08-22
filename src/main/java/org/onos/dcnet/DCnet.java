@@ -221,7 +221,7 @@ public class DCnet {
 
     private final HostListener hostListener = new InternalHostListener();
 
-    private final PacketProcessor packetProcessor = new LeafPacketProcessor();
+    private final PacketProcessor packetProcessor = new DCnetPacketProcessor();
 
     /* Selector for IPv4 traffic to intercept */
     private final TrafficSelector intercept = DefaultTrafficSelector.builder().matchEthType(Ethernet.TYPE_IPV4).build();
@@ -569,7 +569,7 @@ public class DCnet {
     }
 
     /* Intercepts packets sent to controller */
-    private class LeafPacketProcessor implements PacketProcessor {
+    private class DCnetPacketProcessor implements PacketProcessor {
         @Override
         public void process(PacketContext context) {
             Ethernet eth = context.inPacket().parsed();
@@ -577,13 +577,14 @@ public class DCnet {
                 Device device = deviceService.getDevice(context.inPacket().receivedFrom().deviceId());
                 String id = device.chassisId().toString();
                 SwitchEntry entry = switchDB.get(id);
-                if (entry.getLevel() == LEAF) {
-                    log.info("Leaf received packet with destination: " + eth.getDestinationMAC().toString());
-                    processPacketLeaf(context, eth);
-                }
-                else if (entry.getLevel() == DC) {
-                    log.info("DC received packet with destination: " + eth.getDestinationMAC().toString());
-                    processPacketDc(context, eth);
+                if (entry != null) {
+                    if (entry.getLevel() == LEAF) {
+                        log.info("Leaf received packet with destination: " + eth.getDestinationMAC().toString());
+                        processPacketLeaf(context, eth);
+                    } else if (entry.getLevel() == DC) {
+                        log.info("DC received packet with destination: " + eth.getDestinationMAC().toString());
+                        //processPacketDc(context, eth);
+                    }
                 }
             }
         }
@@ -685,6 +686,7 @@ public class DCnet {
         }
 
         /* Adds default rule to let controller handle packets that come in from the internet */
+        /*
         selector = DefaultTrafficSelector.builder().matchInPort(PortNumber.portNumber(dcRadixDown.get(dc) + dcCount)).matchEthType(Ethernet.TYPE_IPV4);
         treatment = DefaultTrafficTreatment.builder().punt();
         flowRule = DefaultFlowRule.builder()
@@ -696,6 +698,7 @@ public class DCnet {
                 .withPriority(BASE_PRIO + 1500)
                 .build();
         flowRuleService.applyFlowRules(flowRule);
+        */
 
         // TODO: Forward all other traffic to internet
     }

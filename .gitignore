@@ -2,5 +2,5 @@
 config/mininet
 
 # Ignore IntelliJ files
-controller/onos-app-dcnet.iml
-controller/.idea/
+onos-app-dcnet.iml
+.idea/
