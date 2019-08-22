@@ -484,6 +484,7 @@ public class DCnet {
                 flowRuleService.applyFlowRules(flowRule);
                 installedFlows.add(flowRule);
             }
+            context.block();
         }
     }
 
