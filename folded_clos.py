@@ -10,6 +10,7 @@ from argparse import ArgumentParser
 import traceback
 import random
 import time
+import json
 
 # Function to parse the command line arguments
 def parseOptions():
@@ -177,21 +178,26 @@ class FoldedClos(Topo):
 		dc_count = 13 + increment
 
 		# Configuration file for topology that can be used by SDN controller
-		top_config = open("config/mininet/top_config.csv", "w+")
-		top_config.write("dc_count,dc_radix_down,ss_radix_down,")
-		top_config.write("sp_radix_up,sp_radix_down,lf_radix_up,lf_radix_down\n")
+		#top_config = open("config/mininet/top_config.csv", "w+")
+		top_config = {"dc_count" : dc,"config" : []}
 		for i in range(dc):
-			top_config.write(str(dc) + "," + str(spine * ss_ratio) + ",")
-			top_config.write(str(pod) + "," + str(ss_ratio) + ",")
-			top_config.write(str(leaf) + "," + str(spine) + "," + str(fanout) + "\n")
-
+			top_config["config"].append({
+				"dc_radix_down" : spine * ss_ratio,
+				"ss_radix_down" : pod,
+				"sp_radix_up" : ss_ratio,
+				"sp_radix_down" : leaf,
+				"lf_radix_up" : spine,
+				"lf_radix_down" : fanout
+			})
+		config = open("config/mininet/top_config.json", "w+")
+		config.write(json.dumps(top_config, indent = 4))
 		# Configuration file for switches that can be used by SDN controller
-		switch_config = open("config/mininet/switch_config.csv", "w+")
-		switch_config.write("id,name,level,dc,pod,leaf\n")
+		#switch_config = open("config/mininet/switch_config.csv", "w+")
+		switch_config = {"dcs" : [], "supers" : [], "spines" : [], "leaves" : []}
 		
 		# Configuration file for hosts that can be used by SDN controller
-		host_config = open("config/mininet/host_config.csv", "w+")
-		host_config.write("ip,name,leaf,port,rmac\n")
+		#host_config = open("config/mininet/host_config.csv", "w+")
+		host_config = {"hosts" : []}
 		
 		dc_switches = []
 		ss_switches = []
@@ -204,7 +210,13 @@ class FoldedClos(Topo):
 			self.addSwitch(dc_name, ip = ip_addr)
 			switch_count += 1;
 			dc_switches.append(dc_name)
-			switch_config.write(format(dc_count, "x") + "," + dc_name + ",0," + str(d) + ",-1,-1\n")
+			switch_config["dcs"].append({
+				"mac" : dc_count,
+				"name" : dc_name,
+				"dc" : d,
+				"pod" : -1,
+				"leaf" : -1
+			})
 			dc_count += increment
 
 			# Create super spines
@@ -215,7 +227,13 @@ class FoldedClos(Topo):
 				self.addSwitch(ss_name, ip = ip_addr)
 				switch_count += 1;
 				ss_switches.append(ss_name)
-				switch_config.write(format(ss_count, "x") + "," + ss_name + ",1," + str(d) + ",-1,-1\n")
+				switch_config["supers"].append({
+					"mac" : ss_count,
+					"name" : ss_name,
+					"dc" : d,
+					"pod" : -1,
+					"leaf" : -1
+				})
 				ss_count += increment
 
 			# Create a group of leaf and spine switches for every pod
@@ -229,8 +247,13 @@ class FoldedClos(Topo):
 					self.addSwitch(leaf_name, ip = ip_addr)
 					switch_count += 1;
 					leaf_switches.append(leaf_name)
-					switch_config.write(format(leaf_count, "x") + "," + leaf_name + ",3," + str(d) + ",")
-					switch_config.write(str(p) + "," + str(l) + "\n")
+					switch_config["leaves"].append({
+						"mac" : leaf_count,
+						"name" : leaf_name,
+						"dc" : d,
+						"pod" : p,
+						"leaf" : l
+					})
 					leaf_count += increment
 					
 					# Create hosts, designated by letter h, and link to leaf
@@ -263,8 +286,11 @@ class FoldedClos(Topo):
 						rmac_addr += format(h & 0xFF, "02x")
 	
 						self.addHost(host_name, ip = ip_addr + "/12", mac = mac_addr)
-						host_config.write(ip_addr + "," + host_name + "," + leaf_name)
-						host_config.write("," + str(h) + "," + rmac_addr + "," + mac_addr + "\n")
+						host_config["hosts"].append({
+							"ip" : ip_addr,
+							"name" : host_name,
+							"rmac" : rmac_addr
+						})
 						host_count += 1
 						self.addLink(leaf_name, host_name, cls = TCLink, bw = 10, delay = "0.1ms")
 						#self.addLink(leaf_name, host_name)
@@ -276,8 +302,13 @@ class FoldedClos(Topo):
 					ip_addr += format(switch_count & 0xFF, "d") + "/12"
 					self.addSwitch(spine_name, ip = ip_addr)
 					switch_count += 1;
-					switch_config.write(format(spine_count, "x") + "," + spine_name + ",2," + str(d))
-					switch_config.write("," + str(p) + ",-1\n")
+					switch_config["spines"].append({
+						"mac" : spine_count,
+						"name" : spine_name,
+						"dc" : d,
+						"pod" : p,
+						"leaf" : -1
+					})
 					spine_count += increment
 					for l in range(leaf):
 						self.addLink(spine_name, leaf_switches[l + p*leaf + d*pod*leaf],
@@ -300,6 +331,11 @@ class FoldedClos(Topo):
 			for d2 in range(d1 + 1, dc):
 				self.addLink(dc_switches[d1], dc_switches[d2], cls = TCLink, bw = 1000, delay = "50ms")
 				#self.addLink(dc_switches[d1], dc_switches[d2])
+		
+		config = open("config/mininet/switch_config.json", "w+")
+		config.write(json.dumps(switch_config, indent = 4))
+		config = open("config/mininet/host_config.json", "w+")
+		config.write(json.dumps(host_config, indent = 4))
 
 if __name__ == "__main__":
 	net = None
