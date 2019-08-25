@@ -23,6 +23,9 @@ import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.onlab.packet.*;
 import org.onlab.util.KryoNamespace;
 import org.onosproject.core.ApplicationId;
@@ -44,6 +47,8 @@ import org.onosproject.net.packet.*;
 import org.onosproject.net.topology.PathService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.json.simple.parser.JSONParser;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -138,29 +143,17 @@ public class DCnet {
 
     public class HostEntry {
         private String name;
-        private String leaf;
-        private String port;
         private String rmac;
         private String idmac;
 
-        public HostEntry(String name, String leaf, String port, String rmac, String idmac) {
+        public HostEntry(String name, String rmac, String idmac) {
             this.name = name;
-            this.leaf = leaf;
-            this.port = port;
             this.rmac = rmac;
             this.idmac = idmac;
         }
 
         public String getName() {
             return this.name;
-        }
-
-        public String getLeaf() {
-            return this.leaf;
-        }
-
-        public String getPort() {
-            return this.port;
         }
 
         public String getRmac() {
@@ -247,42 +240,24 @@ public class DCnet {
 
         groupCount = 0;
 
+        JSONParser parser = new JSONParser();
+
         try {
             /* Setup switch database by reading fields in switch configuration file */
-            BufferedReader switchConfig = new BufferedReader(new FileReader(configLoc + "switch_config.csv"));
-            String line;
-            switchConfig.readLine();
-            while ((line = switchConfig.readLine()) != null) {
-                String[] config = line.split(",");
-                switchDB.put(config[0], new SwitchEntry(config[1], Integer.parseInt(config[2]),
-                                                        Integer.parseInt(config[3]), Integer.parseInt(config[4]),
-                                                        Integer.parseInt(config[5])));
-            }
-            switchConfig.close();
+            JSONObject config = (JSONObject) parser.parse(new BufferedReader(new FileReader(configLoc + "switch_config.json")));
+            addSwitchConfigs((JSONArray) config.get("dcs"), DC);
+            addSwitchConfigs((JSONArray) config.get("supers"), SUPER);
+            addSwitchConfigs((JSONArray) config.get("spines"), SPINE);
+            addSwitchConfigs((JSONArray) config.get("leaves"), LEAF);
 
             /* Setup host database by reading fields in host configuration file */
-            BufferedReader hostConfig = new BufferedReader(new FileReader(configLoc + "host_config.csv"));
-            hostConfig.readLine();
-            while ((line = hostConfig.readLine()) != null) {
-                String[] config = line.split(",");
-                hostDB.put(config[0], new HostEntry(config[1], config[2], config[3], config[4], config[5]));
-            }
-            hostConfig.close();
+            config = (JSONObject) parser.parse(new BufferedReader(new FileReader(configLoc + "host_config.json")));
+            addHostConfigs((JSONArray) config.get("hosts"));
 
             /* Setup topology specifications by reading fields in topology configuration file */
-            BufferedReader topConfig = new BufferedReader(new FileReader(configLoc + "top_config.csv"));
-            topConfig.readLine();
-            while ((line = topConfig.readLine()) != null) {
-                String[] config = line.split(",");
-                dcCount = Integer.parseInt(config[0]);
-                dcRadixDown.add(Integer.parseInt(config[1]));
-                ssRadixDown.add(Integer.parseInt(config[2]));
-                spRadixUp.add(Integer.parseInt(config[3]));
-                spRadixDown.add(Integer.parseInt(config[4]));
-                lfRadixUp.add(Integer.parseInt(config[5]));
-                lfRadixDown.add(Integer.parseInt(config[6]));
-            }
-            topConfig.close();
+            config = (JSONObject) parser.parse(new BufferedReader(new FileReader(configLoc + "host_config.json")));
+            dcCount = (int) config.get("dc_count");
+            addDcConfigs((JSONArray) config.get("config"));
 
             /* Create buckets for each switch type in each data center describing ports to use for ECMP */
             for (int d = 0; d < dcCount; d++) {
@@ -304,8 +279,36 @@ public class DCnet {
             }
         }
 
-        catch (IOException e) {
+        catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void addSwitchConfigs(JSONArray configs, int level) {
+        for(Object obj : configs) {
+            JSONObject config = (JSONObject) obj;
+            SwitchEntry entry = new SwitchEntry((String) config.get("name"), level, (int) config.get("dc"), (int) config.get("pod"), (int) config.get("leaf"));
+            switchDB.put((String)config.get("mac"), entry);
+        }
+    }
+
+    private void addHostConfigs(JSONArray configs) {
+        for(Object obj : configs) {
+            JSONObject config = (JSONObject) obj;
+            HostEntry entry = new HostEntry((String) config.get("name"), (String) config.get("rmac"), (String) config.get("idmac"));
+            hostDB.put((String) config.get("ip"), entry);
+        }
+    }
+
+    private void addDcConfigs(JSONArray configs) {
+        for(Object obj : configs) {
+            JSONObject config = (JSONObject) obj;
+            dcRadixDown.add((int) config.get("dc_radix_down"));
+            ssRadixDown.add((int) config.get("ss_radix_down"));
+            spRadixUp.add((int) config.get("sp_radix_up"));
+            spRadixDown.add((int) config.get("sp_radix_down"));
+            lfRadixUp.add((int) config.get("lf_radix_up"));
+            lfRadixDown.add((int) config.get("lf_radix_down"));
         }
     }
 
