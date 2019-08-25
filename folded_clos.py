@@ -211,7 +211,7 @@ class FoldedClos(Topo):
 			switch_count += 1;
 			dc_switches.append(dc_name)
 			switch_config["dcs"].append({
-				"mac" : dc_count,
+				"mac" : format(dc_count, "x"),
 				"name" : dc_name,
 				"dc" : d,
 				"pod" : -1,
@@ -228,7 +228,7 @@ class FoldedClos(Topo):
 				switch_count += 1;
 				ss_switches.append(ss_name)
 				switch_config["supers"].append({
-					"mac" : ss_count,
+					"mac" : format(ss_count, "x"),
 					"name" : ss_name,
 					"dc" : d,
 					"pod" : -1,
@@ -248,7 +248,7 @@ class FoldedClos(Topo):
 					switch_count += 1;
 					leaf_switches.append(leaf_name)
 					switch_config["leaves"].append({
-						"mac" : leaf_count,
+						"mac" : format(leaf_count, "x"),
 						"name" : leaf_name,
 						"dc" : d,
 						"pod" : p,
@@ -289,7 +289,8 @@ class FoldedClos(Topo):
 						host_config["hosts"].append({
 							"ip" : ip_addr,
 							"name" : host_name,
-							"rmac" : rmac_addr
+							"rmac" : rmac_addr,
+							"idmac" : mac_addr
 						})
 						host_count += 1
 						self.addLink(leaf_name, host_name, cls = TCLink, bw = 10, delay = "0.1ms")
@@ -303,7 +304,7 @@ class FoldedClos(Topo):
 					self.addSwitch(spine_name, ip = ip_addr)
 					switch_count += 1;
 					switch_config["spines"].append({
-						"mac" : spine_count,
+						"mac" : format(spine_count, "x"),
 						"name" : spine_name,
 						"dc" : d,
 						"pod" : p,
