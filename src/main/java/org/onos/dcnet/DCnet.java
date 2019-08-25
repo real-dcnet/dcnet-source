@@ -255,7 +255,7 @@ public class DCnet {
             addHostConfigs((JSONArray) config.get("hosts"));
 
             /* Setup topology specifications by reading fields in topology configuration file */
-            config = (JSONObject) parser.parse(new BufferedReader(new FileReader(configLoc + "host_config.json")));
+            config = (JSONObject) parser.parse(new BufferedReader(new FileReader(configLoc + "top_config.json")));
             dcCount = (int) config.get("dc_count");
             addDcConfigs((JSONArray) config.get("config"));
 
