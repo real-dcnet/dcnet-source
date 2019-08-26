@@ -262,7 +262,6 @@ class FoldedClos(Topo):
 
 						# Construct host IPv4 address, first 8 bits are reserved,
 						# last 24 bits uniquely identify a host
-						ip_addr = "10.0.1." + str(host_count & 0xFF)
 						ip_addr = "10.0." + format(host_count >> 8, "d") + "."
 						ip_addr += format(host_count & 0xFF, "d")
 	
@@ -332,6 +331,14 @@ class FoldedClos(Topo):
 			for d2 in range(d1 + 1, dc):
 				self.addLink(dc_switches[d1], dc_switches[d2], cls = TCLink, bw = 1000, delay = "50ms")
 				#self.addLink(dc_switches[d1], dc_switches[d2])
+			host_name = "h" + str(host_count)
+			ip_addr = "10.0." + format(host_count >> 8, "d") + "."
+			ip_addr += format(host_count & 0xFF, "d")
+			self.addHost(host_name, ip = ip_addr, mac = "FF:FF:FF:00:00:" + format(d1, "02d"))
+			host_count += 1
+			self.addLink(dc_switches[d1], host_name, cls = TCLink, bw = 10, delay = "0.1ms")
+
+
 		
 		config = open("config/mininet/switch_config.json", "w+")
 		config.write(json.dumps(switch_config, indent = 4))
