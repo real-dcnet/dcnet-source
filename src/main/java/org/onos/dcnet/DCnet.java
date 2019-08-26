@@ -337,7 +337,7 @@ public class DCnet {
 
     /* Helper function to translate int version of IP (used by ONOS) into String (used in this application) */
     private int ipStrtoInt(String ip) {
-        String[] bytes = ip.split(".");
+        String[] bytes = ip.split("\\.");
         return (Integer.parseInt(bytes[0]) << 24) + (Integer.parseInt(bytes[1]) << 16)
                 + (Integer.parseInt(bytes[2]) << 8) + Integer.parseInt(bytes[3]);
     }
