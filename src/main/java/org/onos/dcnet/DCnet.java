@@ -354,12 +354,9 @@ public class DCnet {
     }
 
     /* Creates rules for packets with new IPv4 destination that a leaf switch receives */
-    private void processPacketLeaf(PacketContext context, Ethernet eth) {
+    private void processPacketLeaf(PacketContext context, Ethernet eth, Device device, SwitchEntry entry) {
 
         IPv4 ip = (IPv4) (eth.getPayload());
-        Device device = deviceService.getDevice(context.inPacket().receivedFrom().deviceId());
-        String id = device.chassisId().toString();
-        SwitchEntry entry = switchDB.get(id);
 
         int ipDst = ip.getDestinationAddress();
         int ipSrc = ip.getSourceAddress();
@@ -439,7 +436,7 @@ public class DCnet {
             }
         }
 
-        /* Handle translation for reverse traffic, ie for any responses, if source host is in data center */
+        /* Handle translation for reverse traffic that may come in response, if source host is in data center */
         if (hostSrc != null) {
 
             byte[] bytesSrc = hostSrc.getRmac();
@@ -494,12 +491,9 @@ public class DCnet {
     }
 
     /* Creates rules for packets with new IPv4 destination that a data center switch receives */
-    private void processPacketDc(PacketContext context, Ethernet eth) {
+    private void processPacketDc(PacketContext context, Ethernet eth, Device device, SwitchEntry entry) {
 
         IPv4 ipv4 = (IPv4) (eth.getPayload());
-        Device device = deviceService.getDevice(context.inPacket().receivedFrom().deviceId());
-        String id = device.chassisId().toString();
-        SwitchEntry entry = switchDB.get(id);
 
         int ip = ipv4.getDestinationAddress();
         HostEntry host = hostDB.get(ip);
@@ -587,10 +581,10 @@ public class DCnet {
                 if (entry != null) {
                     if (entry.getLevel() == LEAF) {
                         log.info("Leaf received packet with destination: " + eth.getDestinationMAC().toString());
-                        processPacketLeaf(context, eth);
+                        processPacketLeaf(context, eth, device, entry);
                     } else if (entry.getLevel() == DC) {
                         log.info("DC received packet with destination: " + eth.getDestinationMAC().toString());
-                        //processPacketDc(context, eth);
+                        //processPacketDc(context, eth, device, entry);
                     }
                 }
             }
@@ -692,6 +686,8 @@ public class DCnet {
             flowRuleService.applyFlowRules(flowRule);
         }
 
+        // TODO: Forward all other traffic to internet
+
         /* Adds default rule to let controller handle packets that come in from the internet */
         /*
         selector = DefaultTrafficSelector.builder().matchInPort(PortNumber.portNumber(dcRadixDown.get(dc) + dcCount)).matchEthType(Ethernet.TYPE_IPV4);
@@ -706,8 +702,6 @@ public class DCnet {
                 .build();
         flowRuleService.applyFlowRules(flowRule);
         */
-
-        // TODO: Forward all other traffic to internet
     }
 
     /* Adds flows for super spine switches to forward down to spines and up to the data center switch */
