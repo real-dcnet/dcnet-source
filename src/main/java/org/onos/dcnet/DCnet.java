@@ -584,7 +584,7 @@ public class DCnet {
                         processPacketLeaf(context, eth, device, entry);
                     } else if (entry.getLevel() == DC) {
                         log.info("DC received packet with destination: " + eth.getDestinationMAC().toString());
-                        //processPacketDc(context, eth, device, entry);
+                        processPacketDc(context, eth, device, entry);
                     }
                 }
             }
@@ -688,9 +688,8 @@ public class DCnet {
 
         // TODO: Forward all other traffic to internet
 
-        /* Adds default rule to let controller handle packets that come in from the internet */
-        /*
-        selector = DefaultTrafficSelector.builder().matchInPort(PortNumber.portNumber(dcRadixDown.get(dc) + dcCount)).matchEthType(Ethernet.TYPE_IPV4);
+        /* Adds default rule to let controller handle packets for connections to internet */
+        selector = DefaultTrafficSelector.builder().matchEthType(Ethernet.TYPE_IPV4);
         treatment = DefaultTrafficTreatment.builder().punt();
         flowRule = DefaultFlowRule.builder()
                 .fromApp(appId)
@@ -698,10 +697,9 @@ public class DCnet {
                 .withSelector(selector.build())
                 .withTreatment(treatment.build())
                 .forDevice(device.id())
-                .withPriority(BASE_PRIO + 1500)
+                .withPriority(BASE_PRIO + 100)
                 .build();
         flowRuleService.applyFlowRules(flowRule);
-        */
     }
 
     /* Adds flows for super spine switches to forward down to spines and up to the data center switch */
