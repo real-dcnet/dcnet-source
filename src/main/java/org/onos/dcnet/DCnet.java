@@ -141,10 +141,10 @@ public class DCnet {
 
     public class HostEntry {
         private String name;
-        private String rmac;
-        private String idmac;
+        private byte[] rmac;
+        private byte[] idmac;
 
-        public HostEntry(String name, String rmac, String idmac) {
+        public HostEntry(String name, byte[] rmac, byte[] idmac) {
             this.name = name;
             this.rmac = rmac;
             this.idmac = idmac;
@@ -154,11 +154,11 @@ public class DCnet {
             return this.name;
         }
 
-        public String getRmac() {
+        public byte[] getRmac() {
             return this.rmac;
         }
 
-        public String getIdmac() {
+        public byte[] getIdmac() {
             return this.idmac;
         }
 
@@ -192,7 +192,7 @@ public class DCnet {
     private Map<String, SwitchEntry> switchDB = new TreeMap<>();
 
     /* Maps IP address to a host entry */
-    private Map<String, HostEntry> hostDB = new TreeMap<>();
+    private Map<Integer, HostEntry> hostDB = new TreeMap<>();
 
     /* List of currently active flow rules */
     private List<FlowRule> installedFlows = new ArrayList<>();
@@ -291,8 +291,8 @@ public class DCnet {
     private void addHostConfigs(JsonArray configs) {
         for(JsonValue obj : configs) {
             JsonObject config = obj.asObject();
-            HostEntry entry = new HostEntry(config.get("name").asString(), config.get("rmac").asString(), config.get("idmac").asString());
-            hostDB.put(config.get("ip").asString(), entry);
+            HostEntry entry = new HostEntry(config.get("name").asString(), strToMac(config.get("rmac").asString()), strToMac(config.get("idmac").asString()));
+            hostDB.put(ipStrtoInt(config.get("ip").asString()), entry);
         }
     }
 
@@ -336,19 +336,21 @@ public class DCnet {
     }
 
     /* Helper function to translate int version of IP (used by ONOS) into String (used in this application) */
-    private String integerToIpStr(int ip) {
-        return String.format("%d.%d.%d.%d", (ip >> 24) & 0xFF, (ip >> 16) & 0xFF, (ip >> 8) & 0xFF, ip & 0xFF);
+    private int ipStrtoInt(String ip) {
+        String[] bytes = ip.split(".");
+        return (Integer.parseInt(bytes[0]) << 24) + (Integer.parseInt(bytes[1]) << 16)
+                + (Integer.parseInt(bytes[2]) << 8) + Integer.parseInt(bytes[3]);
     }
 
     /* Helper function to translate String version of MAC (used in this application) into byte[] (used by ONOS) */
-    private MacAddress strToMac(String address) {
+    private byte[] strToMac(String address) {
 
         byte[] bytes = new byte[6];
         String[] octets = address.split(":");
         for (int i = 0; i < 6; i++) {
             bytes[i] = (byte)(Integer.parseInt(octets[i], 16));
         }
-        return new MacAddress(bytes);
+        return bytes;
     }
 
     /* Creates rules for packets with new IPv4 destination that a leaf switch receives */
@@ -361,23 +363,24 @@ public class DCnet {
 
         int ipDst = ip.getDestinationAddress();
         int ipSrc = ip.getSourceAddress();
-        HostEntry hostDst = hostDB.get(integerToIpStr(ipDst));
-        HostEntry hostSrc = hostDB.get(integerToIpStr(ipSrc));
+        HostEntry hostDst = hostDB.get(ipDst);
+        HostEntry hostSrc = hostDB.get(ipSrc);
 
         /* Handle translation for forward direction, ie where current packet is heading, if destination host is in data center */
         if (hostDst != null) {
 
             /* Obtain location information from RMAC address corresponding to IP destination */
-            String[] bytesDst = hostDst.getRmac().split(":");
-            int dcDst = Integer.parseInt(bytesDst[0], 16) * 16 + Integer.parseInt(bytesDst[1].substring(0, 1), 16);
-            int podDst = Integer.parseInt(bytesDst[1].substring(1), 16) * 16 + Integer.parseInt(bytesDst[2], 16);
-            int leafDst = Integer.parseInt(bytesDst[3], 16) * 16 + Integer.parseInt(bytesDst[4].substring(0, 1), 16);
+            byte[] bytesDst = hostDst.getRmac();
+            int dcDst = (((int)bytesDst[0]) << 4) + (bytesDst[1] >> 4);
+            int podDst = ((bytesDst[1] & 0xF) << 8) + bytesDst[2];
+            int leafDst = (((int)bytesDst[3]) << 4) + (bytesDst[4] >> 4);
             TrafficSelector.Builder selectorDst = DefaultTrafficSelector.builder().matchEthType(Ethernet.TYPE_IPV4).matchIPDst(IpPrefix.valueOf(ipDst, 32));
 
             /* If recipient is directly connected to leaf, translate ethernet destination back to recipients's and forward to it */
             if (dcDst == entry.getDc() && podDst == entry.getPod() && leafDst == entry.getLeaf()) {
-                int port = Integer.parseInt(bytesDst[4].substring(1), 16) * 16 + Integer.parseInt(bytesDst[5], 16) + 1;
-                TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder().setEthDst(strToMac(hostDst.getIdmac())).setOutput(PortNumber.portNumber(port));
+                int port = ((bytesDst[4] & 0xF) << 8) + bytesDst[5] + 1;
+                MacAddress hostDstMac = new MacAddress(hostDst.getIdmac());
+                TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder().setEthDst(hostDstMac).setOutput(PortNumber.portNumber(port));
                 FlowRule flowRule = DefaultFlowRule.builder()
                         .fromApp(appId)
                         .makePermanent()
@@ -393,7 +396,7 @@ public class DCnet {
                 Ethernet modifiedMac = new Ethernet();
                 modifiedMac.setEtherType(Ethernet.TYPE_IPV4)
                         .setSourceMACAddress(context.inPacket().parsed().getSourceMACAddress())
-                        .setDestinationMACAddress(strToMac(hostDst.getIdmac()))
+                        .setDestinationMACAddress(hostDstMac)
                         .setPayload(context.inPacket().parsed().getPayload());
                 treatment = DefaultTrafficTreatment.builder().setOutput(PortNumber.portNumber(port));
                 OutboundPacket packet = new DefaultOutboundPacket(device.id(), treatment.build(), ByteBuffer.wrap(modifiedMac.serialize()));
@@ -411,7 +414,8 @@ public class DCnet {
                     groupDescription = new DefaultGroupDescription(device.id(), GroupDescription.Type.SELECT, new GroupBuckets(leafBuckets.get(entry.getDc())), key, groupCount++, appId);
                     groupService.addGroup(groupDescription);
                 }
-                TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder().setEthDst(strToMac(hostDst.getRmac())).group(new GroupId(groupDescription.givenGroupId()));
+                MacAddress hostDstMac = new MacAddress(hostDst.getRmac());
+                TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder().setEthDst(hostDstMac).group(new GroupId(groupDescription.givenGroupId()));
                 FlowRule flowRule = DefaultFlowRule.builder()
                         .fromApp(appId)
                         .makePermanent()
@@ -427,7 +431,7 @@ public class DCnet {
                 Ethernet modifiedMac = new Ethernet();
                 modifiedMac.setEtherType(Ethernet.TYPE_IPV4)
                         .setSourceMACAddress(context.inPacket().parsed().getSourceMACAddress())
-                        .setDestinationMACAddress(strToMac(hostDst.getRmac()))
+                        .setDestinationMACAddress(hostDstMac)
                         .setPayload(context.inPacket().parsed().getPayload());
                 treatment = DefaultTrafficTreatment.builder().setOutput(PortNumber.portNumber(lfRadixDown.get(entry.getDc()) + 1 + (int) (Math.random() * lfRadixUp.get(entry.getDc()))));
                 OutboundPacket packet = new DefaultOutboundPacket(device.id(), treatment.build(), ByteBuffer.wrap(modifiedMac.serialize()));
@@ -438,16 +442,17 @@ public class DCnet {
         /* Handle translation for reverse traffic, ie for any responses, if source host is in data center */
         if (hostSrc != null) {
 
-            String[] bytesSrc = hostSrc.getRmac().split(":");
-            int dcSrc = Integer.parseInt(bytesSrc[0], 16) * 16 + Integer.parseInt(bytesSrc[1].substring(0, 1), 16);
-            int podSrc = Integer.parseInt(bytesSrc[1].substring(1), 16) * 16 + Integer.parseInt(bytesSrc[2], 16);
-            int leafSrc = Integer.parseInt(bytesSrc[3], 16) * 16 + Integer.parseInt(bytesSrc[4].substring(0, 1), 16);
+            byte[] bytesSrc = hostSrc.getRmac();
+            int dcSrc = (((int)bytesSrc[0]) << 4) + (bytesSrc[1] >> 4);
+            int podSrc = ((bytesSrc[1] & 0xF) << 8) + bytesSrc[2];
+            int leafSrc = (((int)bytesSrc[3]) << 4) + (bytesSrc[4] >> 4);
             TrafficSelector.Builder selectorSrc = DefaultTrafficSelector.builder().matchEthType(Ethernet.TYPE_IPV4).matchIPDst(IpPrefix.valueOf(ipSrc, 32));
 
             /* If sender is directly connected to leaf, translate ethernet destination back to recipients's and forward to it */
             if (dcSrc == entry.getDc() && podSrc == entry.getPod() && leafSrc == entry.getLeaf()) {
-                int port = Integer.parseInt(bytesSrc[4].substring(1), 16) * 16 + Integer.parseInt(bytesSrc[5], 16) + 1;
-                TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder().setEthDst(strToMac(hostSrc.getIdmac())).setOutput(PortNumber.portNumber(port));
+                int port = ((bytesSrc[4] & 0xF) << 8) + bytesSrc[5] + 1;
+                MacAddress hostSrcMac = new MacAddress(hostSrc.getIdmac());
+                TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder().setEthDst(hostSrcMac).setOutput(PortNumber.portNumber(port));
                 FlowRule flowRule = DefaultFlowRule.builder()
                         .fromApp(appId)
                         .makePermanent()
@@ -471,7 +476,8 @@ public class DCnet {
                     groupDescription = new DefaultGroupDescription(device.id(), GroupDescription.Type.SELECT, new GroupBuckets(leafBuckets.get(entry.getDc())), key, groupCount++, appId);
                     groupService.addGroup(groupDescription);
                 }
-                TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder().setEthDst(strToMac(hostSrc.getRmac())).group(new GroupId(groupDescription.givenGroupId()));
+                MacAddress hostSrcMac = new MacAddress(hostSrc.getRmac());
+                TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder().setEthDst(hostSrcMac).group(new GroupId(groupDescription.givenGroupId()));
                 FlowRule flowRule = DefaultFlowRule.builder()
                         .fromApp(appId)
                         .makePermanent()
@@ -496,15 +502,16 @@ public class DCnet {
         SwitchEntry entry = switchDB.get(id);
 
         int ip = ipv4.getDestinationAddress();
-        HostEntry host = hostDB.get(integerToIpStr(ip));
+        HostEntry host = hostDB.get(ip);
         if (host == null) {
             return;
         }
 
         TrafficSelector.Builder selector = DefaultTrafficSelector.builder().matchInPort(PortNumber.portNumber(dcRadixDown.get(entry.getDc()) + dcCount)).matchEthType(Ethernet.TYPE_IPV4).matchIPDst(IpPrefix.valueOf(ip, 32));
 
-        String[] bytes = host.getRmac().split(":");
-        int dc = Integer.parseInt(bytes[0], 16) * 16 + Integer.parseInt(bytes[1].substring(0, 1), 16);
+        byte[] bytes = host.getRmac();
+        int dc = (((int)bytes[0]) << 4) + (bytes[1] >> 4);
+        MacAddress hostMac = new MacAddress(host.getRmac());
 
         if (dc == entry.getDc()) {
             GroupDescription groupDescription = null;
@@ -516,7 +523,7 @@ public class DCnet {
                 groupDescription = new DefaultGroupDescription(device.id(), GroupDescription.Type.SELECT, new GroupBuckets(dcBuckets.get(entry.getDc())), key, groupCount++, appId);
                 groupService.addGroup(groupDescription);
             }
-            TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder().setEthDst(strToMac(host.getRmac())).group(new GroupId(groupDescription.givenGroupId()));
+            TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder().setEthDst(hostMac).group(new GroupId(groupDescription.givenGroupId()));
             FlowRule flowRule = DefaultFlowRule.builder()
                     .fromApp(appId)
                     .makePermanent()
@@ -532,7 +539,7 @@ public class DCnet {
             Ethernet modifiedMac = new Ethernet();
             modifiedMac.setEtherType(Ethernet.TYPE_IPV4)
                     .setSourceMACAddress(context.inPacket().parsed().getSourceMACAddress())
-                    .setDestinationMACAddress(strToMac(host.getRmac()))
+                    .setDestinationMACAddress(hostMac)
                     .setPayload(context.inPacket().parsed().getPayload());
             treatment = DefaultTrafficTreatment.builder().setOutput(PortNumber.portNumber(1 + (int) (Math.random() * dcRadixDown.get(entry.getDc()))));
             OutboundPacket packet = new DefaultOutboundPacket(device.id(), treatment.build(), ByteBuffer.wrap(modifiedMac.serialize()));
@@ -544,7 +551,7 @@ public class DCnet {
             if (entry.getDc() < dc) {
                 temp--;
             }
-            TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder().setEthDst(strToMac(host.getRmac())).setOutput(PortNumber.portNumber(temp));
+            TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder().setEthDst(hostMac).setOutput(PortNumber.portNumber(temp));
             FlowRule flowRule = DefaultFlowRule.builder()
                     .fromApp(appId)
                     .makePermanent()
@@ -560,7 +567,7 @@ public class DCnet {
             Ethernet modifiedMac = new Ethernet();
             modifiedMac.setEtherType(Ethernet.TYPE_IPV4)
                     .setSourceMACAddress(context.inPacket().parsed().getSourceMACAddress())
-                    .setDestinationMACAddress(strToMac(host.getRmac()))
+                    .setDestinationMACAddress(hostMac)
                     .setPayload(context.inPacket().parsed().getPayload());
             treatment = DefaultTrafficTreatment.builder().setOutput(PortNumber.portNumber(temp));
             OutboundPacket packet = new DefaultOutboundPacket(device.id(), treatment.build(), ByteBuffer.wrap(modifiedMac.serialize()));
