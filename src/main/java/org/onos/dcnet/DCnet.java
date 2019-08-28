@@ -15,37 +15,70 @@
  */
 package org.onos.dcnet;
 
+import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonValue;
 import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.onlab.packet.*;
+import org.onlab.packet.Ethernet;
+import org.onlab.packet.MacAddress;
+import org.onlab.packet.IpPrefix;
+import org.onlab.packet.IPv4;
+import org.onlab.packet.IpAddress;
 import org.onlab.util.KryoNamespace;
 import org.onosproject.core.ApplicationId;
 import org.onosproject.core.CoreService;
 import org.onosproject.core.GroupId;
-import org.onosproject.net.*;
+import org.onosproject.net.Device;
+import org.onosproject.net.DeviceId;
+import org.onosproject.net.Host;
+import org.onosproject.net.PortNumber;
 import org.onosproject.net.device.DeviceEvent;
 import org.onosproject.net.device.DeviceListener;
 import org.onosproject.net.device.DeviceService;
-import org.onosproject.net.flow.*;
+import org.onosproject.net.flow.DefaultFlowRule;
+import org.onosproject.net.flow.DefaultTrafficSelector;
+import org.onosproject.net.flow.DefaultTrafficTreatment;
+import org.onosproject.net.flow.FlowRule;
+import org.onosproject.net.flow.FlowRuleService;
+import org.onosproject.net.flow.TrafficSelector;
+import org.onosproject.net.flow.TrafficTreatment;
 import org.onosproject.net.flow.criteria.Criterion;
 import org.onosproject.net.flow.criteria.IPCriterion;
-import org.onosproject.net.group.*;
+import org.onosproject.net.group.DefaultGroupBucket;
+import org.onosproject.net.group.DefaultGroupDescription;
+import org.onosproject.net.group.DefaultGroupKey;
+import org.onosproject.net.group.GroupBucket;
+import org.onosproject.net.group.GroupBuckets;
+import org.onosproject.net.group.GroupDescription;
+import org.onosproject.net.group.GroupKey;
+import org.onosproject.net.group.GroupService;
 import org.onosproject.net.host.HostEvent;
 import org.onosproject.net.host.HostListener;
 import org.onosproject.net.host.HostService;
-import org.onosproject.net.packet.*;
+import org.onosproject.net.packet.DefaultOutboundPacket;
+import org.onosproject.net.packet.OutboundPacket;
+import org.onosproject.net.packet.PacketContext;
+import org.onosproject.net.packet.PacketPriority;
+import org.onosproject.net.packet.PacketProcessor;
+import org.onosproject.net.packet.PacketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.eclipsesource.json.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * ONOS App implementing DCnet forwarding scheme.
@@ -456,9 +489,7 @@ public class DCnet {
             final Ethernet eth,
             final Device device,
             final SwitchEntry entry) {
-
         IPv4 ip = (IPv4) (eth.getPayload());
-
         int ipDst = ip.getDestinationAddress();
         int ipSrc = ip.getSourceAddress();
         HostEntry hostDst = hostDB.get(ipDst);
@@ -471,19 +502,15 @@ public class DCnet {
                 .builder()
                 .matchEthType(Ethernet.TYPE_IPV4)
                 .matchIPDst(IpPrefix.valueOf(ipSrc, 32));
-
         byte[] bytesDst = null;
         int dcDst = 0;
         int podDst = 0;
         int leafDst = 0;
-
         byte[] bytesSrc = null;
         int dcSrc = 0;
         int podSrc = 0;
         int leafSrc = 0;
-
         if (hostDst != null) {
-
             /* Obtain location information from RMAC address if it exists */
             bytesDst = hostDst.getRmac();
             dcDst = (((int) bytesDst[0]) << 4) + (bytesDst[1] >> 4);
