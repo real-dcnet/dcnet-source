@@ -1,3 +1,6 @@
+# Ignore certain extensions
+*.swp
+
 # Ignore generated configuration files
 config/mininet
 
