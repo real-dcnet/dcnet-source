@@ -157,6 +157,13 @@ def runTCPTests(net, pods, dcs, with_load):
 	tcp_out.write(client.cmd("iperf3 -t 20 -p 5250 -c " + server.IP()))
 	time.sleep(10)
 
+def generateMac(switch_id):
+	mac_addr = "00:00:" + format((switch_id >> 24) & 0xFF, "02x")
+	mac_addr += ":" + format((switch_id >> 16) & 0xFF, "02x")
+	mac_addr += ":" + format((switch_id >> 8) & 0xFF, "02x")
+	mac_addr += ":" + format(switch_id & 0xFF, "02x")
+	return mac_addr
+
 
 # Class defining a Folded Clos topology using super spines
 class FoldedClos(Topo):
@@ -211,8 +218,9 @@ class FoldedClos(Topo):
 			switch_count += 1;
 			dc_switches.append(dc_name)
 			switch_config["dcs"].append({
-				"mac" : format(dc_count, "x"),
+				"id" : format(dc_count, "x"),
 				"name" : dc_name,
+				"mac" : generateMac(dc_count),
 				"dc" : d,
 				"pod" : -1,
 				"leaf" : -1
@@ -228,8 +236,9 @@ class FoldedClos(Topo):
 				switch_count += 1;
 				ss_switches.append(ss_name)
 				switch_config["supers"].append({
-					"mac" : format(ss_count, "x"),
+					"id" : format(ss_count, "x"),
 					"name" : ss_name,
+					"mac" : generateMac(ss_count),
 					"dc" : d,
 					"pod" : -1,
 					"leaf" : -1
@@ -248,8 +257,9 @@ class FoldedClos(Topo):
 					switch_count += 1;
 					leaf_switches.append(leaf_name)
 					switch_config["leaves"].append({
-						"mac" : format(leaf_count, "x"),
+						"id" : format(leaf_count, "x"),
 						"name" : leaf_name,
+						"mac" : generateMac(leaf_count),
 						"dc" : d,
 						"pod" : p,
 						"leaf" : l
@@ -303,8 +313,9 @@ class FoldedClos(Topo):
 					self.addSwitch(spine_name, ip = ip_addr)
 					switch_count += 1;
 					switch_config["spines"].append({
-						"mac" : format(spine_count, "x"),
+						"id" : format(spine_count, "x"),
 						"name" : spine_name,
+						"mac" : generateMac(spine_count),
 						"dc" : d,
 						"pod" : p,
 						"leaf" : -1
@@ -338,8 +349,6 @@ class FoldedClos(Topo):
 			host_count += 1
 			self.addLink(dc_switches[d1], host_name, cls = TCLink, bw = 10, delay = "0.1ms")
 
-
-		
 		config = open("config/mininet/switch_config.json", "w+")
 		config.write(json.dumps(switch_config, indent = 4))
 		config = open("config/mininet/host_config.json", "w+")
