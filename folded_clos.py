@@ -345,7 +345,10 @@ class FoldedClos(Topo):
 			host_name = "h" + str(host_count)
 			ip_addr = "10.0." + format(host_count >> 8, "d") + "."
 			ip_addr += format(host_count & 0xFF, "d")
-			self.addHost(host_name, ip = ip_addr, mac = "FF:FF:FF:00:00:" + format(d1, "02d"))
+			mac_addr = "dc:dc:dc:" + format((host_count >> 16) & 0xFF, "02x")
+			mac_addr += ":" + format((host_count >> 8) & 0xFF, "02x")
+			mac_addr += ":" + format(host_count & 0xFF, "02x")
+			self.addHost(host_name, ip = ip_addr, mac = mac_addr)
 			host_count += 1
 			self.addLink(dc_switches[d1], host_name, cls = TCLink, bw = 10, delay = "0.1ms")
 

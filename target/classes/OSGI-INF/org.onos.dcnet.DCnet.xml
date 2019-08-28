@@ -3,8 +3,6 @@
         
     <reference name="coreService" interface="org.onosproject.core.CoreService" cardinality="1..1" policy="static" bind="bindCoreService" unbind="unbindCoreService"/>
         
-    <reference name="flowObjectiveService" interface="org.onosproject.net.flowobjective.FlowObjectiveService" cardinality="1..1" policy="static" bind="bindFlowObjectiveService" unbind="unbindFlowObjectiveService"/>
-        
     <reference name="flowRuleService" interface="org.onosproject.net.flow.FlowRuleService" cardinality="1..1" policy="static" bind="bindFlowRuleService" unbind="unbindFlowRuleService"/>
         
     <reference name="packetService" interface="org.onosproject.net.packet.PacketService" cardinality="1..1" policy="static" bind="bindPacketService" unbind="unbindPacketService"/>
@@ -14,8 +12,6 @@
     <reference name="hostService" interface="org.onosproject.net.host.HostService" cardinality="1..1" policy="static" bind="bindHostService" unbind="unbindHostService"/>
         
     <reference name="groupService" interface="org.onosproject.net.group.GroupService" cardinality="1..1" policy="static" bind="bindGroupService" unbind="unbindGroupService"/>
-        
-    <reference name="pathService" interface="org.onosproject.net.topology.PathService" cardinality="1..1" policy="static" bind="bindPathService" unbind="unbindPathService"/>
         
     <implementation class="org.onos.dcnet.DCnet"/>
     
