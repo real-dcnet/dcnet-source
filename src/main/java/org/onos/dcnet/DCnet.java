@@ -713,7 +713,7 @@ public class DCnet {
 
         /* Adds rule to forward packets to internet if they have a reserved RMAC address */
         MacAddress reserved = new MacAddress(new byte[]{(byte) 0x3F, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF});
-        MacAddress test = new MacAddress(new byte[]{(byte) 0xDC, (byte) 0xDC, (byte) 0xDC, (byte) 0x00, (byte) 0x00, (byte) 0x49});
+        MacAddress test = new MacAddress(new byte[]{(byte) 0xDC, (byte) 0xDC, (byte) 0xDC, (byte) 0x00, (byte) 0x00, (byte) 0x31});
         selector = DefaultTrafficSelector.builder().matchEthDst(reserved).matchEthType(Ethernet.TYPE_IPV4);
         treatment = DefaultTrafficTreatment.builder().setEthSrc(new MacAddress(entry.getMac())).setEthDst(test).setOutput(PortNumber.portNumber(dcRadixDown.get(dc) + dcCount));
         flowRule = DefaultFlowRule.builder()
