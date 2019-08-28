@@ -273,7 +273,7 @@ public class DCnet {
             JsonObject config = obj.asObject();
             SwitchEntry entry = new SwitchEntry(config.get("name").asString(), strToMac(config.get("mac").asString()),
                     level, config.get("dc").asInt(), config.get("pod").asInt(), config.get("leaf").asInt());
-            switchDB.put(config.get("mac").asString(), entry);
+            switchDB.put(config.get("id").asString(), entry);
         }
     }
 
