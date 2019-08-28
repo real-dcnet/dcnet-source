@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *	   http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,9 +15,6 @@
  */
 package org.onos.dcnet;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.SetMultimap;
 import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Deactivate;
@@ -35,13 +32,11 @@ import org.onosproject.net.device.DeviceService;
 import org.onosproject.net.flow.*;
 import org.onosproject.net.flow.criteria.Criterion;
 import org.onosproject.net.flow.criteria.IPCriterion;
-import org.onosproject.net.flowobjective.FlowObjectiveService;
 import org.onosproject.net.group.*;
 import org.onosproject.net.host.HostEvent;
 import org.onosproject.net.host.HostListener;
 import org.onosproject.net.host.HostService;
 import org.onosproject.net.packet.*;
-import org.onosproject.net.topology.PathService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,163 +44,220 @@ import com.eclipsesource.json.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.*;
 
 /**
- * ONOS App implementing DCnet forwarding scheme
+ * ONOS App implementing DCnet forwarding scheme.
  */
 @Component(immediate = true)
 public class DCnet {
+    /** Service used to register DCnet application in ONOS. */
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     private CoreService coreService;
 
-    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
-    private FlowObjectiveService flowObjectiveService;
-
+    /** Service used to manage flow rules installed on switches. */
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     private FlowRuleService flowRuleService;
 
+    /** Service used to request and manage packets punted
+     * by leaf and data center switches. */
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     private PacketService packetService;
 
+    /** Service used to register and obtain device information. */
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     private DeviceService deviceService;
 
+    /** Service used to register and obtain host information. */
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     private HostService hostService;
 
+    /** Service used to register and obtain group information. */
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     private GroupService groupService;
 
-    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
-    private PathService pathService;
-
-    public class SwitchEntry {
+    /** Holds information about switches parsed from JSON. */
+    private static final class SwitchEntry {
+        /** Human readable name for the switch. */
         private String name;
+
+        /** MAC address of the switch. */
         private byte[] mac;
+
+        /** Location of switch on data center hierarchy. */
         private int level;
+
+        /** Identifier for data center that contains switch. */
         private int dc;
+
+        /** Identifier for pod that contains switch. */
         private int pod;
+
+        /** Identifier at leaf level for a switch if it is one. */
         private int leaf;
-        private boolean joined;
-        private Device device;
 
-        public SwitchEntry(String name, byte[] mac, int level, int dc, int pod, int leaf) {
-            this.name = name;
-            this.mac = mac;
-            this.level = level;
-            this.dc = dc;
-            this.pod = pod;
-            this.leaf = leaf;
+        private SwitchEntry(final String switchName,
+                            final byte[] switchMac,
+                            final int switchLevel,
+                            final int dcLoc,
+                            final int podLoc,
+                            final int leafLoc) {
+            this.name = switchName;
+            this.mac = switchMac;
+            this.level = switchLevel;
+            this.dc = dcLoc;
+            this.pod = podLoc;
+            this.leaf = leafLoc;
         }
 
-        public String getName() {
-            return this.name;
-        }
-
-        public byte[] getMac() {
+        private byte[] getMac() {
             return this.mac;
         }
 
-        public int getLevel() {
+        private int getLevel() {
             return this.level;
         }
 
-        public int getDc() {
+        private int getDc() {
             return this.dc;
         }
 
-        public int getPod() {
+        private int getPod() {
             return this.pod;
         }
 
-        public int getLeaf() {
+        private int getLeaf() {
             return this.leaf;
         }
     }
 
-    public class HostEntry {
+    private static final class HostEntry {
+        /** Human readable name for the switch. */
         private String name;
+
+        /** Location based mac address to use in forwarding. */
         private byte[] rmac;
+
+        /** Real mac address of the switch. */
         private byte[] idmac;
 
-        public HostEntry(String name, byte[] rmac, byte[] idmac) {
-            this.name = name;
-            this.rmac = rmac;
-            this.idmac = idmac;
+        private HostEntry(final String hostName,
+                          final byte[] hostRmac,
+                          final byte[] hostIdmac) {
+            this.name = hostName;
+            this.rmac = hostRmac;
+            this.idmac = hostIdmac;
         }
 
-        public String getName() {
-            return this.name;
-        }
-
-        public byte[] getRmac() {
+        private byte[] getRmac() {
             return this.rmac;
         }
 
-        public byte[] getIdmac() {
+        private byte[] getIdmac() {
             return this.idmac;
         }
 
     }
 
+    /** Logs information, errors, and warnings during runtime. */
     private static Logger log = LoggerFactory.getLogger(DCnet.class);
 
-    private static final String configLoc = System.getProperty("user.home") + "/dcnet-source/config/mininet/";
+    /** Location where configuration information can be found.
+     * Change this as necessary if configuration JSONs are stored elsewhere */
+    private static String configLoc =
+            System.getProperty("user.home") + "/dcnet-source/config/mininet/";
 
+    /** Macro for data center egress switches. */
     private static final int DC = 0;
+
+    /** Macro for super spine switches. */
     private static final int SUPER = 1;
+
+    /** Macro for spine switches. */
     private static final int SPINE = 2;
+
+    /** Macro for leaf switches. */
     private static final int LEAF = 3;
+
+    /** Priority to use when installing flow rules.
+     * Should be higher than reactive forwarding rules */
     private static final int BASE_PRIO = 50000;
 
+    /** Number of data centers. */
     private int dcCount = 0;
+
+    /** Number of links going down for each data center egress. */
     private List<Integer> dcRadixDown = new ArrayList<>();
+
+    /** Number of links going down for each super spine in each data center. */
     private List<Integer> ssRadixDown = new ArrayList<>();
+
+    /** Number of links going up for each spine in each data center. */
     private List<Integer> spRadixUp = new ArrayList<>();
+
+    /** Number of links going down for each spine in each data center. */
     private List<Integer> spRadixDown = new ArrayList<>();
+
+    /** Number of links going up for each leaf in each data center. */
     private List<Integer> lfRadixUp = new ArrayList<>();
+
+    /** Number of links going down for each leaf in each data center. */
     private List<Integer> lfRadixDown = new ArrayList<>();
 
+    /** Keeps track of which ports should be ECMP'ed for
+     * leaf switches in each data center. */
     private List<List<GroupBucket>> leafBuckets = new ArrayList<>();
+
+    /** Keeps track of which ports should be ECMP'ed for
+     * spine switches in each data center. */
     private List<List<GroupBucket>> spineBuckets = new ArrayList<>();
+
+    /** Keeps track of which ports should be ECMP'ed for
+     * egress switches in each data center. */
     private List<List<GroupBucket>> dcBuckets = new ArrayList<>();
 
+    /** Counter for number of groups created to guarantee unique ids. */
     private int groupCount = 0;
 
-    /* Maps Chassis ID to a switch entry */
+    /** Maps Chassis ID to a switch entry. */
     private Map<String, SwitchEntry> switchDB = new TreeMap<>();
 
-    /* Maps IP address to a host entry */
+    /** Maps IP address to a host entry. */
     private Map<Integer, HostEntry> hostDB = new TreeMap<>();
 
-    /* List of currently active flow rules */
+    /** List of currently active flow rules for DCnet. */
     private List<FlowRule> installedFlows = new ArrayList<>();
 
+    /** List of devices that have been added to DCnet. */
     private List<DeviceId> addedDevices = new ArrayList<>();
 
+    /** Used to identify flow rules belonging to DCnet. */
     private ApplicationId appId;
 
-    protected static KryoNamespace appKryo = new KryoNamespace.Builder()
+    /** Allows deviceIDs to be hashed for creating group keys. */
+    private static KryoNamespace appKryo = new KryoNamespace.Builder()
             .register(Integer.class)
             .register(DeviceId.class)
-            .build("group-fwd-app");
+            .build("dcnet-app");
 
-    private final SetMultimap<GroupKey, FlowRule> pendingFlows = HashMultimap.create();
-
+    /** Listens for switches that are added to the network. */
     private final DeviceListener deviceListener = new InternalDeviceListener();
 
+    /** Listens for hosts that are added to the network. */
     private final HostListener hostListener = new InternalHostListener();
 
+    /** Handler for packets that are passed to controller by switches. */
     private final PacketProcessor packetProcessor = new DCnetPacketProcessor();
 
-    /* Selector for IPv4 traffic to intercept */
-    private final TrafficSelector intercept = DefaultTrafficSelector.builder().matchEthType(Ethernet.TYPE_IPV4).build();
+    /** Selector for IPv4 traffic to intercept. */
+    private final TrafficSelector intercept = DefaultTrafficSelector.
+            builder()
+            .matchEthType(Ethernet.TYPE_IPV4)
+            .build();
 
-    /* Initializes application by reading configuration files for hosts, switches, and topology design */
+    /** Initializes application by reading configuration files for hosts,
+     * switches, and topology design. */
     private void init() {
 
         dcRadixDown = new ArrayList<>();
@@ -227,66 +279,103 @@ public class DCnet {
         groupCount = 0;
 
         try {
-            /* Setup switch database by reading fields in switch configuration file */
-            JsonObject config = Json.parse(new BufferedReader(new FileReader(configLoc + "switch_config.json"))).asObject();
+            /* Setup switch database by reading fields in switch config JSON */
+            JsonObject config = Json.parse(new BufferedReader(
+                    new FileReader(configLoc + "switch_config.json"))
+            ).asObject();
             addSwitchConfigs(config.get("dcs").asArray(), DC);
             addSwitchConfigs(config.get("supers").asArray(), SUPER);
             addSwitchConfigs(config.get("spines").asArray(), SPINE);
             addSwitchConfigs(config.get("leaves").asArray(), LEAF);
 
-            /* Setup host database by reading fields in host configuration file */
-            config = Json.parse(new BufferedReader(new FileReader(configLoc + "host_config.json"))).asObject();
+            /* Setup host database by reading fields in host config JSON */
+            config = Json.parse(new BufferedReader(
+                    new FileReader(configLoc + "host_config.json"))
+            ).asObject();
             addHostConfigs(config.get("hosts").asArray());
 
-            /* Setup topology specifications by reading fields in topology configuration file */
-            config = Json.parse(new BufferedReader(new FileReader(configLoc + "top_config.json"))).asObject();
+            /* Setup topology by reading fields in topology config JSON */
+            config = Json.parse(new BufferedReader(
+                    new FileReader(configLoc + "top_config.json"))
+            ).asObject();
             dcCount = config.get("dc_count").asInt();
             addDcConfigs(config.get("config").asArray());
 
-            /* Create buckets for each switch type in each data center describing ports to use for ECMP */
+            /* Create buckets for each switch type in each data center
+                describing ports to use for ECMP */
             for (int d = 0; d < dcCount; d++) {
                 leafBuckets.add(new ArrayList<>());
                 for (int i = 1; i <= lfRadixUp.get(d); i++) {
-                    TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder().setOutput(PortNumber.portNumber(lfRadixDown.get(d) + i));
-                    leafBuckets.get(d).add(DefaultGroupBucket.createSelectGroupBucket(treatment.build()));
+                    TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                            .builder()
+                            .setOutput(PortNumber.portNumber(
+                                    lfRadixDown.get(d) + i));
+                    leafBuckets.get(d).add(DefaultGroupBucket
+                            .createSelectGroupBucket(treatment.build()));
                 }
                 spineBuckets.add(new ArrayList<>());
                 for (int i = 1; i <= spRadixUp.get(d); i++) {
-                    TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder().setOutput(PortNumber.portNumber(spRadixDown.get(d) + i));
-                    spineBuckets.get(d).add(DefaultGroupBucket.createSelectGroupBucket(treatment.build()));
+                    TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                            .builder()
+                            .setOutput(PortNumber.portNumber(
+                                    spRadixDown.get(d) + i));
+                    spineBuckets.get(d).add(DefaultGroupBucket
+                            .createSelectGroupBucket(treatment.build()));
                 }
                 dcBuckets.add(new ArrayList<>());
                 for (int i = 1; i <= dcRadixDown.get(d); i++) {
-                    TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder().setOutput(PortNumber.portNumber(i));
-                    dcBuckets.get(d).add(DefaultGroupBucket.createSelectGroupBucket(treatment.build()));
+                    TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                            .builder()
+                            .setOutput(PortNumber.portNumber(i));
+                    dcBuckets.get(d).add(DefaultGroupBucket
+                            .createSelectGroupBucket(treatment.build()));
                 }
             }
-        }
-
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void addSwitchConfigs(JsonArray configs, int level) {
-        for(JsonValue obj : configs) {
+    /**
+     * Parses the JSONs describing each switch.
+     * @param configs   Array of JSONs that hold config information
+     * @param level     Level in hierarchy of the switches being added
+     */
+    private void addSwitchConfigs(final JsonArray configs, final int level) {
+        for (JsonValue obj : configs) {
             JsonObject config = obj.asObject();
-            SwitchEntry entry = new SwitchEntry(config.get("name").asString(), strToMac(config.get("mac").asString()),
-                    level, config.get("dc").asInt(), config.get("pod").asInt(), config.get("leaf").asInt());
+            SwitchEntry entry = new SwitchEntry(
+                    config.get("name").asString(),
+                    strToMac(config.get("mac").asString()),
+                    level,
+                    config.get("dc").asInt(),
+                    config.get("pod").asInt(),
+                    config.get("leaf").asInt());
             switchDB.put(config.get("id").asString(), entry);
         }
     }
 
-    private void addHostConfigs(JsonArray configs) {
-        for(JsonValue obj : configs) {
+    /**
+     * Parses the JSONs describing each host.
+     * @param configs   Array of JSONs that hold config information
+     */
+    private void addHostConfigs(final JsonArray configs) {
+        for (JsonValue obj : configs) {
             JsonObject config = obj.asObject();
-            HostEntry entry = new HostEntry(config.get("name").asString(), strToMac(config.get("rmac").asString()), strToMac(config.get("idmac").asString()));
+            HostEntry entry = new HostEntry(
+                    config.get("name").asString(),
+                    strToMac(config.get("rmac").asString()),
+                    strToMac(config.get("idmac").asString()));
             hostDB.put(ipStrtoInt(config.get("ip").asString()), entry);
         }
     }
 
-    private void addDcConfigs(JsonArray configs) {
-        for(JsonValue obj : configs) {
+    /**
+     * Parses the JSONs describing each data center topology.
+     * @param configs   Array of JSONs that hold config information
+     */
+    private void addDcConfigs(final JsonArray configs) {
+        for (JsonValue obj : configs) {
             JsonObject config = obj.asObject();
             dcRadixDown.add(config.get("dc_radix_down").asInt());
             ssRadixDown.add(config.get("ss_radix_down").asInt());
@@ -297,53 +386,76 @@ public class DCnet {
         }
     }
 
-    /* Allows application to be started by ONOS controller */
+    /** Allows application to be started by ONOS controller. */
     @Activate
     public void activate() {
-
         init();
         appId = coreService.registerApplication("org.onosproject.dcnet");
         packetService.addProcessor(packetProcessor, BASE_PRIO);
-        packetService.requestPackets(intercept, PacketPriority.CONTROL, appId, Optional.empty());
+        packetService.requestPackets(
+                intercept,
+                PacketPriority.CONTROL,
+                appId,
+                Optional.empty());
         deviceService.addListener(deviceListener);
-        //hostService.addListener(hostListener);
+        hostService.addListener(hostListener);
         log.info("Started");
     }
 
-    /* Allows application to be stopped by ONOS controller */
+    /** Allows application to be stopped by ONOS controller. */
     @Deactivate
     public void deactivate() {
 
         packetService.removeProcessor(packetProcessor);
         flowRuleService.removeFlowRulesById(appId);
         deviceService.removeListener(deviceListener);
-        //hostService.removeListener(hostListener);
+        hostService.removeListener(hostListener);
         for (DeviceId d : addedDevices) {
             groupService.purgeGroupEntries(d);
         }
         log.info("Stopped");
     }
 
-    /* Helper function to translate int version of IP (used by ONOS) into String (used in this application) */
-    private int ipStrtoInt(String ip) {
+    /**
+     * Translates an IP String into integer representation.
+     * @param ip    String representation of IP address
+     * @return      Integer representation of IP address
+     */
+    private int ipStrtoInt(final String ip) {
         String[] bytes = ip.split("\\.");
-        return (Integer.parseInt(bytes[0]) << 24) + (Integer.parseInt(bytes[1]) << 16)
-                + (Integer.parseInt(bytes[2]) << 8) + Integer.parseInt(bytes[3]);
+        return (Integer.parseInt(bytes[0]) << 24)
+                + (Integer.parseInt(bytes[1]) << 16)
+                + (Integer.parseInt(bytes[2]) << 8)
+                + Integer.parseInt(bytes[3]);
     }
 
-    /* Helper function to translate String version of MAC (used in this application) into byte[] (used by ONOS) */
-    private byte[] strToMac(String address) {
+    /**
+     * Translates a MAC address String into byte array representation.
+     * @param address   String representation of MAC address
+     * @return          Byte array representation of MAC address
+     */
+    private byte[] strToMac(final String address) {
 
         byte[] bytes = new byte[6];
         String[] octets = address.split(":");
         for (int i = 0; i < 6; i++) {
-            bytes[i] = (byte)(Integer.parseInt(octets[i], 16));
+            bytes[i] = (byte) (Integer.parseInt(octets[i], 16));
         }
         return bytes;
     }
 
-    /* Creates rules for packets with new IPv4 destination that a leaf switch receives */
-    private void processPacketLeaf(PacketContext context, Ethernet eth, Device device, SwitchEntry entry) {
+    /**
+     * Creates rules for new packets received by leaf switch.
+     * @param context   Contains extra information sent to controller
+     * @param eth       Packet that was sent to controller
+     * @param device    Switch that sent the packet
+     * @param entry     Information about switch that sent packet
+     */
+    private void processPacketLeaf(
+            final PacketContext context,
+            final Ethernet eth,
+            final Device device,
+            final SwitchEntry entry) {
 
         IPv4 ip = (IPv4) (eth.getPayload());
 
@@ -351,8 +463,14 @@ public class DCnet {
         int ipSrc = ip.getSourceAddress();
         HostEntry hostDst = hostDB.get(ipDst);
         HostEntry hostSrc = hostDB.get(ipSrc);
-        TrafficSelector.Builder selectorDst = DefaultTrafficSelector.builder().matchEthType(Ethernet.TYPE_IPV4).matchIPDst(IpPrefix.valueOf(ipDst, 32));
-        TrafficSelector.Builder selectorSrc = DefaultTrafficSelector.builder().matchEthType(Ethernet.TYPE_IPV4).matchIPDst(IpPrefix.valueOf(ipSrc, 32));
+        TrafficSelector.Builder selectorDst = DefaultTrafficSelector
+                .builder()
+                .matchEthType(Ethernet.TYPE_IPV4)
+                .matchIPDst(IpPrefix.valueOf(ipDst, 32));
+        TrafficSelector.Builder selectorSrc = DefaultTrafficSelector
+                .builder()
+                .matchEthType(Ethernet.TYPE_IPV4)
+                .matchIPDst(IpPrefix.valueOf(ipSrc, 32));
 
         byte[] bytesDst = null;
         int dcDst = 0;
@@ -364,21 +482,25 @@ public class DCnet {
         int podSrc = 0;
         int leafSrc = 0;
 
-        /* Handle translation for forward direction, ie where current packet is heading, if destination host is in data center */
         if (hostDst != null) {
 
-            /* Obtain location information from RMAC address corresponding to IP destination */
+            /* Obtain location information from RMAC address if it exists */
             bytesDst = hostDst.getRmac();
             dcDst = (((int) bytesDst[0]) << 4) + (bytesDst[1] >> 4);
             podDst = ((bytesDst[1] & 0xF) << 8) + bytesDst[2];
             leafDst = (((int) bytesDst[3]) << 4) + (bytesDst[4] >> 4);
         }
 
-        /* If recipient is directly connected to leaf, translate ethernet destination back to recipients's and forward to it */
-        if (hostDst != null && dcDst == entry.getDc() && podDst == entry.getPod() && leafDst == entry.getLeaf()) {
+        if (hostDst != null && dcDst == entry.getDc()
+                && podDst == entry.getPod() && leafDst == entry.getLeaf()) {
+            /* If recipient is directly connected to leaf, translate ethernet
+            destination back to recipients's and forward to it */
             int port = ((bytesDst[4] & 0xF) << 8) + bytesDst[5] + 1;
             MacAddress hostDstMac = new MacAddress(hostDst.getIdmac());
-            TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder().setEthDst(hostDstMac).setOutput(PortNumber.portNumber(port));
+            TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                    .builder()
+                    .setEthDst(hostDstMac)
+                    .setOutput(PortNumber.portNumber(port));
             FlowRule flowRule = DefaultFlowRule.builder()
                     .fromApp(appId)
                     .makePermanent()
@@ -393,33 +515,49 @@ public class DCnet {
             /* Send packet to destination host */
             Ethernet modifiedMac = new Ethernet();
             modifiedMac.setEtherType(Ethernet.TYPE_IPV4)
-                    .setSourceMACAddress(context.inPacket().parsed().getSourceMACAddress())
+                    .setSourceMACAddress(context.inPacket()
+                            .parsed().getSourceMACAddress())
                     .setDestinationMACAddress(hostDstMac)
                     .setPayload(context.inPacket().parsed().getPayload());
-            treatment = DefaultTrafficTreatment.builder().setOutput(PortNumber.portNumber(port));
-            OutboundPacket packet = new DefaultOutboundPacket(device.id(), treatment.build(), ByteBuffer.wrap(modifiedMac.serialize()));
+            treatment = DefaultTrafficTreatment
+                    .builder()
+                    .setOutput(PortNumber.portNumber(port));
+            OutboundPacket packet = new DefaultOutboundPacket(
+                    device.id(),
+                    treatment.build(),
+                    ByteBuffer.wrap(modifiedMac.serialize()));
             packetService.emit(packet);
-        }
-
-        /* If recipient is connected elsewhere, translate ethernet destination to RMAC and forward to spines */
-        else {
+        } else {
+            /* If recipient is connected elsewhere, translate ethernet
+                destination to RMAC and forward to spines */
             GroupDescription groupDescription = null;
             for (GroupDescription g : groupService.getGroups(device.id())) {
                 groupDescription = g;
             }
-            GroupKey key = new DefaultGroupKey(appKryo.serialize(Objects.hash(device)));
+            GroupKey key = new DefaultGroupKey(appKryo
+                    .serialize(Objects.hash(device)));
             if (groupDescription == null) {
-                groupDescription = new DefaultGroupDescription(device.id(), GroupDescription.Type.SELECT, new GroupBuckets(leafBuckets.get(entry.getDc())), key, groupCount++, appId);
+                groupDescription = new DefaultGroupDescription(
+                        device.id(),
+                        GroupDescription.Type.SELECT,
+                        new GroupBuckets(leafBuckets.get(entry.getDc())),
+                        key,
+                        groupCount++,
+                        appId);
                 groupService.addGroup(groupDescription);
             }
             MacAddress hostDstMac;
             if (hostDst != null) {
                 hostDstMac = new MacAddress(hostDst.getRmac());
+            } else {
+                hostDstMac = new MacAddress(new byte[]{
+                        (byte) 0x3F, (byte) 0xFF, (byte) 0xFF,
+                        (byte) 0xFF, (byte) 0xFF, (byte) 0xFF});
             }
-            else {
-                hostDstMac = new MacAddress(new byte[]{(byte) 0x3F, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF});
-            }
-            TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder().setEthDst(hostDstMac).group(new GroupId(groupDescription.givenGroupId()));
+            TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                    .builder()
+                    .setEthDst(hostDstMac)
+                    .group(new GroupId(groupDescription.givenGroupId()));
             FlowRule flowRule = DefaultFlowRule.builder()
                     .fromApp(appId)
                     .makePermanent()
@@ -434,28 +572,41 @@ public class DCnet {
             /* Send packet to a random spine switch */
             Ethernet modifiedMac = new Ethernet();
             modifiedMac.setEtherType(Ethernet.TYPE_IPV4)
-                    .setSourceMACAddress(context.inPacket().parsed().getSourceMACAddress())
+                    .setSourceMACAddress(context.inPacket()
+                            .parsed().getSourceMACAddress())
                     .setDestinationMACAddress(hostDstMac)
                     .setPayload(context.inPacket().parsed().getPayload());
-            treatment = DefaultTrafficTreatment.builder().setOutput(PortNumber.portNumber(lfRadixDown.get(entry.getDc()) + 1 + (int) (Math.random() * lfRadixUp.get(entry.getDc()))));
-            OutboundPacket packet = new DefaultOutboundPacket(device.id(), treatment.build(), ByteBuffer.wrap(modifiedMac.serialize()));
+            treatment = DefaultTrafficTreatment
+                    .builder()
+                    .setOutput(PortNumber.portNumber(
+                            lfRadixDown.get(entry.getDc()) + 1 + (int) (Math
+                                    .random() * lfRadixUp.get(entry.getDc()))));
+            OutboundPacket packet = new DefaultOutboundPacket(
+                    device.id(),
+                    treatment.build(),
+                    ByteBuffer.wrap(modifiedMac.serialize()));
             packetService.emit(packet);
         }
 
-        /* Handle translation for reverse traffic that may come in response, if source host is in data center */
+        /* Handle translation for reverse traffic, towards source host*/
         if (hostSrc != null) {
-
+            /* Obtain location information from RMAC address if it exists */
             bytesSrc = hostSrc.getRmac();
             dcSrc = (((int) bytesSrc[0]) << 4) + (bytesSrc[1] >> 4);
             podSrc = ((bytesSrc[1] & 0xF) << 8) + bytesSrc[2];
             leafSrc = (((int) bytesSrc[3]) << 4) + (bytesSrc[4] >> 4);
         }
 
-        /* If sender is directly connected to leaf, translate ethernet destination back to recipients's and forward to it */
-        if (hostSrc != null && dcSrc == entry.getDc() && podSrc == entry.getPod() && leafSrc == entry.getLeaf()) {
+        if (hostSrc != null && dcSrc == entry.getDc()
+                && podSrc == entry.getPod() && leafSrc == entry.getLeaf()) {
+            /* If sender is directly connected to leaf, translate ethernet
+            destination back to recipients's and forward to it */
             int port = ((bytesSrc[4] & 0xF) << 8) + bytesSrc[5] + 1;
             MacAddress hostSrcMac = new MacAddress(hostSrc.getIdmac());
-            TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder().setEthDst(hostSrcMac).setOutput(PortNumber.portNumber(port));
+            TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                    .builder()
+                    .setEthDst(hostSrcMac)
+                    .setOutput(PortNumber.portNumber(port));
             FlowRule flowRule = DefaultFlowRule.builder()
                     .fromApp(appId)
                     .makePermanent()
@@ -466,27 +617,37 @@ public class DCnet {
                     .build();
             flowRuleService.applyFlowRules(flowRule);
             installedFlows.add(flowRule);
-        }
-
-        /* If sender is connected to another leaf, translate ethernet destination to RMAC and forward to spines */
-        else {
+        } else {
+            /* If sender is connected to another leaf, translate ethernet
+                destination to RMAC and forward to spines */
             GroupDescription groupDescription = null;
             for (GroupDescription g : groupService.getGroups(device.id())) {
                 groupDescription = g;
             }
-            GroupKey key = new DefaultGroupKey(appKryo.serialize(Objects.hash(device)));
+            GroupKey key = new DefaultGroupKey(appKryo
+                    .serialize(Objects.hash(device)));
             if (groupDescription == null) {
-                groupDescription = new DefaultGroupDescription(device.id(), GroupDescription.Type.SELECT, new GroupBuckets(leafBuckets.get(entry.getDc())), key, groupCount++, appId);
+                groupDescription = new DefaultGroupDescription(
+                        device.id(),
+                        GroupDescription.Type.SELECT,
+                        new GroupBuckets(leafBuckets.get(entry.getDc())),
+                        key,
+                        groupCount++,
+                        appId);
                 groupService.addGroup(groupDescription);
             }
             MacAddress hostSrcMac;
             if (hostSrc != null) {
                 hostSrcMac = new MacAddress(hostSrc.getRmac());
+            } else {
+                hostSrcMac = new MacAddress(new byte[]{
+                        (byte) 0x3F, (byte) 0xFF, (byte) 0xFF,
+                        (byte) 0xFF, (byte) 0xFF, (byte) 0xFF});
             }
-            else {
-                hostSrcMac = new MacAddress(new byte[]{(byte) 0x3F, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF});
-            }
-            TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder().setEthDst(hostSrcMac).group(new GroupId(groupDescription.givenGroupId()));
+            TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                    .builder()
+                    .setEthDst(hostSrcMac)
+                    .group(new GroupId(groupDescription.givenGroupId()));
             FlowRule flowRule = DefaultFlowRule.builder()
                     .fromApp(appId)
                     .makePermanent()
