@@ -69,6 +69,8 @@ import org.onosproject.net.packet.PacketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.nio.ByteBuffer;
@@ -292,7 +294,7 @@ public class DCnet {
     /** Initializes application by reading configuration files for hosts,
      * switches, and topology design. */
     private void init() {
-
+        Client client = ClientBuilder.newClient();
         dcRadixDown = new ArrayList<>();
         ssRadixDown = new ArrayList<>();
         spRadixUp = new ArrayList<>();
