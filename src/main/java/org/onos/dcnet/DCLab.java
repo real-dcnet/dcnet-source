@@ -10,6 +10,11 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class DCLab {
     /** Logs information, errors, and warnings during runtime. */
@@ -22,6 +27,7 @@ public class DCLab {
                 .add("jsonrpc", "2.0")
                 .add("id", 1)
                 .add("method", "login");
+        /*
         Response response = client
                 .target("http://10.0.1.99/cgi-bin/luci/rpc/auth")
                 .queryParam("params", new JsonArray().add("admin").add("admin"))
@@ -33,5 +39,32 @@ public class DCLab {
         String token = response.readEntity(String.class);
         log.info(Integer.toString(response.getStatus()));
         log.info(token);
+        */
+        try {
+            URL url = new URL("http://10.0.1.99/cgi-bin/luci/rpc/auth");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Content-Type", "application/json");
+
+            String input = request.toString();
+            log.info(input);
+
+            OutputStream os = conn.getOutputStream();
+            os.write(input.getBytes());
+            os.flush();
+            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+
+            String output;
+            log.info("Output from Server .... \n");
+            while ((output = br.readLine()) != null) {
+                log.info(output);
+            }
+
+            conn.disconnect();
+        }
+        catch(Exception e) {
+            log.error("URL Exception");
+        }
     }
 }
