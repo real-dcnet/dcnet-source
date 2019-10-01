@@ -24,7 +24,7 @@ public class DCLab {
                 .request()
                 .accept(MediaType.APPLICATION_JSON)
                 .get();
-        String token = response.getEntity().toString();
+        String token = response.readEntity(String.class);
         log.info(Integer.toString(response.getStatus()));
         log.info(token);
     }
