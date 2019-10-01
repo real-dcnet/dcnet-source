@@ -1,5 +1,7 @@
 package org.onos.dcnet;
 
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
 import org.onosproject.net.Device;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,14 +17,18 @@ public class DCLab {
 
     public static void configureSwitch(final Device device) {
         Client client = ClientBuilder.newClient();
+        JsonObject request = new JsonObject()
+                .add("params", new JsonArray().add("admin").add("admin"))
+                .add("jsonrpc", "2.0")
+                .add("id", 1)
+                .add("method", "login");
         Response response = client
                 .target("http://10.0.1.99/cgi-bin/luci/rpc/auth")
-                .queryParam("params", "admin", "admin")
+                .queryParam("params", new JsonArray().add("admin").add("admin"))
                 .queryParam("jsonrpc", "2.0")
                 .queryParam("id", 1)
                 .queryParam("method", "login")
-                .request()
-                .accept(MediaType.APPLICATION_JSON)
+                .request(MediaType.APPLICATION_JSON)
                 .get();
         String token = response.readEntity(String.class);
         log.info(Integer.toString(response.getStatus()));
