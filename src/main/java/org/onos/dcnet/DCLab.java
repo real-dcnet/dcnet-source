@@ -1,47 +1,83 @@
 package org.onos.dcnet;
 
+import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
+import org.apache.felix.scr.annotations.Component;
+import org.apache.felix.scr.annotations.Reference;
+import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.onosproject.net.Device;
+import org.onosproject.net.host.HostService;
+import org.onosproject.net.topology.TopologyGraph;
+import org.onosproject.net.topology.TopologyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * ONOS App implementing DCLab forwarding scheme.
+ */
 public class DCLab {
     /** Logs information, errors, and warnings during runtime. */
     private static Logger log = LoggerFactory.getLogger(DCLab.class);
 
+    /** Service used to register and obtain host information. */
+    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    private static TopologyService topologyService;
+
+    public class RestPaths {
+        private static final String PROTO = "http://";
+        private static final String AUTH = "/cgi-bin/luci/rpc/auth";
+        private static final String UCI = "/cgi-bin/luci/rpc/uci";
+        private static final String SYS = "/cgi-bin/luci/rpc/sys";
+    }
+
+    public static void analyzeTopology() {
+        TopologyGraph graph = topologyService.getGraph(topologyService.currentTopology());
+        log.info(graph.toString());
+    }
+
     public static void configureSwitch(final Device device) {
-        Client client = ClientBuilder.newClient();
+        String token = getToken();
+        log.info(token);
+        analyzeTopology();
+    }
+
+    public static String getToken() {
+        String[] params = {"admin", "admin"};
+        JsonObject ret = restCall(RestPaths.PROTO + "10.0.1.99" + RestPaths.AUTH, params, "login", null);
+        if (ret != null) {
+            return ret.getString("result", "");
+        }
+        return "";
+    }
+
+    public static JsonObject restCall(String path, String[] params, String method, String token) {
         JsonObject request = new JsonObject()
-                .add("params", new JsonArray().add("admin").add("admin"))
                 .add("jsonrpc", "2.0")
                 .add("id", 1)
-                .add("method", "login");
-        /*
-        Response response = client
-                .target("http://10.0.1.99/cgi-bin/luci/rpc/auth")
-                .queryParam("params", new JsonArray().add("admin").add("admin"))
-                .queryParam("jsonrpc", "2.0")
-                .queryParam("id", 1)
-                .queryParam("method", "login")
-                .request(MediaType.APPLICATION_JSON)
-                .get();
-        String token = response.readEntity(String.class);
-        log.info(Integer.toString(response.getStatus()));
-        log.info(token);
-        */
+                .add("method", method);
+        if (params.length == 1) {
+            request.add("params", params[0]);
+        }
+        else {
+            JsonArray parameters = new JsonArray();
+            for (String param : params) {
+                parameters.add(param);
+            }
+            request.add("params", parameters);
+        }
         try {
-            URL url = new URL("http://10.0.1.99/cgi-bin/luci/rpc/auth");
+            String target = path;
+            if (token != null) {
+                target += "?auth=" + token;
+            }
+            URL url = new URL(target);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
             conn.setRequestMethod("GET");
@@ -53,18 +89,27 @@ public class DCLab {
             OutputStream os = conn.getOutputStream();
             os.write(input.getBytes());
             os.flush();
-            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 
-            String output;
-            log.info("Output from Server .... \n");
-            while ((output = br.readLine()) != null) {
-                log.info(output);
+            /* Don't wait for response for apply methods since switch must restart its network processes */
+            if (!method.equals("apply")) {
+                BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+
+                String output;
+                StringBuilder result = new StringBuilder();
+                while ((output = br.readLine()) != null) {
+                    log.info(output);
+                    result.append(output);
+                }
+                conn.disconnect();
+
+                return Json.parse(result.toString()).asObject();
             }
-
-            conn.disconnect();
+            return null;
         }
         catch(Exception e) {
             log.error("URL Exception");
+            return null;
         }
+
     }
 }
