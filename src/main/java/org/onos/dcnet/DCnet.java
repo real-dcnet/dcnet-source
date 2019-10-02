@@ -427,6 +427,7 @@ public class DCnet {
     public void activate() {
         init();
         appId = coreService.registerApplication("org.onosproject.dcnet");
+        dcLab = new DCLab();
         packetService.addProcessor(packetProcessor, BASE_PRIO);
         packetService.requestPackets(
                 intercept,
@@ -1204,7 +1205,7 @@ public class DCnet {
                 case DEVICE_UPDATED:
                     setupFlows(deviceEvent.subject());
                     if (configEnable) {
-                        DCLab.configureSwitch(deviceEvent.subject());
+                        dcLab.configureSwitch(deviceEvent.subject());
                     }
                     dcLab.analyzeTopology();
                     break;

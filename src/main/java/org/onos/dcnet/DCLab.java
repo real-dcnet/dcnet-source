@@ -31,7 +31,7 @@ public class DCLab {
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     private TopologyService topologyService;
 
-    public class RestPaths {
+    public static class RestPaths {
         private static final String PROTO = "http://";
         private static final String AUTH = "/cgi-bin/luci/rpc/auth";
         private static final String UCI = "/cgi-bin/luci/rpc/uci";
