@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<checkstyle version="8.10">
-<file name="/home/reed226/dcnet-source/src/main/java/org/onos/dcnet/package-info.java">
-</file>
-<file name="/home/reed226/dcnet-source/src/main/java/org/onos/dcnet/DCnet.java">
-<error line="168" severity="warning" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTypeCheck"/>
-</file>
-</checkstyle>

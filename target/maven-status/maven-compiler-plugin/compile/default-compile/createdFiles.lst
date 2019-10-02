@@ -1,4 +1,5 @@
 org/onos/dcnet/DCnet$1.class
+org/onos/dcnet/DCLab.class
 org/onos/dcnet/package-info.class
 org/onos/dcnet/DCnet$DCnetPacketProcessor.class
 org/onos/dcnet/DCnet.class
@@ -6,3 +7,4 @@ org/onos/dcnet/DCnet$InternalDeviceListener.class
 org/onos/dcnet/DCnet$HostEntry.class
 org/onos/dcnet/DCnet$InternalHostListener.class
 org/onos/dcnet/DCnet$SwitchEntry.class
+org/onos/dcnet/DCLab$RestPaths.class
