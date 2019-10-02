@@ -70,10 +70,6 @@
                 <groupId>org.onosproject</groupId>
                 <artifactId>onos-maven-plugin</artifactId>
             </plugin>
-            <plugin>
-                <groupId>org.jgrapht</groupId>
-                <artifactId>jgrapht-core</artifactId>
-            </plugin>
         </plugins>
     </build>
 
