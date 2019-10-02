@@ -8,6 +8,7 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.onosproject.net.Device;
 import org.onosproject.net.host.HostService;
+import org.onosproject.net.topology.Topology;
 import org.onosproject.net.topology.TopologyGraph;
 import org.onosproject.net.topology.TopologyService;
 import org.slf4j.Logger;
@@ -38,7 +39,8 @@ public class DCLab {
     }
 
     public static void analyzeTopology() {
-        TopologyGraph graph = topologyService.getGraph(topologyService.currentTopology());
+        Topology topo = topologyService.currentTopology();
+        TopologyGraph graph = topologyService.getGraph(topo);
         log.info(graph.toString());
     }
 
