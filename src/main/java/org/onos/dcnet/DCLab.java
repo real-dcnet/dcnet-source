@@ -29,7 +29,7 @@ public class DCLab {
 
     /** Service used to register and obtain host information. */
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
-    private static TopologyService topologyService;
+    private TopologyService topologyService;
 
     public class RestPaths {
         private static final String PROTO = "http://";
@@ -38,18 +38,18 @@ public class DCLab {
         private static final String SYS = "/cgi-bin/luci/rpc/sys";
     }
 
-    public static void analyzeTopology() {
+    public void analyzeTopology() {
         Topology topo = topologyService.currentTopology();
         TopologyGraph graph = topologyService.getGraph(topo);
         log.info(graph.toString());
     }
 
-    public static void configureSwitch(final Device device) {
+    public void configureSwitch(final Device device) {
         String token = getToken();
         log.info(token);
     }
 
-    public static String getToken() {
+    public String getToken() {
         String[] params = {"admin", "admin"};
         JsonObject ret = restCall(RestPaths.PROTO + "10.0.1.99" + RestPaths.AUTH, params, "login", null);
         if (ret != null) {
@@ -58,7 +58,7 @@ public class DCLab {
         return "";
     }
 
-    public static JsonObject restCall(String path, String[] params, String method, String token) {
+    public JsonObject restCall(String path, String[] params, String method, String token) {
         JsonObject request = new JsonObject()
                 .add("jsonrpc", "2.0")
                 .add("id", 1)

@@ -110,6 +110,8 @@ public class DCnet {
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     private GroupService groupService;
 
+    private DCLab dcLab;
+
     /** Holds information about switches parsed from JSON. */
     private static final class SwitchEntry {
         /** Human readable name for the switch. */
@@ -1204,7 +1206,7 @@ public class DCnet {
                     if (configEnable) {
                         DCLab.configureSwitch(deviceEvent.subject());
                     }
-                    DCLab.analyzeTopology();
+                    dcLab.analyzeTopology();
                     break;
                 case DEVICE_REMOVED:
                 case DEVICE_SUSPENDED:
