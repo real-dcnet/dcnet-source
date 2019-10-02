@@ -3,14 +3,13 @@ package org.onos.dcnet;
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
+import org.onlab.graph.Weight;
 import org.onosproject.net.Device;
-import org.onosproject.net.host.HostService;
-import org.onosproject.net.topology.Topology;
-import org.onosproject.net.topology.TopologyGraph;
-import org.onosproject.net.topology.TopologyService;
+import org.onosproject.net.Path;
+import org.onosproject.net.topology.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +18,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Set;
 
 /**
  * ONOS App implementing DCLab forwarding scheme.
@@ -36,10 +36,37 @@ public class DCLab {
 
     public static void analyzeTopology(TopologyService topologyService) {
         Topology topo = topologyService.currentTopology();
-        TopologyGraph graph = topologyService.getGraph(topo);
+        TopologyGraph topoGraph = topologyService.getGraph(topo);
+        Graph<TopologyVertex, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+        for (TopologyVertex v : topoGraph.getVertexes()) {
+            graph.addVertex(v);
+        }
+        for (TopologyEdge e : topoGraph.getEdges()) {
+            graph.addEdge(e.src(), e.dst());
+        }
         log.info(graph.toString());
+        //createLinearTopos(graph, 3);
     }
-
+/*
+    public static void createLinearTopos(Graph<TopologyVertex, DefaultEdge> graph, int size) {
+        Topology topo = topologyService.currentTopology();
+        TopologyGraph graph = topologyService.getGraph(topo);
+        Weight max = null;
+        Path longest = null;
+        for (TopologyVertex v : graph.getVertexes()) {
+            for (TopologyVertex u : graph.getVertexes()) {
+                Set<Path> paths = topologyService.getPaths(topo, v.deviceId(), u.deviceId());
+                if(!paths.isEmpty()) {
+                    Path p = paths.iterator().next();
+                    if(max == null || p.weight().compareTo(max) > 0) {
+                        max = p.weight();
+                        longest = p;
+                    }
+                }
+            }
+        }
+    }
+*/
     public static void configureSwitch(final Device device) {
         String token = getToken();
         log.info(token);
