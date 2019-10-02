@@ -45,7 +45,6 @@ public class DCLab {
     public static void configureSwitch(final Device device) {
         String token = getToken();
         log.info(token);
-        analyzeTopology();
     }
 
     public static String getToken() {

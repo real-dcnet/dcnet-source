@@ -201,6 +201,8 @@ public class DCnet {
     private static String configLoc =
             System.getProperty("user.home") + "/dcnet-source/config/mininet/";
 
+    private static boolean configEnable = false;
+
     /** Macro for data center egress switches. */
     private static final int DC = 0;
 
@@ -1199,7 +1201,10 @@ public class DCnet {
                 case DEVICE_ADDED:
                 case DEVICE_UPDATED:
                     setupFlows(deviceEvent.subject());
-                    DCLab.configureSwitch(deviceEvent.subject());
+                    if (configEnable) {
+                        DCLab.configureSwitch(deviceEvent.subject());
+                    }
+                    DCLab.analyzeTopology();
                     break;
                 case DEVICE_REMOVED:
                 case DEVICE_SUSPENDED:
