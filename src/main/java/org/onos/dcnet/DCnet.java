@@ -430,7 +430,6 @@ public class DCnet {
     public void activate() {
         init();
         appId = coreService.registerApplication("org.onosproject.dcnet");
-        dcLab = new DCLab();
         packetService.addProcessor(packetProcessor, BASE_PRIO);
         packetService.requestPackets(
                 intercept,
