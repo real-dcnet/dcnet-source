@@ -66,6 +66,7 @@ import org.onosproject.net.packet.PacketContext;
 import org.onosproject.net.packet.PacketPriority;
 import org.onosproject.net.packet.PacketProcessor;
 import org.onosproject.net.packet.PacketService;
+import org.onosproject.net.topology.TopologyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,7 +111,9 @@ public class DCnet {
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     private GroupService groupService;
 
-    private DCLab dcLab;
+    /** Service used to register and obtain group information. */
+    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    private TopologyService topologyService;
 
     /** Holds information about switches parsed from JSON. */
     private static final class SwitchEntry {
@@ -1205,9 +1208,9 @@ public class DCnet {
                 case DEVICE_UPDATED:
                     setupFlows(deviceEvent.subject());
                     if (configEnable) {
-                        dcLab.configureSwitch(deviceEvent.subject());
+                        DCLab.configureSwitch(deviceEvent.subject());
                     }
-                    dcLab.analyzeTopology();
+                    DCLab.analyzeTopology(topologyService);
                     break;
                 case DEVICE_REMOVED:
                 case DEVICE_SUSPENDED:
