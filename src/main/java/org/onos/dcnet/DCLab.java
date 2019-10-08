@@ -4,11 +4,12 @@ import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
-import org.onlab.graph.Weight;
 import org.onosproject.net.Device;
-import org.onosproject.net.Path;
 import org.onosproject.net.topology.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Set;
+import java.util.*;
 
 /**
  * ONOS App implementing DCLab forwarding scheme.
@@ -34,6 +35,28 @@ public class DCLab {
         private static final String SYS = "/cgi-bin/luci/rpc/sys";
     }
 
+    public static class QueueEntry implements Comparable<QueueEntry> {
+        private int key;
+        private int value;
+
+        public QueueEntry(int key, int value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public int getKey() {
+            return this.key;
+        }
+
+        public int getValue() {
+            return this.value;
+        }
+
+        public int compareTo(QueueEntry entry) {
+            return this.key - entry.getKey();
+        }
+    }
+
     public static void analyzeTopology(TopologyService topologyService) {
         Topology topo = topologyService.currentTopology();
         TopologyGraph topoGraph = topologyService.getGraph(topo);
@@ -42,31 +65,116 @@ public class DCLab {
             graph.addVertex(v);
         }
         for (TopologyEdge e : topoGraph.getEdges()) {
-            graph.addEdge(e.src(), e.dst());
+            if (DijkstraShortestPath.findPathBetween(graph, e.src(), e.dst()) == null) {
+                graph.addEdge(e.src(), e.dst());
+            }
         }
         log.info(graph.toString());
-        //createLinearTopos(graph, 3);
+        List<List<TopologyVertex>> topos = createLinearTopos(graph, 3);
+        log.info(topos.toString());
     }
-/*
-    public static void createLinearTopos(Graph<TopologyVertex, DefaultEdge> graph, int size) {
-        Topology topo = topologyService.currentTopology();
-        TopologyGraph graph = topologyService.getGraph(topo);
-        Weight max = null;
-        Path longest = null;
-        for (TopologyVertex v : graph.getVertexes()) {
-            for (TopologyVertex u : graph.getVertexes()) {
-                Set<Path> paths = topologyService.getPaths(topo, v.deviceId(), u.deviceId());
-                if(!paths.isEmpty()) {
-                    Path p = paths.iterator().next();
-                    if(max == null || p.weight().compareTo(max) > 0) {
-                        max = p.weight();
-                        longest = p;
+
+    public static List<List<TopologyVertex>> createLinearTopos(Graph<TopologyVertex, DefaultEdge> graph, int size) {
+        while(true) {
+            int max = 0;
+            GraphPath longest = null;
+            for (TopologyVertex v : graph.vertexSet()) {
+                for (TopologyVertex u : graph.vertexSet()) {
+                    GraphPath path = DijkstraShortestPath.findPathBetween(graph, v, u);
+                    if (path != null && path.getLength() > max) {
+                        max = path.getLength();
+                        longest = path;
                     }
                 }
             }
+            if(max <= size || longest == null) {
+                break;
+            }
+            int count = 1;
+            for(Object e : longest.getEdgeList()) {
+                if(count == size) {
+                    graph.removeEdge((DefaultEdge) e);
+                    count = 1;
+                }
+                else {
+                    count++;
+                }
+            }
+        }
+        List<List<TopologyVertex>> topos = new ArrayList<>();
+        List<TopologyVertex> addedVertices = new ArrayList<>();
+        for (TopologyVertex v : graph.vertexSet()) {
+            for (TopologyVertex u : graph.vertexSet()) {
+                GraphPath path = DijkstraShortestPath.findPathBetween(graph, v, u);
+                if (path.getLength() == size) {
+                    boolean exit = false;
+                    for (Object k : path.getVertexList()) {
+                        if (addedVertices.contains(k)) {
+                            exit = true;
+                            break;
+                        }
+                    }
+                    if (exit) {
+                        break;
+                    }
+                    addedVertices.addAll(path.getVertexList());
+                    topos.add(path.getVertexList());
+                }
+            }
+        }
+        return topos;
+    }
+
+    public static List<List<TopologyVertex>> createStarTopos(Graph<TopologyVertex, DefaultEdge> graph, int size) {
+        List<List<TopologyVertex>> components = new ArrayList<>();
+        List<Integer> points = new ArrayList<>();
+        for (TopologyVertex v : graph.vertexSet()) {
+            if (graph.degreeOf(v) == 1) {
+                List<TopologyVertex> component = new ArrayList<>();
+                component.add(v);
+                components.add(component);
+                points.add(1);
+            }
+        }
+        while (true) {
+            List<List<Integer>> compDist = new ArrayList<>();
+            for (int i = 0; i < components.size(); i++) {
+                compDist.add(new ArrayList<>());
+                for (int j = 0; j < components.size(); j++) {
+                    compDist.get(i).add(Integer.MAX_VALUE);
+                }
+            }
+
+            /* Find shortest distance between all pairs of components */
+            for (int i = 0; i < components.size(); i++) {
+                for (int j = i + 1; j < components.size(); j++) {
+                    for (TopologyVertex v : components.get(i)) {
+                        for (TopologyVertex u : components.get(j)) {
+                            int dist = DijkstraShortestPath.findPathBetween(graph, v, u).getLength();
+                            if (dist < compDist.get(i).get(j)) {
+                                compDist.get(i).set(j, dist);
+                            }
+                            if (dist < compDist.get(j).get(i)) {
+                                compDist.get(j).set(i, dist);
+                            }
+                        }
+                    }
+                }
+            }
+
+            /* Put distances into a minheap */
+            List<PriorityQueue<QueueEntry>> compQueue = new ArrayList<>();
+            for (int i = 0; i < components.size(); i++) {
+                compQueue.add(new PriorityQueue<>());
+                for (int j = 0; j < components.size(); j++) {
+                    compQueue.get(i).add(new QueueEntry(compDist.get(i).get(j), j));
+                }
+            }
+
+            // TODO: Gale-Shapely Matching
         }
     }
-*/
+
     public static void configureSwitch(final Device device) {
         String token = getToken();
         log.info(token);
