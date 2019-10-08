@@ -3,6 +3,7 @@ package org.onos.dcnet;
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -145,11 +146,13 @@ public class DCLab {
                 }
             }
 
+            // TODO: Use a temporary graph so that edges can be removed during Gale-Shapley
             /* Find shortest distance between all pairs of components */
             for (int i = 0; i < components.size(); i++) {
                 for (int j = i + 1; j < components.size(); j++) {
                     for (TopologyVertex v : components.get(i)) {
                         for (TopologyVertex u : components.get(j)) {
+                            // TODO: Store closest nodes for each pair of components so they do not need to be found again
                             int dist = DijkstraShortestPath.findPathBetween(graph, v, u).getLength();
                             if (dist < compDist.get(i).get(j)) {
                                 compDist.get(i).set(j, dist);
@@ -171,7 +174,21 @@ public class DCLab {
                 }
             }
 
-            // TODO: Gale-Shapely Matching
+            List<Boolean> matched = new ArrayList<>();
+            for (int i = 0; i < components.size(); i++) {
+                matched.add(false);
+            }
+            List<List<TopologyVertex>> tempComp = new ArrayList<>();
+            List<Integer> tempPoints = new ArrayList<>();
+            // TODO: Gale-Shapley Matching
+            while (true) {
+                int minDist = Integer.MAX_VALUE;
+                for (int i = 0; i < compQueue.size(); i++) {
+                    if (compQueue.get(i).peek() != null && compQueue.get(i).peek().getKey() < minDist) {
+
+                    }
+                }
+            }
         }
     }
 
