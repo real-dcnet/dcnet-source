@@ -12,7 +12,14 @@ tar xvf onos-2.1.0.tar.gz
 ## Generating Mininet Topology
 The following command generates the folded Clos topology in Mininet according to DCnet specifications and creates configuration files to use with the Ryu controller:
 ```
-sudo python folded_clos.py [--leaf NUM] [--spine NUM] [--pod NUM] [--ratio NUM] [--fanout NUM]
+sudo python folded_clos.py  [--leaf NUM1 [NUM2 NUM3 ...]]
+                            [--spine NUM1 [NUM2 NUM3 ...]]
+                            [--pod NUM1 [NUM2 NUM3 ...]]
+                            [--ratio NUM1 [NUM2 NUM3 ...]]
+                            [--fanout NUM1 [NUM2 NUM3 ...]]
+                            [--remote 0/1 [0/1 0/1 ...]]
+                            [--dc NUM]
+                            [--test]
 ```
 All arguments are optional, with the default values and effects being:
 
@@ -29,6 +36,11 @@ All arguments are optional, with the default values and effects being:
 
 --dc     (Default 2) : Number of data centers in topology
 
+--remote (Default 0) : Indicates if data centers are located remotely (higher latency)
+
+--test   (Default 0) : Indicates if ping and TCP testing should be performed
+
+Also note that every flag can take several arguments, up to the value for --dc. This gives different configuration settings for each data center. Single arguments will give the same configuration setting for all data centers. An argument count that is not equal to the number --dc is invalid and will default to using the first argument in the single argument action.
 
 Running this command starts the Mininet CLI and creates three configuration files, switch_config.csv, host_config.csv, and top_config.csv, for use by the ONOS controller.
 
