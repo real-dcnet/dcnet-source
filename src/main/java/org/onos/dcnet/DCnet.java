@@ -340,10 +340,6 @@ public class DCnet {
                 describing ports to use for ECMP */
             for (int d = 0; d < dcCount; d++) {
                 leafBuckets.add(new ArrayList<>());
-                log.info("Data Center: " + d);
-                log.info("lfRadixUp: " + lfRadixUp.get(d));
-                log.info("spRadixUp: " + spRadixUp.get(d));
-                log.info("dcRadixDown: " + dcRadixDown.get(d));
                 for (int i = 1; i <= lfRadixUp.get(d); i++) {
                     TrafficTreatment.Builder treatment = DefaultTrafficTreatment
                             .builder()
@@ -361,7 +357,6 @@ public class DCnet {
                     spineBuckets.get(d).add(DefaultGroupBucket
                             .createSelectGroupBucket(treatment.build()));
                 }
-                log.info("Spine buckets" + spineBuckets.get(d));
                 dcBuckets.add(new ArrayList<>());
                 for (int i = 1; i <= dcRadixDown.get(d); i++) {
                     TrafficTreatment.Builder treatment = DefaultTrafficTreatment
@@ -1125,7 +1120,6 @@ public class DCnet {
                     appId);
             groupService.addGroup(groupDescription);
         }
-        log.info("Group Id" + new GroupId(groupDescription.givenGroupId()));
         TrafficTreatment.Builder treatment = DefaultTrafficTreatment
                 .builder()
                 .group(new GroupId(groupDescription.givenGroupId()));
