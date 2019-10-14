@@ -14,41 +14,76 @@ import json
 
 # Function to parse the command line arguments
 def parseOptions():
-	leaf = 4
-	spine = 2
-	pod = 2
-	ss_ratio = 2
-	fanout = 3
+	leaf = []
+	spine = []
+	pod = []
+	ss_ratio = []
+	fanout = []
 	dc = 2
 	test = False
 
 	parser = ArgumentParser("Create a folded Clos network topology")
 
 	# Add arguments to the parser for leaf, spine, pod, super spine, and fanout options
-	parser.add_argument("--leaf", type = int, help = "Number of leaf switches per pod")
-	parser.add_argument("--spine", type = int, help = "Number of spine switches per pod")
-	parser.add_argument("--pod", type = int, help = "Number of pods per data center")
-	parser.add_argument("--ratio", type = int
-						, help = "Number of super spine switches per spine switch")
-	parser.add_argument("--fanout", type = int, help = "Number of hosts per leaf switch")
+	parser.add_argument("--leaf", type = int, nargs = "+",
+						help = "Number of leaf switches per pod")
+	parser.add_argument("--spine", type = int, nargs = "+",
+						help = "Number of spine switches per pod")
+	parser.add_argument("--pod", type = int, nargs = "+",
+						help = "Number of pods per data center")
+	parser.add_argument("--ratio", type = int, nargs = "+",
+						help = "Number of super spine switches per spine switch")
+	parser.add_argument("--fanout", type = int, nargs = "+", 
+						help = "Number of hosts per leaf switch")
 	parser.add_argument("--dc", type = int, help = "Number of data centers")
 	parser.add_argument("--test", help = "Enable automatic testing")
 
 	args = parser.parse_args()
 
 	# Change the values if passed on command line
-	if args.leaf:
-		leaf = args.leaf
-	if args.spine:
-		spine = args.spine
-	if args.pod:
-		pod = args.pod
-	if args.ratio:
-		ss_ratio = args.ratio
-	if args.pod:
-		fanout = args.fanout
 	if args.dc:
 		dc = args.dc
+	for i in range(dc):
+		leaf.append(4)
+		spine.append(2)
+		pod.append(2)
+		ss_ratio.append(2)
+		fanout.append(3)
+	if args.leaf:
+		leaf = []
+		if len(args.leaf) == dc: 
+			leaf = args.leaf
+		else:
+			for i in range(dc):
+				leaf.append(args.leaf[0])
+	if args.spine:
+		spine = []
+		if len(args.spine) == dc: 
+			spine = args.spine
+		else:
+			for i in range(dc):
+				spine.append(args.spine[0])
+	if args.pod:
+		pod = []
+		if len(args.pod) == dc: 
+			pod = args.pod
+		else:
+			for i in range(dc):
+				pod.append(args.pod[0])
+	if args.ratio:
+		ss_ratio = []
+		if len(args.ratio) == dc: 
+			ss_ratio = args.ratio
+		else:
+			for i in range(dc):
+				ss_ratio.append(args.ratio[0])
+	if args.fanout:
+		fanout = []
+		if len(args.fanout) == dc: 
+			fanout = args.fanout
+		else:
+			for i in range(dc):
+				fanout.append(args.fanout[0])
 	if args.test:
 		test = True
 
@@ -189,12 +224,12 @@ class FoldedClos(Topo):
 		top_config = {"dc_count" : dc,"config" : []}
 		for i in range(dc):
 			top_config["config"].append({
-				"dc_radix_down" : spine * ss_ratio,
-				"ss_radix_down" : pod,
-				"sp_radix_up" : ss_ratio,
-				"sp_radix_down" : leaf,
-				"lf_radix_up" : spine,
-				"lf_radix_down" : fanout
+				"dc_radix_down" : spine[i] * ss_ratio[i],
+				"ss_radix_down" : pod[i],
+				"sp_radix_up" : ss_ratio[i],
+				"sp_radix_down" : leaf[i],
+				"lf_radix_up" : spine[i],
+				"lf_radix_down" : fanout[i]
 			})
 		config = open("config/mininet/top_config.json", "w+")
 		config.write(json.dumps(top_config, indent = 4))
@@ -226,15 +261,17 @@ class FoldedClos(Topo):
 				"leaf" : -1
 			})
 			dc_count += increment
+			ss_switches.append([])
+			leaf_switches.append([])
 
 			# Create super spines
-			for ss in range(ss_ratio * spine):
+			for ss in range(ss_ratio[d] * spine[d]):
 				ss_name = "u" + str(ss_count)
 				ip_addr = "10.0.1" + format(switch_count >> 8, "02d") + "."
 				ip_addr += format(switch_count & 0xFF, "d") + "/12"
 				self.addSwitch(ss_name, ip = ip_addr)
 				switch_count += 1;
-				ss_switches.append(ss_name)
+				ss_switches[d].append(ss_name)
 				switch_config["supers"].append({
 					"id" : format(ss_count, "x"),
 					"name" : ss_name,
@@ -246,16 +283,16 @@ class FoldedClos(Topo):
 				ss_count += increment
 
 			# Create a group of leaf and spine switches for every pod
-			for p in range(pod):
+			for p in range(pod[d]):
 
 				# Create leaves and hosts for each leaf
-				for l in range(leaf):
+				for l in range(leaf[d]):
 					leaf_name = "l" + str(leaf_count)
 					ip_addr = "10.0.1" + format(switch_count >> 8, "02d") + "."
 					ip_addr += format(switch_count & 0xFF, "d") + "/12"
 					self.addSwitch(leaf_name, ip = ip_addr)
 					switch_count += 1;
-					leaf_switches.append(leaf_name)
+					leaf_switches[d].append(leaf_name)
 					switch_config["leaves"].append({
 						"id" : format(leaf_count, "x"),
 						"name" : leaf_name,
@@ -267,7 +304,7 @@ class FoldedClos(Topo):
 					leaf_count += increment
 					
 					# Create hosts, designated by letter h, and link to leaf
-					for h in range(fanout):
+					for h in range(fanout[d]):
 						host_name = "h" + str(host_count)
 
 						# Construct host IPv4 address, first 8 bits are reserved,
@@ -306,7 +343,7 @@ class FoldedClos(Topo):
 						#self.addLink(leaf_name, host_name)
 	
 				# Create spines and link to super spines and leaves
-				for s in range(spine):
+				for s in range(spine[d]):
 					spine_name = "s" + str(spine_count)
 					ip_addr = "10.0.1" + format(switch_count >> 8, "02d") + "."
 					ip_addr += format(switch_count & 0xFF, "d") + "/12"
@@ -321,18 +358,19 @@ class FoldedClos(Topo):
 						"leaf" : -1
 					})
 					spine_count += increment
-					for l in range(leaf):
-						self.addLink(spine_name, leaf_switches[l + p*leaf + d*pod*leaf],
+					for l in range(leaf[d]):
+	# TODO: Non-uniform data center sizes
+						self.addLink(spine_name, leaf_switches[d][l + p*leaf[d]],
 										cls = TCLink, bw = 40, delay = "0.1ms")
 						#self.addLink(spine_name, leaf_switches[l + p*leaf + d*pod*leaf])
-					for ss in range(ss_ratio):
-						self.addLink(ss_switches[ss + s*ss_ratio + d*spine*ss_ratio],
+					for ss in range(ss_ratio[d]):
+						self.addLink(ss_switches[d][ss + s*ss_ratio[d]],
 										spine_name, cls = TCLink, bw = 40, delay = "0.1ms")
 						#self.addLink(ss_switches[ss + s*ss_ratio + d*spine*ss_ratio], spine_name)
 			
 			# Link super spines to data center router
-			for ss in range(ss_ratio * spine):
-				ss_name = ss_switches[ss + d*spine*ss_ratio]
+			for ss in range(ss_ratio[d] * spine[d]):
+				ss_name = ss_switches[d][ss]
 				self.addLink(dc_name, ss_name, cls = TCLink, bw = 100, delay = "0.1ms")
 				#self.addLink(dc_name, ss_name)
 		
@@ -378,12 +416,12 @@ if __name__ == "__main__":
 		if test is True:
                         time.sleep(30)
 			print("*** Running performance tests (no load)")
-			runPingTests(net, pod, dc, False)
-			runTCPTests(net, pod, dc, False)
+			runPingTests(net, pod[0], dc, False)
+			runTCPTests(net, pod[0], dc, False)
 		
 			print("*** Running performance tests (with load)")
-			runPingTests(net, pod, dc, True)
-			runTCPTests(net, pod, dc, True)
+			runPingTests(net, pod[0], dc, True)
+			runTCPTests(net, pod[0], dc, True)
 
 		CLI(net)
 	finally:
