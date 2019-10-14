@@ -20,6 +20,7 @@ def parseOptions():
 	ss_ratio = []
 	fanout = []
 	dc = 2
+	remote = []
 	test = False
 
 	parser = ArgumentParser("Create a folded Clos network topology")
@@ -36,6 +37,8 @@ def parseOptions():
 	parser.add_argument("--fanout", type = int, nargs = "+", 
 						help = "Number of hosts per leaf switch")
 	parser.add_argument("--dc", type = int, help = "Number of data centers")
+	parser.add_argument("--remote", type = int, nargs = "+",
+						help = "Value 1 or 0. Indicates if a data center is remote")
 	parser.add_argument("--test", help = "Enable automatic testing")
 
 	args = parser.parse_args()
@@ -49,6 +52,7 @@ def parseOptions():
 		pod.append(2)
 		ss_ratio.append(2)
 		fanout.append(3)
+		remote.append(0)
 	if args.leaf:
 		leaf = []
 		if len(args.leaf) == dc: 
@@ -84,11 +88,18 @@ def parseOptions():
 		else:
 			for i in range(dc):
 				fanout.append(args.fanout[0])
+	if args.remote:
+		remote = []
+		if len(args.remote) == dc: 
+			remote = args.remote
+		else:
+			for i in range(dc):
+				remote.append(args.remote[0])
 	if args.test:
 		test = True
 
 	# return the values
-	return leaf, spine, pod, ss_ratio, fanout, dc, test
+	return leaf, spine, pod, ss_ratio, fanout, dc, remote, test
 
 def createTraffic(shuffle, host):
 	h = 0
@@ -202,7 +213,7 @@ def generateMac(switch_id):
 
 # Class defining a Folded Clos topology using super spines
 class FoldedClos(Topo):
-	def __init__(self, leaf, spine, pod, ss_ratio, fanout, dc):
+	def __init__(self, leaf, spine, pod, ss_ratio, fanout, dc, remote):
 		"Create Leaf and Spine Topo."
 
 		Topo.__init__(self)
@@ -339,8 +350,8 @@ class FoldedClos(Topo):
 							"idmac" : mac_addr
 						})
 						host_count += 1
-						self.addLink(leaf_name, host_name, cls = TCLink, bw = 10, delay = "0.1ms")
-						#self.addLink(leaf_name, host_name)
+						self.addLink(leaf_name, host_name,
+									cls = TCLink, bw = 10, delay = "1ms")
 	
 				# Create spines and link to super spines and leaves
 				for s in range(spine[d]):
@@ -359,27 +370,27 @@ class FoldedClos(Topo):
 					})
 					spine_count += increment
 					for l in range(leaf[d]):
-	# TODO: Non-uniform data center sizes
 						self.addLink(spine_name, leaf_switches[d][l + p*leaf[d]],
-										cls = TCLink, bw = 40, delay = "0.1ms")
-						#self.addLink(spine_name, leaf_switches[l + p*leaf + d*pod*leaf])
+										cls = TCLink, bw = 40, delay = "1ms")
 					for ss in range(ss_ratio[d]):
 						self.addLink(ss_switches[d][ss + s*ss_ratio[d]],
-										spine_name, cls = TCLink, bw = 40, delay = "0.1ms")
-						#self.addLink(ss_switches[ss + s*ss_ratio + d*spine*ss_ratio], spine_name)
+										spine_name, cls = TCLink, bw = 40, delay = "1ms")
 			
 			# Link super spines to data center router
 			for ss in range(ss_ratio[d] * spine[d]):
 				ss_name = ss_switches[d][ss]
-				self.addLink(dc_name, ss_name, cls = TCLink, bw = 100, delay = "0.1ms")
-				#self.addLink(dc_name, ss_name)
+				self.addLink(dc_name, ss_name, cls = TCLink, bw = 100, delay = "1ms")
 		
 		# Let a single high bandwidth, high latency link represent
 		# an internet connection between each pair of data centers	
 		for d1 in range(dc):
 			for d2 in range(d1 + 1, dc):
-				self.addLink(dc_switches[d1], dc_switches[d2], cls = TCLink, bw = 1000, delay = "50ms")
-				#self.addLink(dc_switches[d1], dc_switches[d2])
+				if (remote[d1] == 0) & (remote[d2]) == 0:
+					self.addLink(dc_switches[d1], dc_switches[d2],
+								cls = TCLink, bw = 1000, delay = "1ms")
+				else:
+					self.addLink(dc_switches[d1], dc_switches[d2],
+								cls = TCLink, bw = 1000, delay = "50ms")
 			host_name = "h" + str(host_count)
 			ip_addr = "10.0." + format(host_count >> 8, "d") + "."
 			ip_addr += format(host_count & 0xFF, "d")
@@ -388,7 +399,8 @@ class FoldedClos(Topo):
 			mac_addr += ":" + format(host_count & 0xFF, "02x")
 			self.addHost(host_name, ip = ip_addr, mac = mac_addr)
 			host_count += 1
-			self.addLink(dc_switches[d1], host_name, cls = TCLink, bw = 10, delay = "0.1ms")
+			self.addLink(dc_switches[d1], host_name,
+						cls = TCLink, bw = 10, delay = "1ms")
 
 		config = open("config/mininet/switch_config.json", "w+")
 		config.write(json.dumps(switch_config, indent = 4))
@@ -399,8 +411,8 @@ if __name__ == "__main__":
 	net = None
 	try:
 		setLogLevel("info")
-		leaf, spine, pod, ss_ratio, fanout, dc, test = parseOptions()
-		topo = FoldedClos(leaf, spine, pod, ss_ratio, fanout, dc)
+		leaf, spine, pod, ss_ratio, fanout, dc, remote, test = parseOptions()
+		topo = FoldedClos(leaf, spine, pod, ss_ratio, fanout, dc, remote)
 		net = Mininet(topo, controller = RemoteController, link = TCLink)
 		net.start()
 
