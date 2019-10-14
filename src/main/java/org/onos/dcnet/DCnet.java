@@ -340,6 +340,10 @@ public class DCnet {
                 describing ports to use for ECMP */
             for (int d = 0; d < dcCount; d++) {
                 leafBuckets.add(new ArrayList<>());
+                log.info("Data Center: " + d);
+                log.info("lfRadixUp: " + lfRadixUp.get(d));
+                log.info("spRadixUp: " + spRadixUp.get(d));
+                log.info("dcRadixDown: " + dcRadixDown.get(d));
                 for (int i = 1; i <= lfRadixUp.get(d); i++) {
                     TrafficTreatment.Builder treatment = DefaultTrafficTreatment
                             .builder()
