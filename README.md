@@ -10,7 +10,7 @@ tar xvf onos-2.1.0.tar.gz
 ```
 
 ## Generating Mininet Topology
-The following command generates the folded Clos topology in Mininet according to DCnet specifications and creates configuration files to use with the Ryu controller:
+The following command generates the folded Clos topology in Mininet according to DCnet specifications and creates configuration files to use with the ONOS controller:
 ```
 sudo python folded_clos.py  [--leaf NUM1 [NUM2 NUM3 ...]]
                             [--spine NUM1 [NUM2 NUM3 ...]]
@@ -42,7 +42,7 @@ All arguments are optional, with the default values and effects being:
 
 Also note that every flag can take several arguments, up to the value for --dc. This gives different configuration settings for each data center. Single arguments will give the same configuration setting for all data centers. An argument count that is not equal to the number --dc is invalid and will default to using the first argument in the single argument action.
 
-Running this command starts the Mininet CLI and creates three configuration files, switch_config.csv, host_config.csv, and top_config.csv, for use by the ONOS controller.
+Running this command starts the Mininet CLI and creates three configuration files: switch_config.json, host_config.json, and top_config.json, which are placed in config/mininet for use by the ONOS controller.
 
 ## Running ONOS Controller
 To start ONOS, go to the directory containing onos-2.1.0 that was extracted from the tarball and use the commands:
