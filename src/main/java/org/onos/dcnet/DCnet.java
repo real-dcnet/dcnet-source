@@ -361,6 +361,7 @@ public class DCnet {
                     spineBuckets.get(d).add(DefaultGroupBucket
                             .createSelectGroupBucket(treatment.build()));
                 }
+                log.info("Spine buckets" + spineBuckets.get(d));
                 dcBuckets.add(new ArrayList<>());
                 for (int i = 1; i <= dcRadixDown.get(d); i++) {
                     TrafficTreatment.Builder treatment = DefaultTrafficTreatment
@@ -1124,6 +1125,7 @@ public class DCnet {
                     appId);
             groupService.addGroup(groupDescription);
         }
+        log.info("Group Id" + new GroupId(groupDescription.givenGroupId()));
         TrafficTreatment.Builder treatment = DefaultTrafficTreatment
                 .builder()
                 .group(new GroupId(groupDescription.givenGroupId()));
