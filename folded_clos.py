@@ -110,7 +110,7 @@ def createTraffic(shuffle, host):
 			h += 2
 			continue
 		server.cmd("iperf3 -s -1 &")
-		client.cmd("iperf3 -t 25 -c " + server.IP() + " &")
+		client.cmd("iperf3 -t 105 -c " + server.IP() + " &")
 		h += 2
 
 def runPingTests(net, pods, dcs, with_load):
@@ -125,38 +125,42 @@ def runPingTests(net, pods, dcs, with_load):
 	if with_load is True:
 		createTraffic(shuffle, host)
 	ping_out.write("\n--- Ping Test 1 Results ---")
-	ping_out.write(host.cmd("ping -c 3 " + net.hosts[1].IP()))
+	ping_out.write(host.cmd("ping -c 1 " + net.hosts[1].IP()))
+	time.sleep(5)
 	print("Ping Test 2")
 	ping_out.write("\n--- Ping Test 2 Results ---")
-	ping_out.write(host.cmd("ping -c 20 " + net.hosts[1].IP()))
-	time.sleep(10)
+	ping_out.write(host.cmd("ping -c 100 " + net.hosts[1].IP()))
+	time.sleep(5)
 	print("Ping Test 3")
 	if with_load is True:
 		createTraffic(shuffle, host)
 	ping_out.write("\n--- Ping Test 3 Results ---")
-	ping_out.write(host.cmd("ping -c 3 " + net.hosts[len(net.hosts)/(dcs*pods)-1].IP()))
+	ping_out.write(host.cmd("ping -c 1 " + net.hosts[len(net.hosts)/(dcs*pods)-1].IP()))
+	time.sleep(5)
 	print("Ping Test 4")
 	ping_out.write("\n--- Ping Test 4 Results ---")
-	ping_out.write(host.cmd("ping -c 20 " + net.hosts[len(net.hosts)/(dcs*pods)-1].IP()))
-	time.sleep(10)
+	ping_out.write(host.cmd("ping -c 100 " + net.hosts[len(net.hosts)/(dcs*pods)-1].IP()))
+	time.sleep(5)
 	print("Ping Test 5")
 	if with_load is True:
 		createTraffic(shuffle, host)
 	ping_out.write("\n--- Ping Test 5 Results ---")
-	ping_out.write(host.cmd("ping -c 3 " + net.hosts[len(net.hosts) / dcs - 1].IP()))
+	ping_out.write(host.cmd("ping -c 1 " + net.hosts[len(net.hosts) / dcs - 1].IP()))
+	time.sleep(5)
 	print("Ping Test 6")
 	ping_out.write("\n--- Ping Test 6 Results ---")
-	ping_out.write(host.cmd("ping -c 20 " + net.hosts[len(net.hosts) / dcs - 1].IP()))
-	time.sleep(10)
+	ping_out.write(host.cmd("ping -c 100 " + net.hosts[len(net.hosts) / dcs - 1].IP()))
+	time.sleep(5)
 	print("Ping Test 7")
 	if with_load is True:
 		createTraffic(shuffle, host)
 	ping_out.write("\n--- Ping Test 7 Results ---")
-	ping_out.write(host.cmd("ping -c 3 " + net.hosts[-1].IP()))
+	ping_out.write(host.cmd("ping -c 1 " + net.hosts[-1].IP()))
+	time.sleep(5)
 	print("Ping Test 8")
 	ping_out.write("\n--- Ping Test 8 Results ---")
-	ping_out.write(host.cmd("ping -c 20 " + net.hosts[-1].IP()))
-	time.sleep(10)
+	ping_out.write(host.cmd("ping -c 100 " + net.hosts[-1].IP()))
+	time.sleep(5)
 
 def runTCPTests(net, pods, dcs, with_load):
 	client = net.hosts[0]
@@ -173,7 +177,7 @@ def runTCPTests(net, pods, dcs, with_load):
 	server.cmd("iperf3 -s -1 -p 5250 &")
 	tcp_out.write("\n--- TCP Test 1: ")
 	tcp_out.write(client.name + " sending to " + server.name + " ---\n")
-	tcp_out.write(client.cmd("iperf3 -t 20 -p 5250 -c " + server.IP()))
+	tcp_out.write(client.cmd("iperf3 -t 100 -p 5250 -c " + server.IP()))
 	time.sleep(10)
 	print("TCP Test 2")
 	if with_load is True:
@@ -182,7 +186,7 @@ def runTCPTests(net, pods, dcs, with_load):
 	server.cmd("iperf3 -s -1 -p 5250 &")
 	tcp_out.write("\n--- TCP Test 2: ")
 	tcp_out.write(client.name + " sending to " + server.name + " ---\n")
-	tcp_out.write(client.cmd("iperf3 -t 20 -p 5250 -c " + server.IP()))
+	tcp_out.write(client.cmd("iperf3 -t 100 -p 5250 -c " + server.IP()))
 	time.sleep(10)
 	print("TCP Test 3")
 	if with_load is True:
@@ -191,7 +195,7 @@ def runTCPTests(net, pods, dcs, with_load):
 	server.cmd("iperf3 -s -1 -p 5250 &")
 	tcp_out.write("\n--- TCP Test 3: ")
 	tcp_out.write(client.name + " sending to " + server.name + " ---\n")
-	tcp_out.write(client.cmd("iperf3 -t 20 -p 5250 -c " + server.IP()))
+	tcp_out.write(client.cmd("iperf3 -t 100 -p 5250 -c " + server.IP()))
 	time.sleep(10)
 	print("TCP Test 4")
 	if with_load is True:
@@ -200,7 +204,7 @@ def runTCPTests(net, pods, dcs, with_load):
 	server.cmd("iperf3 -s -1 -p 5250 &")
 	tcp_out.write("\n--- TCP Test 4: ")
 	tcp_out.write(client.name + " sending to " + server.name + " ---\n")
-	tcp_out.write(client.cmd("iperf3 -t 20 -p 5250 -c " + server.IP()))
+	tcp_out.write(client.cmd("iperf3 -t 100 -p 5250 -c " + server.IP()))
 	time.sleep(10)
 
 def generateMac(switch_id):
