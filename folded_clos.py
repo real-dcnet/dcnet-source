@@ -101,111 +101,69 @@ def parseOptions():
 	# return the values
 	return leaf, spine, pod, ss_ratio, fanout, dc, remote, test
 
-def createTraffic(shuffle, host):
+def createTraffic(shuffle):
 	h = 0
-	while h < len(shuffle):
+	while h < len(shuffle) - 1:
 		server = shuffle[h]
 		client = shuffle[h + 1]
-		if server.name == host.name or client.name == host.name:
-			h += 2
-			continue
 		server.cmd("iperf3 -s -1 &")
 		client.cmd("iperf3 -t 105 -c " + server.IP() + " &")
 		h += 2
 
-def runPingTests(net, pods, dcs, with_load):
+def runPingTests(net, leaf, pod, fanout, dc, with_load):
 	host = net.hosts[0]
+	destinations = [1, fanout[0], (leaf[0] * fanout[0])]
+	host_count = pod[0] * leaf[0] * fanout[0]
+	for i in range(dc - 1):
+		destinations.append(host_count)
+		host_count += pod[i + 1] * leaf[i + 1] * fanout[i + 1]
 	if with_load is True:
-		ping_out = open("ping_test_with_load.out", "w+")
+		ping_out = open("results/ping_test_with_load.out", "w+")
 	else:
-		ping_out = open("ping_test_no_load.out", "w+")
-	shuffle = list(net.hosts)
-	random.shuffle(shuffle)
-	print("Ping Test 1")
-	if with_load is True:
-		createTraffic(shuffle, host)
-	ping_out.write("\n--- Ping Test 1 Results ---")
-	ping_out.write(host.cmd("ping -c 1 " + net.hosts[1].IP()))
-	time.sleep(5)
-	print("Ping Test 2")
-	ping_out.write("\n--- Ping Test 2 Results ---")
-	ping_out.write(host.cmd("ping -c 100 " + net.hosts[1].IP()))
-	time.sleep(5)
-	print("Ping Test 3")
-	if with_load is True:
-		createTraffic(shuffle, host)
-	ping_out.write("\n--- Ping Test 3 Results ---")
-	ping_out.write(host.cmd("ping -c 1 " + net.hosts[len(net.hosts)/(dcs*pods)-1].IP()))
-	time.sleep(5)
-	print("Ping Test 4")
-	ping_out.write("\n--- Ping Test 4 Results ---")
-	ping_out.write(host.cmd("ping -c 100 " + net.hosts[len(net.hosts)/(dcs*pods)-1].IP()))
-	time.sleep(5)
-	print("Ping Test 5")
-	if with_load is True:
-		createTraffic(shuffle, host)
-	ping_out.write("\n--- Ping Test 5 Results ---")
-	ping_out.write(host.cmd("ping -c 1 " + net.hosts[len(net.hosts) / dcs - 1].IP()))
-	time.sleep(5)
-	print("Ping Test 6")
-	ping_out.write("\n--- Ping Test 6 Results ---")
-	ping_out.write(host.cmd("ping -c 100 " + net.hosts[len(net.hosts) / dcs - 1].IP()))
-	time.sleep(5)
-	print("Ping Test 7")
-	if with_load is True:
-		createTraffic(shuffle, host)
-	ping_out.write("\n--- Ping Test 7 Results ---")
-	ping_out.write(host.cmd("ping -c 1 " + net.hosts[-1].IP()))
-	time.sleep(5)
-	print("Ping Test 8")
-	ping_out.write("\n--- Ping Test 8 Results ---")
-	ping_out.write(host.cmd("ping -c 100 " + net.hosts[-1].IP()))
-	time.sleep(5)
+		ping_out = open("results/ping_test_no_load.out", "w+")
+	for i in range(len(destinations)):
+		shuffle = list(net.hosts)
+		random.shuffle(shuffle)
+		print("Ping Test " + str(2 * i + 1))
+		if with_load is True:
+			createTraffic(shuffle, host)
+		time.sleep(2)
+		ping_out.write("\n--- Ping Test " + str(2 * i + 1) + " Results ---")
+		ping_out.write(host.cmd("ping -c 1 " + net.hosts[destinations[i]].IP()))
+		time.sleep(1)
+		print("Ping Test " + str(2 * i + 2))
+		ping_out.write("\n--- Ping Test " + str(2 * i + 2) + " Results ---")
+		ping_out.write(host.cmd("ping -c 100 " + net.hosts[destinations[i]].IP()))
+		time.sleep(4)
 
-def runTCPTests(net, pods, dcs, with_load):
+def runTCPTests(net, leaf, pod, fanout, dc, with_load):
 	client = net.hosts[0]
+	destinations = [1, fanout[0], (leaf[0] * fanout[0])]
+	host_count = pod[0] * leaf[0] * fanout[0]
+	for i in range(dc - 1):
+		destinations.append(host_count)
+		host_count += pod[i + 1] * leaf[i + 1] * fanout[i + 1]
 	if with_load is True:
-		tcp_out = open("tcp_test_with_load.out", "w+")
+		tcp_out = open("results/tcp_test_with_load.out", "w+")
 	else:
-		tcp_out = open("tcp_test_no_load.out", "w+")
-	shuffle = list(net.hosts)
-	random.shuffle(shuffle)
-	print("TCP Test 1")
-	if with_load is True:
-		createTraffic(shuffle, client)
-	server = net.hosts[1]
-	server.cmd("iperf3 -s -1 -p 5250 &")
-	tcp_out.write("\n--- TCP Test 1: ")
-	tcp_out.write(client.name + " sending to " + server.name + " ---\n")
-	tcp_out.write(client.cmd("iperf3 -t 100 -p 5250 -c " + server.IP()))
-	time.sleep(10)
-	print("TCP Test 2")
-	if with_load is True:
-		createTraffic(shuffle, client)
-	server = net.hosts[len(net.hosts)/(dcs * pods) - 1]
-	server.cmd("iperf3 -s -1 -p 5250 &")
-	tcp_out.write("\n--- TCP Test 2: ")
-	tcp_out.write(client.name + " sending to " + server.name + " ---\n")
-	tcp_out.write(client.cmd("iperf3 -t 100 -p 5250 -c " + server.IP()))
-	time.sleep(10)
-	print("TCP Test 3")
-	if with_load is True:
-		createTraffic(shuffle, client)
-	server = net.hosts[len(net.hosts)/dcs - 1]
-	server.cmd("iperf3 -s -1 -p 5250 &")
-	tcp_out.write("\n--- TCP Test 3: ")
-	tcp_out.write(client.name + " sending to " + server.name + " ---\n")
-	tcp_out.write(client.cmd("iperf3 -t 100 -p 5250 -c " + server.IP()))
-	time.sleep(10)
-	print("TCP Test 4")
-	if with_load is True:
-		createTraffic(shuffle, client)
-	server = net.hosts[len(net.hosts) - 1]
-	server.cmd("iperf3 -s -1 -p 5250 &")
-	tcp_out.write("\n--- TCP Test 4: ")
-	tcp_out.write(client.name + " sending to " + server.name + " ---\n")
-	tcp_out.write(client.cmd("iperf3 -t 100 -p 5250 -c " + server.IP()))
-	time.sleep(10)
+		tcp_out = open("results/tcp_test_no_load.out", "w+")
+	others = []
+	for i in range(1, len(net.hosts) - dc):
+		if i not in destinations:
+			others.append(net.hosts[i])
+	for i in range(len(destinations)):
+		shuffle = list(others)
+		random.shuffle(shuffle)
+		print("TCP Test " + str(i))
+		if with_load is True:
+			createTraffic(shuffle)
+		time.sleep(2)
+		server = net.hosts[destinations[i]]
+		server.cmd("iperf3 -s -1 -p 5250 &")
+		tcp_out.write("\n--- TCP Test " + str(i) + ": ")
+		tcp_out.write(client.name + " sending to " + server.name + " ---\n")
+		tcp_out.write(client.cmd("iperf3 -t 100 -p 5250 -c " + server.IP()))
+		time.sleep(5)
 
 def generateMac(switch_id):
 	mac_addr = "00:00:" + format((switch_id >> 24) & 0xFF, "02x")
@@ -430,14 +388,14 @@ if __name__ == "__main__":
 
 		# Run ping and TCP tests
 		if test is True:
-                        time.sleep(30)
+			time.sleep(10)
 			print("*** Running performance tests (no load)")
-			runPingTests(net, pod[0], dc, False)
-			runTCPTests(net, pod[0], dc, False)
+			runPingTests(net, leaf, pod, fanout, dc, False)
+			#runTCPTests(net, leaf, pod, fanout, dc, False)
 		
 			print("*** Running performance tests (with load)")
-			runPingTests(net, pod[0], dc, True)
-			runTCPTests(net, pod[0], dc, True)
+			#runPingTests(net, leaf, pod, fanout, dc, True)
+			runTCPTests(net, leaf, pod, fanout, dc, True)
 
 		CLI(net)
 	finally:
