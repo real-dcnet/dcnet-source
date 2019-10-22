@@ -2,7 +2,7 @@
 *.swp
 
 # Ignore generated configuration files
-config/mininet
+config/mininet/*
 
 # Ignore IntelliJ files
 onos-app-dcnet.iml
