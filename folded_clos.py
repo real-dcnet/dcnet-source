@@ -128,11 +128,11 @@ def runPingTests(net, leaf, pod, fanout, dc, with_load):
 		if with_load is True:
 			createTraffic(shuffle, host)
 		time.sleep(2)
-		ping_out.write("\n--- Ping Test " + str(2 * i + 1) + " Results ---")
+		ping_out.write("\n--- Ping Test " + str(2 * i + 1) + " Results ---\n")
 		ping_out.write(host.cmd("ping -c 1 " + net.hosts[destinations[i]].IP()))
 		time.sleep(1)
 		print("Ping Test " + str(2 * i + 2))
-		ping_out.write("\n--- Ping Test " + str(2 * i + 2) + " Results ---")
+		ping_out.write("\n--- Ping Test " + str(2 * i + 2) + " Results ---\n")
 		ping_out.write(host.cmd("ping -c 100 " + net.hosts[destinations[i]].IP()))
 		time.sleep(4)
 
