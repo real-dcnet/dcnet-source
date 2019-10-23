@@ -1,9 +1,0 @@
-
-Initial ping from host 128.10.135.60 to host 128.10.135.61
-Steady-state ping from host 128.10.135.60 to host 128.10.135.61
-TCP bandwidth from host 128.10.135.60 to host 128.10.135.61
-TCP bandwidth from host 128.10.135.60 to host 128.10.135.61
-TCP bandwidth from host 128.10.135.60 to host 128.10.135.61
-TCP bandwidth from host 128.10.135.60 to host 128.10.135.61
-TCP bandwidth from host 128.10.135.60 to host 128.10.135.61
-Initial ping from host 128.10.135.60 to host 128.10.135.62
