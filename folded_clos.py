@@ -21,7 +21,7 @@ def parseOptions():
 	fanout = []
 	dc = 2
 	remote = []
-	test = False
+	test = ""
 
 	parser = ArgumentParser("Create a folded Clos network topology")
 
@@ -39,7 +39,7 @@ def parseOptions():
 	parser.add_argument("--dc", type = int, help = "Number of data centers")
 	parser.add_argument("--remote", type = int, nargs = "+",
 						help = "Value 1 or 0. Indicates if a data center is remote")
-	parser.add_argument("--test", help = "Enable automatic testing")
+	parser.add_argument("--test", type = str, help = "Enable automatic testing")
 
 	args = parser.parse_args()
 
@@ -96,7 +96,7 @@ def parseOptions():
 			for i in range(dc):
 				remote.append(args.remote[0])
 	if args.test:
-		test = True
+		test = args.test
 
 	# return the values
 	return leaf, spine, pod, ss_ratio, fanout, dc, remote, test
@@ -107,10 +107,10 @@ def createTraffic(shuffle):
 		server = shuffle[h]
 		client = shuffle[h + 1]
 		server.cmd("iperf3 -s -1 &")
-		client.cmd("iperf3 -t 105 -c " + server.IP() + " &")
+		client.cmd("iperf3 -t 25 -c " + server.IP() + " &")
 		h += 2
 
-def runPingTests(net, leaf, pod, fanout, dc, with_load):
+def runPingTests(net, leaf, pod, fanout, dc, with_load, out_dir):
 	host = net.hosts[0]
 	destinations = [1, fanout[0], (leaf[0] * fanout[0])]
 	host_count = pod[0] * leaf[0] * fanout[0]
@@ -118,9 +118,9 @@ def runPingTests(net, leaf, pod, fanout, dc, with_load):
 		destinations.append(host_count)
 		host_count += pod[i + 1] * leaf[i + 1] * fanout[i + 1]
 	if with_load is True:
-		ping_out = open("results/ping_test_with_load.out", "w+")
+		ping_out = open(out_dir + "/ping_test_with_load.out", "w+")
 	else:
-		ping_out = open("results/ping_test_no_load.out", "w+")
+		ping_out = open(out_dir + "/ping_test_no_load.out", "w+")
 	for i in range(len(destinations)):
 		shuffle = list(net.hosts)
 		random.shuffle(shuffle)
@@ -133,10 +133,10 @@ def runPingTests(net, leaf, pod, fanout, dc, with_load):
 		time.sleep(1)
 		print("Ping Test " + str(2 * i + 2))
 		ping_out.write("\n--- Ping Test " + str(2 * i + 2) + " Results ---\n")
-		ping_out.write(host.cmd("ping -c 100 " + net.hosts[destinations[i]].IP()))
+		ping_out.write(host.cmd("ping -c 20 " + net.hosts[destinations[i]].IP()))
 		time.sleep(4)
 
-def runTCPTests(net, leaf, pod, fanout, dc, with_load):
+def runTCPTests(net, leaf, pod, fanout, dc, with_load, out_dir):
 	client = net.hosts[0]
 	destinations = [1, fanout[0], (leaf[0] * fanout[0])]
 	host_count = pod[0] * leaf[0] * fanout[0]
@@ -144,9 +144,9 @@ def runTCPTests(net, leaf, pod, fanout, dc, with_load):
 		destinations.append(host_count)
 		host_count += pod[i + 1] * leaf[i + 1] * fanout[i + 1]
 	if with_load is True:
-		tcp_out = open("results/tcp_test_with_load.out", "w+")
+		tcp_out = open(out_dir + "/tcp_test_with_load.out", "w+")
 	else:
-		tcp_out = open("results/tcp_test_no_load.out", "w+")
+		tcp_out = open(out_dir + "/tcp_test_no_load.out", "w+")
 	others = []
 	for i in range(1, len(net.hosts) - dc):
 		if i not in destinations:
@@ -162,7 +162,7 @@ def runTCPTests(net, leaf, pod, fanout, dc, with_load):
 		server.cmd("iperf3 -s -1 -p 5250 &")
 		tcp_out.write("\n--- TCP Test " + str(i) + ": ")
 		tcp_out.write(client.name + " sending to " + server.name + " ---\n")
-		tcp_out.write(client.cmd("iperf3 -t 100 -p 5250 -c " + server.IP()))
+		tcp_out.write(client.cmd("iperf3 -t 20 -p 5250 -c " + server.IP()))
 		time.sleep(5)
 
 def generateMac(switch_id):
@@ -387,15 +387,15 @@ if __name__ == "__main__":
 			host.cmd(command)
 
 		# Run ping and TCP tests
-		if test is True:
+		if test != "":
 			time.sleep(10)
 			print("*** Running performance tests (no load)")
-			runPingTests(net, leaf, pod, fanout, dc, False)
+			runPingTests(net, leaf, pod, fanout, dc, False, test)
 			#runTCPTests(net, leaf, pod, fanout, dc, False)
 		
 			print("*** Running performance tests (with load)")
 			#runPingTests(net, leaf, pod, fanout, dc, True)
-			runTCPTests(net, leaf, pod, fanout, dc, True)
+			runTCPTests(net, leaf, pod, fanout, dc, True, test)
 
 		CLI(net)
 	finally:
