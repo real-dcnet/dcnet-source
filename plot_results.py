@@ -8,7 +8,7 @@ def parse_data(ping_loc, tcp_loc):
 	
 	data = {}
 	# Replace 58 with the actual number of hops to remote data center
-	hops = [2, 4, 6, 9, 58]
+	hops = [2, 4, 6, 9, 9]
 	
 	if ping_loc:
 		count = 0
