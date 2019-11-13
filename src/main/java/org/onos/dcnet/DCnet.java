@@ -343,8 +343,7 @@ public class DCnet {
                 for (int i = 1; i <= lfRadixUp.get(d); i++) {
                     TrafficTreatment.Builder treatment = DefaultTrafficTreatment
                             .builder()
-                            .setOutput(PortNumber.portNumber(
-                                    lfRadixDown.get(d) + i));
+                            .setOutput(PortNumber.portNumber(i));
                     leafBuckets.get(d).add(DefaultGroupBucket
                             .createSelectGroupBucket(treatment.build()));
                 }
@@ -524,7 +523,7 @@ public class DCnet {
                 && podDst == entry.getPod() && leafDst == entry.getLeaf()) {
             /* If recipient is directly connected to leaf, translate ethernet
             destination back to recipients's and forward to it */
-            int port = ((bytesDst[4] & 0xF) << 8) + bytesDst[5] + 1;
+            int port = ((bytesDst[4] & 0xF) << 8) + bytesDst[5] + lfRadixUp.get(entry.getDc()) + 1;
             MacAddress hostDstMac = new MacAddress(hostDst.getIdmac());
             TrafficTreatment.Builder treatment = DefaultTrafficTreatment
                     .builder()
@@ -607,8 +606,7 @@ public class DCnet {
                     .setPayload(context.inPacket().parsed().getPayload());
             treatment = DefaultTrafficTreatment
                     .builder()
-                    .setOutput(PortNumber.portNumber(
-                            lfRadixDown.get(entry.getDc()) + 1 + (int) (Math
+                    .setOutput(PortNumber.portNumber(1 + (int) (Math
                                     .random() * lfRadixUp.get(entry.getDc()))));
             OutboundPacket packet = new DefaultOutboundPacket(
                     device.id(),
@@ -630,7 +628,7 @@ public class DCnet {
                 && podSrc == entry.getPod() && leafSrc == entry.getLeaf()) {
             /* If sender is directly connected to leaf, translate ethernet
             destination back to recipients's and forward to it */
-            int port = ((bytesSrc[4] & 0xF) << 8) + bytesSrc[5] + 1;
+            int port = ((bytesSrc[4] & 0xF) << 8) + bytesSrc[5] + lfRadixUp.get(entry.getDc()) + 1;
             MacAddress hostSrcMac = new MacAddress(hostSrc.getIdmac());
             TrafficTreatment.Builder treatment = DefaultTrafficTreatment
                     .builder()
