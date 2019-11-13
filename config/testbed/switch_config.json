@@ -4,31 +4,31 @@
             "leaf": 0, 
             "name": "lf1",
             "dc": 0, 
-            "mac": "44:d1:fa:7b:48:ef",
+            "mac": "44:d1:fa:7b:48:d7",
             "pod": 0, 
-            "id": "44d1fa7b48ef"
+            "id": "44d1fa7b48d7"
         }, 
         {
             "leaf": 1, 
             "name": "lf2",
             "dc": 0, 
-            "mac": "44:d1:fa:7b:48:ab",
+            "mac": "44:d1:fa:7b:48:e5",
             "pod": 0, 
-            "id": "44d1fa7b48ab"
+            "id": "44d1fa7b48e5"
         },
         {
             "leaf": 0, 
             "name": "lf3",
             "dc": 0, 
-            "mac": "44:d1:fa:7b:48:eb",
+            "mac": "44:d1:fa:7b:48:f5",
             "pod": 1, 
-            "id": "44d1fa7b48eb"
+            "id": "44d1fa7b48f5"
         }, 
         {
             "leaf": 1, 
             "name": "lf4",
             "dc": 0, 
-            "mac": "44:d1:fa:7b:48:fb",
+            "mac": "44:d1:fa:7b:48:f7",
             "pod": 1, 
             "id": "44d1fa7b48fb"
         },
@@ -95,6 +95,38 @@
             "mac": "44:d1:fa:7b:48:fd",
             "pod": 2,
             "id": "44d1fa7b48fd"
+        },
+        {
+            "leaf": 0,
+            "name": "lf13",
+            "dc": 2,
+            "mac": "44:d1:fa:7b:48:f1",
+            "pod": 0,
+            "id": "44d1fa7b48f1"
+        },
+        {
+            "leaf": 1,
+            "name": "lf14",
+            "dc": 2,
+            "mac": "44:d1:fa:7b:49:01",
+            "pod": 0,
+            "id": "44d1fa7b4901"
+        },
+        {
+            "leaf": 0,
+            "name": "lf15",
+            "dc": 2,
+            "mac": "44:d1:fa:7b:48:e1",
+            "pod": 1,
+            "id": "44d1fa7b48e1"
+        },
+        {
+            "leaf": 1,
+            "name": "lf16",
+            "dc": 2,
+            "mac": "44:d1:fa:7b:48:a7",
+            "pod": 1,
+            "id": "44d1fa7b48a7"
         }
     ], 
     "spines": [
@@ -102,33 +134,33 @@
             "leaf": -1, 
             "name": "sp1",
             "dc": 0, 
-            "mac": "44:d1:fa:7b:48:bf",
+            "mac": "44:d1:fa:7b:48:ab",
             "pod": 0, 
-            "id": "44d1fa7b48bf"
+            "id": "44d1fa7b48ab"
         }, 
         {
             "leaf": -1, 
             "name": "sp2",
             "dc": 0, 
-            "mac": "44:d1:fa:7b:48:d7",
+            "mac": "44:d1:fa:7b:48:eb",
             "pod": 0, 
-            "id": "44d1fa7b48d7"
+            "id": "44d1fa7b48eb"
         }, 
         {
             "leaf": -1,
             "name": "sp3",
             "dc": 0,
-            "mac": "44:d1:fa:7b:48:e5",
+            "mac": "44:d1:fa:7b:48:fb",
             "pod": 1,
-            "id": "44d1fa7b48e5"
+            "id": "44d1fa7b48fb"
         },
         {
             "leaf": -1,
             "name": "sp4",
             "dc": 0,
-            "mac": "44:d1:fa:7b:48:f5",
+            "mac": "44:d1:fa:7b:48:a5",
             "pod": 1,
-            "id": "44d1fa7b48f5"
+            "id": "44d1fa7b48a5"
         },
         {
             "leaf": -1,
@@ -193,8 +225,40 @@
             "mac": "44:d1:fa:7b:48:c9",
             "pod": 2,
             "id": "44d1fa7b48c9"
+        },
+        {
+            "leaf": -1,
+            "name": "sp13",
+            "dc": 2,
+            "mac": "44:d1:fa:7b:48:e9",
+            "pod": 0,
+            "id": "44d1fa7b48e9"
+        },
+        {
+            "leaf": -1,
+            "name": "sp14",
+            "dc": 2,
+            "mac": "44:d1:fa:7b:48:ad",
+            "pod": 0,
+            "id": "44d1fa7b48ad"
+        },
+        {
+            "leaf": -1,
+            "name": "sp15",
+            "dc": 2,
+            "mac": "44:d1:fa:7b:48:cb",
+            "pod": 1,
+            "id": "44d1fa7b48cb"
+        },
+        {
+            "leaf": -1,
+            "name": "sp16",
+            "dc": 2,
+            "mac": "44:d1:fa:7b:48:cf",
+            "pod": 1,
+            "id": "44d1fa7b48cf"
         }
-    ], 
+    ],
     "dcs": [
         {
             "leaf": -1,
@@ -227,6 +291,14 @@
             "mac": "44:d1:fa:7b:48:8d",
             "pod": -1,
             "id": "44d1fa7b488d"
+        },
+        {
+            "leaf": -1,
+            "name": "dc3",
+            "dc": 2,
+            "mac": "44:d1:fa:7b:48:c5",
+            "pod": -1,
+            "id": "44d1fa7b48c5"
         }
     ], 
     "supers": [
@@ -293,6 +365,22 @@
             "mac": "44:d1:fa:7b:48:e3",
             "pod": -1, 
             "id": "44d1fa7b48e3"
+        },
+        {
+            "leaf": -1,
+            "name": "ss9",
+            "dc": 2,
+            "mac": "44:d1:fa:7b:48:d1",
+            "pod": -1,
+            "id": "44d1fa7b48d1"
+        },
+        {
+            "leaf": -1,
+            "name": "ss10",
+            "dc": 2,
+            "mac": "44:d1:fa:7b:49:03",
+            "pod": -1,
+            "id": "44d1fa7b4903"
         }
     ]
 }
