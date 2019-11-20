@@ -1,0 +1,191 @@
+{
+  "links" : {
+    "of:000044d1fa7b48d7/1-of:000044d1fa7b48ab/1" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48d7/2-of:000044d1fa7b48eb/1" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48e5/1-of:000044d1fa7b48ab/2" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48e5/2-of:000044d1fa7b48eb/2" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48ab/1-of:000044d1fa7b48d7/1" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48ab/2-of:000044d1fa7b48e5/1" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48ab/3-of:000044d1fa7b48a9/1" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48ab/4-of:000044d1fa7b48c1/1" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48eb/1-of:000044d1fa7b48d7/2" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48eb/2-of:000044d1fa7b48e5/2" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48eb/3-of:000044d1fa62a448/1" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48eb/4-of:000044d1fa7b4885/1" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48f5/1-of:000044d1fa7b48fb/1" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48f5/2-of:000044d1fa7b48a5/1" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48f7/1-of:000044d1fa7b48fb/2" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48f7/2-of:000044d1fa7b48a5/2" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48fb/1-of:000044d1fa7b48f5/1" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48fb/2-of:000044d1fa7b48f7/1" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48fb/3-of:000044d1fa7b48a9/2" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48fb/4-of:000044d1fa7b48c1/2" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48a5/1-of:000044d1fa7b48f5/2" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48a5/2-of:000044d1fa7b48f7/2" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48a5/3-of:000044d1fa62a448/2" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48a5/4-of:000044d1fa7b4885/2" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48cd/1-of:000044d1fa7b48bb/1" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48cd/2-of:000044d1fa7b48c3/1" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48b5/1-of:000044d1fa7b48bb/2" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48b5/2-of:000044d1fa7b48c3/2" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48bb/1-of:000044d1fa7b48cd/1" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48bb/2-of:000044d1fa7b48b5/1" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48bb/3-of:000044d1fa7b48a9/3" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48bb/4-of:000044d1fa7b48c1/3" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48c3/1-of:000044d1fa7b48cd/2" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48c3/2-of:000044d1fa7b48b5/2" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48c3/3-of:000044d1fa62a448/3" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48c3/4-of:000044d1fa7b4885/3" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48a9/1-of:000044d1fa7b48ab/3" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48a9/2-of:000044d1fa7b48fb/3" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48a9/3-of:000044d1fa7b48bb/3" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48a9/4-of:000044d1fa7b48c7/1" : {
+      "basic" : {}
+    },
+    "of:000044d1fa62a448/1-of:000044d1fa7b48eb/3" : {
+      "basic" : {}
+    },
+    "of:000044d1fa62a448/2-of:000044d1fa7b48a5/3" : {
+      "basic" : {}
+    },
+    "of:000044d1fa62a448/3-of:000044d1fa7b48c3/3" : {
+      "basic" : {}
+    },
+    "of:000044d1fa62a448/4-of:000044d1fa7b48c7/2" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48c1/1-of:000044d1fa7b48ab/4" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48c1/2-of:000044d1fa7b48fb/4" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48c1/3-of:000044d1fa7b48bb/4" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48c1/4-of:000044d1fa7b48af/1" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b4885/1-of:000044d1fa7b48eb/4" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b4885/2-of:000044d1fa7b48a5/4" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b4885/3-of:000044d1fa7b48c3/4" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b4885/4-of:000044d1fa7b48af/2" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48c7/1-of:000044d1fa7b48a9/4" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48c7/2-of:000044d1fa7b4848/4" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48c7/3-" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48c7/4-of:000044d1fa7b48af/3" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48af/1-of:000044d1fa7b48c1/4" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48af/2-of:000044d1fa7b4885/4" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48af/3-of:000044d1fa7b48c7/4" : {
+      "basic" : {}
+    },
+    "of:000044d1fa7b48af/4-" : {
+      "basic" : {}
+    }
+  },
+  "apps" : {
+    "org.onosproject.core" : {
+      "core" : {
+        "linkDiscoveryMode" : "STRICT"
+      }
+    }
+  }
+}
