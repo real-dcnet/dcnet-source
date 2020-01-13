@@ -24,11 +24,7 @@ import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.onlab.packet.Ethernet;
-import org.onlab.packet.MacAddress;
-import org.onlab.packet.IpPrefix;
-import org.onlab.packet.IPv4;
-import org.onlab.packet.IpAddress;
+import org.onlab.packet.*;
 import org.onlab.util.KryoNamespace;
 import org.onosproject.core.ApplicationId;
 import org.onosproject.core.CoreService;
@@ -807,6 +803,56 @@ public class DCnet {
         }
     }
 
+    /**
+     * Handles ARP packets received by leaf switch.
+     * @param context   Contains extra information sent to controller
+     * @param eth       Packet that was sent to controller
+     * @param device    Switch that sent the packet
+     * @param entry     Information about switch that sent packet
+     */
+    private void processPacketArp(
+            final PacketContext context,
+            final Ethernet eth,
+            final Device device,
+            final SwitchEntry entry) {
+        ARP request = (ARP) (eth.getPayload());
+
+        byte[] ip = request.getSenderProtocolAddress();
+        Ip4Address ipAddr = Ip4Address.valueOf(ip);
+        HostEntry hostSrc = hostDB.get(ipAddr.toInt());
+        if (hostSrc == null) {
+            return;
+        }
+        byte[] bytesSrc = hostSrc.getRmac();
+        int dcSrc = (((int) bytesSrc[0]) << 4) + (bytesSrc[1] >> 4);
+        int podSrc = ((bytesSrc[1] & 0xF) << 8) + bytesSrc[2];
+        int leafSrc = (((int) bytesSrc[3]) << 4) + (bytesSrc[4] >> 4);
+        int port = ((bytesSrc[4] & 0xF) << 8) + bytesSrc[5] + lfRadixUp.get(entry.getDc()) + 1;
+
+        if(dcSrc != entry.getDc() || podSrc != entry.getPod() || leafSrc != entry.getLeaf()) {
+            /* ARP request did not originate from a host connected to this leaf */
+            return;
+        }
+
+        ip = request.getTargetProtocolAddress();
+        ipAddr = Ip4Address.valueOf(ip);
+        HostEntry hostDst = hostDB.get(ipAddr.toInt());
+        if (hostDst == null) {
+            return;
+        }
+        Ethernet reply = ARP.buildArpReply(ipAddr, new MacAddress(hostDst.getIdmac()), eth);
+
+        TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                .builder()
+                .setOutput(PortNumber.portNumber(port));
+        OutboundPacket packet = new DefaultOutboundPacket(
+                device.id(),
+                treatment.build(),
+                ByteBuffer.wrap(reply.serialize()));
+        packetService.emit(packet);
+        context.block();
+    }
+
     /** Handler for packets sent to controller by leaf or dc switch. */
     private class DCnetPacketProcessor implements PacketProcessor {
         /**
@@ -823,14 +869,25 @@ public class DCnet {
                 SwitchEntry entry = switchDB.get(id);
                 if (entry != null) {
                     if (entry.getLevel() == LEAF) {
-                        log.info("Leaf received packet with destination: "
+                        log.info("Leaf received IPv4 packet with destination: "
                                 + eth.getDestinationMAC().toString());
                         processPacketLeaf(context, eth, device, entry);
                     } else if (entry.getLevel() == DC) {
                         log.info("DC received packet with destination: "
                                 + eth.getDestinationMAC().toString());
-                        processPacketDc(context, eth, device, entry);
+                        //processPacketDc(context, eth, device, entry);
                     }
+                }
+            }
+            else if (eth.getEtherType() == Ethernet.TYPE_ARP) {
+                Device device = deviceService.getDevice(context.inPacket()
+                        .receivedFrom().deviceId());
+                String id = device.chassisId().toString();
+                SwitchEntry entry = switchDB.get(id);
+                if (entry != null && entry.getLevel() == LEAF) {
+                    log.info("Leaf received ARP packet with destination: "
+                            + eth.getDestinationMAC().toString());
+                    processPacketArp(context, eth, device, entry);
                 }
             }
         }
