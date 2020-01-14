@@ -275,7 +275,31 @@ class FoldedClos(Topo):
 						"leaf" : l
 					})
 					leaf_count += increment
-					
+	
+				# Create spines and link to super spines and leaves
+				for s in range(spine[d]):
+					spine_name = "s" + str(spine_count)
+					ip_addr = "10.0.1" + format(switch_count >> 8, "02d") + "."
+					ip_addr += format(switch_count & 0xFF, "d") + "/12"
+					self.addSwitch(spine_name, ip = ip_addr)
+					switch_count += 1;
+					switch_config["spines"].append({
+						"id" : format(spine_count, "x"),
+						"name" : spine_name,
+						"mac" : generateMac(spine_count),
+						"dc" : d,
+						"pod" : p,
+						"leaf" : -1
+					})
+					spine_count += increment
+					for l in range(leaf[d]):
+						self.addLink(spine_name, leaf_switches[d][l + p*leaf[d]],
+										cls = TCLink, bw = 40, delay = "1ms")
+					for ss in range(ss_ratio[d]):
+						self.addLink(ss_switches[d][ss + s*ss_ratio[d]],
+										spine_name, cls = TCLink, bw = 40, delay = "1ms")
+
+				for l in range(leaf[d]):
 					# Create hosts, designated by letter h, and link to leaf
 					for h in range(fanout[d]):
 						host_name = "h" + str(host_count)
@@ -312,31 +336,8 @@ class FoldedClos(Topo):
 							"idmac" : mac_addr
 						})
 						host_count += 1
-						self.addLink(leaf_name, host_name,
-									cls = TCLink, bw = 10, delay = "1ms")
-	
-				# Create spines and link to super spines and leaves
-				for s in range(spine[d]):
-					spine_name = "s" + str(spine_count)
-					ip_addr = "10.0.1" + format(switch_count >> 8, "02d") + "."
-					ip_addr += format(switch_count & 0xFF, "d") + "/12"
-					self.addSwitch(spine_name, ip = ip_addr)
-					switch_count += 1;
-					switch_config["spines"].append({
-						"id" : format(spine_count, "x"),
-						"name" : spine_name,
-						"mac" : generateMac(spine_count),
-						"dc" : d,
-						"pod" : p,
-						"leaf" : -1
-					})
-					spine_count += increment
-					for l in range(leaf[d]):
-						self.addLink(spine_name, leaf_switches[d][l + p*leaf[d]],
-										cls = TCLink, bw = 40, delay = "1ms")
-					for ss in range(ss_ratio[d]):
-						self.addLink(ss_switches[d][ss + s*ss_ratio[d]],
-										spine_name, cls = TCLink, bw = 40, delay = "1ms")
+						self.addLink(leaf_switches[d][l + p*leaf[d]], host_name,
+							cls = TCLink, bw = 10, delay = "1ms")
 			
 			# Link super spines to data center router
 			for ss in range(ss_ratio[d] * spine[d]):
