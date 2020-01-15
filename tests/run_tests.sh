@@ -1,16 +1,8 @@
 #!/bin/bash
 
-SRC_IP="128.10.135.60"
-SRC_PASS=$(cat ~/host_info.txt | grep $SRC_IP | awk '{print $2}')
+SRC_IP="128.10.135.51"
 
-DST_IPS=("128.10.135.61" "128.10.135.62" "128.10.135.63" "128.10.135.64" "128.10.135.65")
-DST_PASSES=()
-for ip in ${DST_IPS[@]}
-do
-	DST_PASSES+=($(cat ~/host_info.txt | grep $ip | awk '{print $2}'))
-done
-
-echo ${DST_IPS[@]}
+DST_IPS=("128.10.135.59" "128.10.135.75" "128.10.135.53" "128.10.135.56" "128.10.135.55")
 OTHER_IPS=()
 for ip in $(cat ~/host_info.txt | awk '{print $1}')
 do
@@ -20,20 +12,17 @@ do
 	fi
 done
 
-echo ${OTHER_IPS[@]}
 echo > out.txt
 for i in $(seq 1 10)
 do
 	for j in ${!DST_IPS[@]}
 	do
-		source "./ping_test.sh" "$SRC_IP" "${DST_IPS[$j]}" "$SRC_PASS" "out.txt"
+		source "./ping_test.sh" "$SRC_IP" "${DST_IPS[$j]}" "out.txt"
 		TRAFFIC=($(shuf -e ${OTHER_IPS[@]}))
 		for k in $(seq 1 $(expr ${#TRAFFIC[@]} / 2 - 1))
 		do
-			PASS1=$(cat ~/host_info.txt | grep ${TRAFFIC[(2 * $k)]} | awk '{print $2}')
-			PASS2=$(cat ~/host_info.txt | grep ${TRAFFIC[(2 * $k + 1)]} | awk '{print $2}')
-			source "./tcp_traffic.sh" "${TRAFFIC[(2 * $j)]}" "${TRAFFIC[(2 * $j + 1)]}" "$PASS1" "$PASS2" "/dev/null"
-			source "./tcp_test.sh" "$SRC_IP" "${DST_IPS[$j]}" "$SRC_PASS" "${DST_PASSES[$j]}" "out.txt"
+			source "./tcp_traffic.sh" "${TRAFFIC[(2 * $j)]}" "${TRAFFIC[(2 * $j + 1)]}" "/dev/null"
+			source "./tcp_test.sh" "$SRC_IP" "${DST_IPS[$j]}" "out.txt"
 		done
 	done
 done
