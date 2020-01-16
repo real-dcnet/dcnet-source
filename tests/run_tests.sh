@@ -17,12 +17,12 @@ for i in $(seq 1 10)
 do
 	for j in ${!DST_IPS[@]}
 	do
-		source "./ping_test.sh" "$SRC_IP" "${DST_IPS[$j]}" "out.txt"
+		source "./ping_test.sh" "$SRC_IP" "${DST_IPS[$j]}" "run$i/ping_test.out"
 		TRAFFIC=($(shuf -e ${OTHER_IPS[@]}))
 		for k in $(seq 1 $(expr ${#TRAFFIC[@]} / 2 - 1))
 		do
 			source "./tcp_traffic.sh" "${TRAFFIC[(2 * $j)]}" "${TRAFFIC[(2 * $j + 1)]}" "/dev/null"
-			source "./tcp_test.sh" "$SRC_IP" "${DST_IPS[$j]}" "out.txt"
+			source "./tcp_test.sh" "$SRC_IP" "${DST_IPS[$j]}" "run$i/tcp_test.out"
 		done
 	done
 done
