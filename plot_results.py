@@ -76,8 +76,8 @@ args = parser.parse_args()
 loc = args.path
 data = []
 for i in range(1, 10):
-	data.append(parse_data(loc + "/run" + str(i) + "/ping_test_no_load.out",
-							loc + "/run" + str(i) + "/tcp_test_with_load.out"))
+	data.append(parse_data(loc + "/run" + str(i) + "/ping_test.out",
+							loc + "/run" + str(i) + "/tcp_test.out"))
 xinit = []
 yinit = []
 xsteady = []
