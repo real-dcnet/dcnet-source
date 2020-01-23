@@ -29,10 +29,7 @@ import org.onlab.util.KryoNamespace;
 import org.onosproject.core.ApplicationId;
 import org.onosproject.core.CoreService;
 import org.onosproject.core.GroupId;
-import org.onosproject.net.Device;
-import org.onosproject.net.DeviceId;
-import org.onosproject.net.Host;
-import org.onosproject.net.PortNumber;
+import org.onosproject.net.*;
 import org.onosproject.net.device.DeviceEvent;
 import org.onosproject.net.device.DeviceListener;
 import org.onosproject.net.device.DeviceService;
@@ -836,7 +833,6 @@ public class DCnet {
      * @param device    Switch that flows are being installed for
      */
     private synchronized void setupFlows(final Device device) {
-
         String id = device.chassisId().toString();
         log.info("Chassis " + id + " connected");
         if (switchDB.containsKey(id)) {
@@ -918,6 +914,7 @@ public class DCnet {
                 .withPriority(BASE_PRIO + 1000)
                 .build();
         flowRuleService.applyFlowRules(flowRule);
+        installedFlows.add(flowRule);
 
         /* Add rules to forward packets belonging to another data center */
         for (int d = 0; d < dcCount; d++) {
@@ -948,6 +945,7 @@ public class DCnet {
                     .withPriority(BASE_PRIO + 500)
                     .build();
             flowRuleService.applyFlowRules(flowRule);
+            installedFlows.add(flowRule);
         }
 
         /* Adds rule to forward packets with reserved RMAC to internet */
@@ -976,6 +974,7 @@ public class DCnet {
                 .withPriority(BASE_PRIO + 1500)
                 .build();
         flowRuleService.applyFlowRules(flowRule);
+        installedFlows.add(flowRule);
 
         /* Adds rule to let controller handle all other packets */
         selector = DefaultTrafficSelector
@@ -991,6 +990,7 @@ public class DCnet {
                 .withPriority(BASE_PRIO + 100)
                 .build();
         flowRuleService.applyFlowRules(flowRule);
+        installedFlows.add(flowRule);
     }
 
     /**
@@ -1030,6 +1030,7 @@ public class DCnet {
                     .withPriority(BASE_PRIO + 1000)
                     .build();
             flowRuleService.applyFlowRules(flowRule);
+            installedFlows.add(flowRule);
         }
 
         /* Add rule to forward packets belonging to another
@@ -1049,6 +1050,7 @@ public class DCnet {
                 .withPriority(BASE_PRIO + 500)
                 .build();
         flowRuleService.applyFlowRules(flowRule);
+        installedFlows.add(flowRule);
     }
 
     /**
@@ -1090,6 +1092,7 @@ public class DCnet {
                     .withPriority(BASE_PRIO + 1000)
                     .build();
             flowRuleService.applyFlowRules(flowRule);
+            installedFlows.add(flowRule);
         }
 
         /* Add rule to ECMP packets belonging to another
@@ -1125,6 +1128,7 @@ public class DCnet {
                 .withPriority(BASE_PRIO + 500)
                 .build();
         flowRuleService.applyFlowRules(flowRule);
+        installedFlows.add(flowRule);
     }
 
     /**
@@ -1154,6 +1158,7 @@ public class DCnet {
                     .withPriority(BASE_PRIO + 100)
                     .build();
             flowRuleService.applyFlowRules(flowRule);
+            installedFlows.add(flowRule);
         }
     }
 
@@ -1162,7 +1167,29 @@ public class DCnet {
     }
 
     /**
-     * Invalidates flow rules using IP address of relocated host.
+     * Configures RMAC for a new host based on leaf it attached to
+     * @param host  Host that was added
+     */
+    private void configureHost(final Host host) {
+        HostLocation location = host.location();
+        Device device = deviceService.getDevice(location.deviceId());
+        SwitchEntry leaf = switchDB.get(device.chassisId().toString());
+        PortNumber port = location.port();
+        byte[] rmac = new byte[6];
+        rmac[0] = (byte) ((leaf.getDc() >> 4) & 0x3F);
+        rmac[1] = (byte) (((leaf.getDc() & 0xF) << 4) + ((leaf.getPod() >> 8) & 0xF));
+        rmac[2] = (byte) (leaf.getPod() & 0xFF);
+        rmac[3] = (byte) ((leaf.getLeaf() >> 4) & 0xFF);
+        rmac[4] = (byte) (((leaf.getLeaf() & 0xF) << 4) + ((port.toLong() >> 8) & 0xF));
+        rmac[5] = (byte) (port.toLong() & 0xFF);
+        HostEntry hostEntry = new HostEntry(host.id().toString(), rmac, host.mac().toBytes());
+        for (IpAddress ip : host.ipAddresses()) {
+            hostDB.put(ip.getIp4Address().toInt(), hostEntry);
+        }
+    }
+
+    /**
+     * Invalidates flow rules using IP address of relocated/removed host.
      * @param host  Host that was moved
      */
     private void removeHostFlows(final Host host) {
@@ -1181,6 +1208,7 @@ public class DCnet {
             }
         }
         installedFlows = temp;
+        //TODO: Remove host from hostDB
     }
 
     /** Listener for switches that are added to topology. */
@@ -1216,6 +1244,10 @@ public class DCnet {
         public void event(final HostEvent hostEvent) {
             switch (hostEvent.type()) {
                 case HOST_MOVED:
+                    removeHostFlows(hostEvent.subject());
+                case HOST_ADDED:
+                    configureHost(hostEvent.subject());
+                    break;
                 case HOST_REMOVED:
                     removeHostFlows(hostEvent.subject());
                     break;
