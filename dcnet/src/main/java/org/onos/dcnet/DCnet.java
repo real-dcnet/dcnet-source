@@ -1197,11 +1197,8 @@ public class DCnet {
         List<FlowRule> temp = new ArrayList<>(installedFlows);
         for (IpAddress ip : ips) {
             for (FlowRule flow : installedFlows) {
-                if (((IPCriterion) flow.selector()
-                        .getCriterion(Criterion.Type.IPV4_DST))
-                        .ip()
-                        .address()
-                        .equals(ip)) {
+                IPCriterion criterion = (IPCriterion) flow.selector().getCriterion(Criterion.Type.IPV4_DST);
+                if (criterion != null && criterion.ip().address().equals(ip)) {
                     flowRuleService.removeFlowRules(flow);
                     temp.remove(flow);
                 }
