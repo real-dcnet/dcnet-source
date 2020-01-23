@@ -194,7 +194,7 @@ public class DCnet {
     /** Location where configuration information can be found.
      * Change this as necessary if configuration JSONs are stored elsewhere */
     private static String configLoc =
-            System.getProperty("user.home") + "/dcnet-source/config/testbed/";
+            System.getProperty("user.home") + "/dcnet-source/config/mininet/";
 
     /** Macro for data center egress switches. */
     private static final int DC = 0;
@@ -1174,14 +1174,14 @@ public class DCnet {
         HostLocation location = host.location();
         Device device = deviceService.getDevice(location.deviceId());
         SwitchEntry leaf = switchDB.get(device.chassisId().toString());
-        PortNumber port = location.port();
+        int port = (int)(location.port().toLong() - lfRadixUp.get(leaf.getDc()) - 1);
         byte[] rmac = new byte[6];
         rmac[0] = (byte) ((leaf.getDc() >> 4) & 0x3F);
         rmac[1] = (byte) (((leaf.getDc() & 0xF) << 4) + ((leaf.getPod() >> 8) & 0xF));
         rmac[2] = (byte) (leaf.getPod() & 0xFF);
         rmac[3] = (byte) ((leaf.getLeaf() >> 4) & 0xFF);
-        rmac[4] = (byte) (((leaf.getLeaf() & 0xF) << 4) + ((port.toLong() >> 8) & 0xF));
-        rmac[5] = (byte) (port.toLong() & 0xFF);
+        rmac[4] = (byte) (((leaf.getLeaf() & 0xF) << 4) + ((port >> 8) & 0xF));
+        rmac[5] = (byte) (port & 0xFF);
         HostEntry hostEntry = new HostEntry(host.id().toString(), rmac, host.mac().toBytes());
         for (IpAddress ip : host.ipAddresses()) {
             hostDB.put(ip.getIp4Address().toInt(), hostEntry);
