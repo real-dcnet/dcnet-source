@@ -315,12 +315,6 @@ public class DCnet {
             addSwitchConfigs(config.get("spines").asArray(), SPINE);
             addSwitchConfigs(config.get("leaves").asArray(), LEAF);
 
-            /* Setup host database by reading fields in host config JSON */
-            config = Json.parse(new BufferedReader(
-                    new FileReader(configLoc + "host_config.json"))
-            ).asObject();
-            addHostConfigs(config.get("hosts").asArray());
-
             /* Setup topology by reading fields in topology config JSON */
             config = Json.parse(new BufferedReader(
                     new FileReader(configLoc + "top_config.json"))
@@ -378,21 +372,6 @@ public class DCnet {
                     config.get("pod").asInt(),
                     config.get("leaf").asInt());
             switchDB.put(config.get("id").asString(), entry);
-        }
-    }
-
-    /**
-     * Parses the JSONs describing each host.
-     * @param configs   Array of JSONs that hold config information
-     */
-    private void addHostConfigs(final JsonArray configs) {
-        for (JsonValue obj : configs) {
-            JsonObject config = obj.asObject();
-            HostEntry entry = new HostEntry(
-                    config.get("name").asString(),
-                    strToMac(config.get("rmac").asString()),
-                    strToMac(config.get("idmac").asString()));
-            hostDB.put(ipStrtoInt(config.get("ip").asString()), entry);
         }
     }
 
@@ -1183,8 +1162,10 @@ public class DCnet {
         rmac[4] = (byte) (((leaf.getLeaf() & 0xF) << 4) + ((port >> 8) & 0xF));
         rmac[5] = (byte) (port & 0xFF);
         HostEntry hostEntry = new HostEntry(host.id().toString(), rmac, host.mac().toBytes());
-        log.info("New RMAC: " + rmac[0] + ":" + rmac[1] + ":" + rmac[2] + ":" + rmac[3] + ":" + rmac[4] + ":" + rmac[5]);
         for (IpAddress ip : host.ipAddresses()) {
+            log.info("Host with MAC address " + host.mac().toString()
+                    + " and ip address " + ip.getIp4Address().toString()
+                    + " configured with RMAC address " + new MacAddress(rmac).toString());
             hostDB.put(ip.getIp4Address().toInt(), hostEntry);
         }
     }
@@ -1200,7 +1181,8 @@ public class DCnet {
             for (FlowRule flow : installedFlows) {
                 IPCriterion criterion = (IPCriterion) flow.selector().getCriterion(Criterion.Type.IPV4_DST);
                 if (criterion != null && criterion.ip().address().getIp4Address().equals(ip.getIp4Address())) {
-                    log.info("Removed flow rule from switch " + flow.deviceId());
+                    log.info("Removed flow rule for ip address " + ip.getIp4Address().toString()
+                            + " from switch " + flow.deviceId());
                     flowRuleService.removeFlowRules(flow);
                     temp.remove(flow);
                 }
