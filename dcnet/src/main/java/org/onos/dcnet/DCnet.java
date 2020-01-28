@@ -1198,14 +1198,15 @@ public class DCnet {
         for (IpAddress ip : ips) {
             for (FlowRule flow : installedFlows) {
                 IPCriterion criterion = (IPCriterion) flow.selector().getCriterion(Criterion.Type.IPV4_DST);
-                if (criterion != null && criterion.ip().address().equals(ip)) {
+                if (criterion != null && criterion.ip().address().getIp4Address().equals(ip.getIp4Address())) {
+                    log.info("Removed flow rule from switch " + flow.deviceId());
                     flowRuleService.removeFlowRules(flow);
                     temp.remove(flow);
                 }
             }
+            hostDB.remove(ip.getIp4Address().toInt());
         }
         installedFlows = temp;
-        //TODO: Remove host from hostDB
     }
 
     /** Listener for switches that are added to topology. */
