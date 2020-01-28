@@ -1183,6 +1183,7 @@ public class DCnet {
         rmac[4] = (byte) (((leaf.getLeaf() & 0xF) << 4) + ((port >> 8) & 0xF));
         rmac[5] = (byte) (port & 0xFF);
         HostEntry hostEntry = new HostEntry(host.id().toString(), rmac, host.mac().toBytes());
+        log.info("New RMAC: " + rmac[0] + ":" + rmac[1] + ":" + rmac[2] + ":" + rmac[3] + ":" + rmac[4] + ":" + rmac[5]);
         for (IpAddress ip : host.ipAddresses()) {
             hostDB.put(ip.getIp4Address().toInt(), hostEntry);
         }
