@@ -491,102 +491,101 @@ public class DCnet {
             dcDst = (((int) bytesDst[0]) << 4) + (bytesDst[1] >> 4);
             podDst = ((bytesDst[1] & 0xF) << 8) + bytesDst[2];
             leafDst = (((int) bytesDst[3]) << 4) + (bytesDst[4] >> 4);
-        }
 
-        if (hostDst != null && dcDst == entry.getDc()
-                && podDst == entry.getPod() && leafDst == entry.getLeaf()) {
+            if (dcDst == entry.getDc() && podDst == entry.getPod() && leafDst == entry.getLeaf()) {
             /* If recipient is directly connected to leaf, translate ethernet
             destination back to recipients's and forward to it */
-            int port = ((bytesDst[4] & 0xF) << 8) + bytesDst[5] + lfRadixUp.get(entry.getDc()) + 1;
-            MacAddress hostDstMac = new MacAddress(hostDst.getIdmac());
-            TrafficTreatment.Builder treatment = DefaultTrafficTreatment
-                    .builder()
-                    .setEthDst(hostDstMac)
-                    .setOutput(PortNumber.portNumber(port));
-            FlowRule flowRule = DefaultFlowRule.builder()
-                    .fromApp(appId)
-                    .makePermanent()
-                    .withSelector(selectorDst.build())
-                    .withTreatment(treatment.build())
-                    .forDevice(device.id())
-                    .withPriority(BASE_PRIO + 1000)
-                    .build();
-            flowRuleService.applyFlowRules(flowRule);
-            installedFlows.add(flowRule);
+                int port = ((bytesDst[4] & 0xF) << 8) + bytesDst[5] + lfRadixUp.get(entry.getDc()) + 1;
+                MacAddress hostDstMac = new MacAddress(hostDst.getIdmac());
+                TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                        .builder()
+                        .setEthDst(hostDstMac)
+                        .setOutput(PortNumber.portNumber(port));
+                FlowRule flowRule = DefaultFlowRule.builder()
+                        .fromApp(appId)
+                        .makePermanent()
+                        .withSelector(selectorDst.build())
+                        .withTreatment(treatment.build())
+                        .forDevice(device.id())
+                        .withPriority(BASE_PRIO + 1000)
+                        .build();
+                flowRuleService.applyFlowRules(flowRule);
+                installedFlows.add(flowRule);
 
-            /* Send packet to destination host */
-            Ethernet modifiedMac = new Ethernet();
-            modifiedMac.setEtherType(Ethernet.TYPE_IPV4)
-                    .setSourceMACAddress(context.inPacket()
-                            .parsed().getSourceMACAddress())
-                    .setDestinationMACAddress(hostDstMac)
-                    .setPayload(context.inPacket().parsed().getPayload());
-            treatment = DefaultTrafficTreatment
-                    .builder()
-                    .setOutput(PortNumber.portNumber(port));
-            OutboundPacket packet = new DefaultOutboundPacket(
-                    device.id(),
-                    treatment.build(),
-                    ByteBuffer.wrap(modifiedMac.serialize()));
-            packetService.emit(packet);
-        } else {
+                /* Send packet to destination host */
+                Ethernet modifiedMac = new Ethernet();
+                modifiedMac.setEtherType(Ethernet.TYPE_IPV4)
+                        .setSourceMACAddress(context.inPacket()
+                                .parsed().getSourceMACAddress())
+                        .setDestinationMACAddress(hostDstMac)
+                        .setPayload(context.inPacket().parsed().getPayload());
+                treatment = DefaultTrafficTreatment
+                        .builder()
+                        .setOutput(PortNumber.portNumber(port));
+                OutboundPacket packet = new DefaultOutboundPacket(
+                        device.id(),
+                        treatment.build(),
+                        ByteBuffer.wrap(modifiedMac.serialize()));
+                packetService.emit(packet);
+            } else {
             /* If recipient is connected elsewhere, translate ethernet
                 destination to RMAC and forward to spines */
-            GroupDescription groupDescription = null;
-            for (GroupDescription g : groupService.getGroups(device.id())) {
-                groupDescription = g;
-            }
-            GroupKey key = new DefaultGroupKey(appKryo
-                    .serialize(Objects.hash(device)));
-            if (groupDescription == null) {
-                groupDescription = new DefaultGroupDescription(
-                        device.id(),
-                        GroupDescription.Type.SELECT,
-                        new GroupBuckets(leafBuckets.get(entry.getDc())),
-                        key,
-                        groupCount++,
-                        appId);
-                groupService.addGroup(groupDescription);
-            }
-            MacAddress hostDstMac;
-            if (hostDst != null) {
-                hostDstMac = new MacAddress(hostDst.getRmac());
-            } else {
-                hostDstMac = new MacAddress(new byte[]{
-                        (byte) 0x3F, (byte) 0xFF, (byte) 0xFF,
-                        (byte) 0xFF, (byte) 0xFF, (byte) 0xFF});
-            }
-            TrafficTreatment.Builder treatment = DefaultTrafficTreatment
-                    .builder()
-                    .setEthDst(hostDstMac)
-                    .group(new GroupId(groupDescription.givenGroupId()));
-            FlowRule flowRule = DefaultFlowRule.builder()
-                    .fromApp(appId)
-                    .makePermanent()
-                    .withSelector(selectorDst.build())
-                    .withTreatment(treatment.build())
-                    .forDevice(device.id())
-                    .withPriority(BASE_PRIO + 500)
-                    .build();
-            flowRuleService.applyFlowRules(flowRule);
-            installedFlows.add(flowRule);
+                GroupDescription groupDescription = null;
+                for (GroupDescription g : groupService.getGroups(device.id())) {
+                    groupDescription = g;
+                }
+                GroupKey key = new DefaultGroupKey(appKryo
+                        .serialize(Objects.hash(device)));
+                if (groupDescription == null) {
+                    groupDescription = new DefaultGroupDescription(
+                            device.id(),
+                            GroupDescription.Type.SELECT,
+                            new GroupBuckets(leafBuckets.get(entry.getDc())),
+                            key,
+                            groupCount++,
+                            appId);
+                    groupService.addGroup(groupDescription);
+                }
+                MacAddress hostDstMac;
+                if (hostDst != null) {
+                    hostDstMac = new MacAddress(hostDst.getRmac());
+                } else {
+                    hostDstMac = new MacAddress(new byte[]{
+                            (byte) 0x3F, (byte) 0xFF, (byte) 0xFF,
+                            (byte) 0xFF, (byte) 0xFF, (byte) 0xFF});
+                }
+                TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                        .builder()
+                        .setEthDst(hostDstMac)
+                        .group(new GroupId(groupDescription.givenGroupId()));
+                FlowRule flowRule = DefaultFlowRule.builder()
+                        .fromApp(appId)
+                        .makePermanent()
+                        .withSelector(selectorDst.build())
+                        .withTreatment(treatment.build())
+                        .forDevice(device.id())
+                        .withPriority(BASE_PRIO + 500)
+                        .build();
+                flowRuleService.applyFlowRules(flowRule);
+                installedFlows.add(flowRule);
 
-            /* Send packet to a random spine switch */
-            Ethernet modifiedMac = new Ethernet();
-            modifiedMac.setEtherType(Ethernet.TYPE_IPV4)
-                    .setSourceMACAddress(context.inPacket()
-                            .parsed().getSourceMACAddress())
-                    .setDestinationMACAddress(hostDstMac)
-                    .setPayload(context.inPacket().parsed().getPayload());
-            treatment = DefaultTrafficTreatment
-                    .builder()
-                    .setOutput(PortNumber.portNumber(1 + (int) (Math
-                                    .random() * lfRadixUp.get(entry.getDc()))));
-            OutboundPacket packet = new DefaultOutboundPacket(
-                    device.id(),
-                    treatment.build(),
-                    ByteBuffer.wrap(modifiedMac.serialize()));
-            packetService.emit(packet);
+                /* Send packet to a random spine switch */
+                Ethernet modifiedMac = new Ethernet();
+                modifiedMac.setEtherType(Ethernet.TYPE_IPV4)
+                        .setSourceMACAddress(context.inPacket()
+                                .parsed().getSourceMACAddress())
+                        .setDestinationMACAddress(hostDstMac)
+                        .setPayload(context.inPacket().parsed().getPayload());
+                treatment = DefaultTrafficTreatment
+                        .builder()
+                        .setOutput(PortNumber.portNumber(1 + (int) (Math
+                                .random() * lfRadixUp.get(entry.getDc()))));
+                OutboundPacket packet = new DefaultOutboundPacket(
+                        device.id(),
+                        treatment.build(),
+                        ByteBuffer.wrap(modifiedMac.serialize()));
+                packetService.emit(packet);
+            }
         }
 
         /* Handle translation for reverse traffic, towards source host*/
@@ -596,69 +595,69 @@ public class DCnet {
             dcSrc = (((int) bytesSrc[0]) << 4) + (bytesSrc[1] >> 4);
             podSrc = ((bytesSrc[1] & 0xF) << 8) + bytesSrc[2];
             leafSrc = (((int) bytesSrc[3]) << 4) + (bytesSrc[4] >> 4);
-        }
 
-        if (hostSrc != null && dcSrc == entry.getDc()
-                && podSrc == entry.getPod() && leafSrc == entry.getLeaf()) {
+            if (dcSrc == entry.getDc()
+                    && podSrc == entry.getPod() && leafSrc == entry.getLeaf()) {
             /* If sender is directly connected to leaf, translate ethernet
             destination back to recipients's and forward to it */
-            int port = ((bytesSrc[4] & 0xF) << 8) + bytesSrc[5] + lfRadixUp.get(entry.getDc()) + 1;
-            MacAddress hostSrcMac = new MacAddress(hostSrc.getIdmac());
-            TrafficTreatment.Builder treatment = DefaultTrafficTreatment
-                    .builder()
-                    .setEthDst(hostSrcMac)
-                    .setOutput(PortNumber.portNumber(port));
-            FlowRule flowRule = DefaultFlowRule.builder()
-                    .fromApp(appId)
-                    .makePermanent()
-                    .withSelector(selectorSrc.build())
-                    .withTreatment(treatment.build())
-                    .forDevice(device.id())
-                    .withPriority(BASE_PRIO + 1000)
-                    .build();
-            flowRuleService.applyFlowRules(flowRule);
-            installedFlows.add(flowRule);
-        } else {
+                int port = ((bytesSrc[4] & 0xF) << 8) + bytesSrc[5] + lfRadixUp.get(entry.getDc()) + 1;
+                MacAddress hostSrcMac = new MacAddress(hostSrc.getIdmac());
+                TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                        .builder()
+                        .setEthDst(hostSrcMac)
+                        .setOutput(PortNumber.portNumber(port));
+                FlowRule flowRule = DefaultFlowRule.builder()
+                        .fromApp(appId)
+                        .makePermanent()
+                        .withSelector(selectorSrc.build())
+                        .withTreatment(treatment.build())
+                        .forDevice(device.id())
+                        .withPriority(BASE_PRIO + 1000)
+                        .build();
+                flowRuleService.applyFlowRules(flowRule);
+                installedFlows.add(flowRule);
+            } else {
             /* If sender is connected to another leaf, translate ethernet
                 destination to RMAC and forward to spines */
-            GroupDescription groupDescription = null;
-            for (GroupDescription g : groupService.getGroups(device.id())) {
-                groupDescription = g;
+                GroupDescription groupDescription = null;
+                for (GroupDescription g : groupService.getGroups(device.id())) {
+                    groupDescription = g;
+                }
+                GroupKey key = new DefaultGroupKey(appKryo
+                        .serialize(Objects.hash(device)));
+                if (groupDescription == null) {
+                    groupDescription = new DefaultGroupDescription(
+                            device.id(),
+                            GroupDescription.Type.SELECT,
+                            new GroupBuckets(leafBuckets.get(entry.getDc())),
+                            key,
+                            groupCount++,
+                            appId);
+                    groupService.addGroup(groupDescription);
+                }
+                MacAddress hostSrcMac;
+                if (hostSrc != null) {
+                    hostSrcMac = new MacAddress(hostSrc.getRmac());
+                } else {
+                    hostSrcMac = new MacAddress(new byte[]{
+                            (byte) 0x3F, (byte) 0xFF, (byte) 0xFF,
+                            (byte) 0xFF, (byte) 0xFF, (byte) 0xFF});
+                }
+                TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                        .builder()
+                        .setEthDst(hostSrcMac)
+                        .group(new GroupId(groupDescription.givenGroupId()));
+                FlowRule flowRule = DefaultFlowRule.builder()
+                        .fromApp(appId)
+                        .makePermanent()
+                        .withSelector(selectorSrc.build())
+                        .withTreatment(treatment.build())
+                        .forDevice(device.id())
+                        .withPriority(BASE_PRIO + 500)
+                        .build();
+                flowRuleService.applyFlowRules(flowRule);
+                installedFlows.add(flowRule);
             }
-            GroupKey key = new DefaultGroupKey(appKryo
-                    .serialize(Objects.hash(device)));
-            if (groupDescription == null) {
-                groupDescription = new DefaultGroupDescription(
-                        device.id(),
-                        GroupDescription.Type.SELECT,
-                        new GroupBuckets(leafBuckets.get(entry.getDc())),
-                        key,
-                        groupCount++,
-                        appId);
-                groupService.addGroup(groupDescription);
-            }
-            MacAddress hostSrcMac;
-            if (hostSrc != null) {
-                hostSrcMac = new MacAddress(hostSrc.getRmac());
-            } else {
-                hostSrcMac = new MacAddress(new byte[]{
-                        (byte) 0x3F, (byte) 0xFF, (byte) 0xFF,
-                        (byte) 0xFF, (byte) 0xFF, (byte) 0xFF});
-            }
-            TrafficTreatment.Builder treatment = DefaultTrafficTreatment
-                    .builder()
-                    .setEthDst(hostSrcMac)
-                    .group(new GroupId(groupDescription.givenGroupId()));
-            FlowRule flowRule = DefaultFlowRule.builder()
-                    .fromApp(appId)
-                    .makePermanent()
-                    .withSelector(selectorSrc.build())
-                    .withTreatment(treatment.build())
-                    .forDevice(device.id())
-                    .withPriority(BASE_PRIO + 500)
-                    .build();
-            flowRuleService.applyFlowRules(flowRule);
-            installedFlows.add(flowRule);
         }
         context.block();
     }
