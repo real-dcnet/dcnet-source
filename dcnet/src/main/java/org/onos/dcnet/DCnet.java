@@ -396,6 +396,9 @@ public class DCnet {
     public void activate() {
         init();
         appId = coreService.registerApplication("org.onosproject.dcnet");
+        for (Device d : deviceService.getAvailableDevices()) {
+            setupFlows(d);
+        }
         packetService.addProcessor(packetProcessor, BASE_PRIO);
         packetService.requestPackets(
                 intercept,
