@@ -541,14 +541,7 @@ public class DCnet {
                         appId);
                 groupService.addGroup(groupDescription);
             }
-            MacAddress hostDstMac;
-            if (hostDst != null) {
-                hostDstMac = new MacAddress(hostDst.getRmac());
-            } else {
-                hostDstMac = new MacAddress(new byte[]{
-                        (byte) 0x3F, (byte) 0xFF, (byte) 0xFF,
-                        (byte) 0xFF, (byte) 0xFF, (byte) 0xFF});
-            }
+            MacAddress hostDstMac = new MacAddress(hostDst.getRmac());
             TrafficTreatment.Builder treatment = DefaultTrafficTreatment
                     .builder()
                     .setEthDst(hostDstMac)
@@ -628,14 +621,7 @@ public class DCnet {
                         appId);
                 groupService.addGroup(groupDescription);
             }
-            MacAddress hostSrcMac;
-            if (hostSrc != null) {
-                hostSrcMac = new MacAddress(hostSrc.getRmac());
-            } else {
-                hostSrcMac = new MacAddress(new byte[]{
-                        (byte) 0x3F, (byte) 0xFF, (byte) 0xFF,
-                        (byte) 0xFF, (byte) 0xFF, (byte) 0xFF});
-            }
+            MacAddress hostSrcMac = new MacAddress(hostSrc.getRmac());
             TrafficTreatment.Builder treatment = DefaultTrafficTreatment
                     .builder()
                     .setEthDst(hostSrcMac)
