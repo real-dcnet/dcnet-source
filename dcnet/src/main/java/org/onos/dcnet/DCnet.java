@@ -399,6 +399,9 @@ public class DCnet {
         for (Device d : deviceService.getAvailableDevices()) {
             setupFlows(d);
         }
+        for (Host h : hostService.getHosts()) {
+            configureHost(h);
+        }
         packetService.addProcessor(packetProcessor, BASE_PRIO);
         packetService.requestPackets(
                 intercept,
