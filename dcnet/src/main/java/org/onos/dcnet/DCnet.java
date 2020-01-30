@@ -62,8 +62,6 @@ import org.onosproject.net.packet.PacketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.nio.ByteBuffer;
@@ -425,19 +423,6 @@ public class DCnet {
             groupService.purgeGroupEntries(d);
         }
         log.info("Stopped");
-    }
-
-    /**
-     * Translates an IP String into integer representation.
-     * @param ip    String representation of IP address
-     * @return      Integer representation of IP address
-     */
-    private int ipStrtoInt(final String ip) {
-        String[] bytes = ip.split("\\.");
-        return (Integer.parseInt(bytes[0]) << 24)
-                + (Integer.parseInt(bytes[1]) << 16)
-                + (Integer.parseInt(bytes[2]) << 8)
-                + Integer.parseInt(bytes[3]);
     }
 
     /**

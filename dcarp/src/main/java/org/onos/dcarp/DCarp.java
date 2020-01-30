@@ -25,34 +25,14 @@ import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.onlab.packet.*;
-import org.onlab.util.KryoNamespace;
 import org.onosproject.core.ApplicationId;
 import org.onosproject.core.CoreService;
-import org.onosproject.core.GroupId;
-import org.onosproject.net.Device;
-import org.onosproject.net.DeviceId;
-import org.onosproject.net.Host;
-import org.onosproject.net.PortNumber;
-import org.onosproject.net.device.DeviceEvent;
-import org.onosproject.net.device.DeviceListener;
+import org.onosproject.net.*;
 import org.onosproject.net.device.DeviceService;
-import org.onosproject.net.flow.DefaultFlowRule;
 import org.onosproject.net.flow.DefaultTrafficSelector;
 import org.onosproject.net.flow.DefaultTrafficTreatment;
-import org.onosproject.net.flow.FlowRule;
-import org.onosproject.net.flow.FlowRuleService;
 import org.onosproject.net.flow.TrafficSelector;
 import org.onosproject.net.flow.TrafficTreatment;
-import org.onosproject.net.flow.criteria.Criterion;
-import org.onosproject.net.flow.criteria.IPCriterion;
-import org.onosproject.net.group.DefaultGroupBucket;
-import org.onosproject.net.group.DefaultGroupDescription;
-import org.onosproject.net.group.DefaultGroupKey;
-import org.onosproject.net.group.GroupBucket;
-import org.onosproject.net.group.GroupBuckets;
-import org.onosproject.net.group.GroupDescription;
-import org.onosproject.net.group.GroupKey;
-import org.onosproject.net.group.GroupService;
 import org.onosproject.net.host.HostEvent;
 import org.onosproject.net.host.HostListener;
 import org.onosproject.net.host.HostService;
@@ -65,17 +45,13 @@ import org.onosproject.net.packet.PacketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -95,6 +71,10 @@ public class DCarp {
     /** Service used to register and obtain device information. */
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     private DeviceService deviceService;
+
+    /** Service used to register and obtain host information. */
+    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    private HostService hostService;
 
     /** Holds information about switches parsed from JSON. */
     private static final class SwitchEntry {
@@ -215,6 +195,9 @@ public class DCarp {
     /** Used to identify flow rules belonging to DCnet. */
     private ApplicationId appId;
 
+    /** Listens for hosts that are added to the network. */
+    private final HostListener hostListener = new DCarp.InternalHostListener();
+
     /** Handler for packets that are passed to controller by switches. */
     private final PacketProcessor packetProcessor = new ArpPacketProcessor();
 
@@ -240,12 +223,6 @@ public class DCarp {
             addSwitchConfigs(config.get("supers").asArray(), SUPER);
             addSwitchConfigs(config.get("spines").asArray(), SPINE);
             addSwitchConfigs(config.get("leaves").asArray(), LEAF);
-
-            /* Setup host database by reading fields in host config JSON */
-            config = Json.parse(new BufferedReader(
-                    new FileReader(configLoc + "host_config.json"))
-            ).asObject();
-            addHostConfigs(config.get("hosts").asArray());
 
             /* Setup topology by reading fields in topology config JSON */
             config = Json.parse(new BufferedReader(
@@ -277,21 +254,6 @@ public class DCarp {
     }
 
     /**
-     * Parses the JSONs describing each host.
-     * @param configs   Array of JSONs that hold config information
-     */
-    private void addHostConfigs(final JsonArray configs) {
-        for (JsonValue obj : configs) {
-            JsonObject config = obj.asObject();
-            HostEntry entry = new HostEntry(
-                    config.get("name").asString(),
-                    strToMac(config.get("rmac").asString()),
-                    strToMac(config.get("idmac").asString()));
-            hostDB.put(ipStrtoInt(config.get("ip").asString()), entry);
-        }
-    }
-
-    /**
      * Parses the JSONs describing each data center topology.
      * @param configs   Array of JSONs that hold config information
      */
@@ -307,12 +269,16 @@ public class DCarp {
     public void activate() {
         init();
         appId = coreService.registerApplication("org.onosproject.dcarp");
+        for (Host h : hostService.getHosts()) {
+            configureHost(h);
+        }
         packetService.addProcessor(packetProcessor, BASE_PRIO);
         packetService.requestPackets(
                 intercept,
                 PacketPriority.CONTROL,
                 appId,
                 Optional.empty());
+        hostService.addListener(hostListener);
         log.info("Started");
     }
 
@@ -321,19 +287,6 @@ public class DCarp {
     public void deactivate() {
         packetService.removeProcessor(packetProcessor);
         log.info("Stopped");
-    }
-
-    /**
-     * Translates an IP String into integer representation.
-     * @param ip    String representation of IP address
-     * @return      Integer representation of IP address
-     */
-    private int ipStrtoInt(final String ip) {
-        String[] bytes = ip.split("\\.");
-        return (Integer.parseInt(bytes[0]) << 24)
-                + (Integer.parseInt(bytes[1]) << 16)
-                + (Integer.parseInt(bytes[2]) << 8)
-                + Integer.parseInt(bytes[3]);
     }
 
     /**
@@ -420,6 +373,50 @@ public class DCarp {
                             + eth.getDestinationMAC().toString());
                     processPacketArp(context, eth, device, entry);
                 }
+            }
+        }
+    }
+
+    /**
+     * Configures RMAC for a new host based on leaf it attached to
+     * @param host  Host that was added
+     */
+    private void configureHost(final Host host) {
+        HostLocation location = host.location();
+        Device device = deviceService.getDevice(location.deviceId());
+        SwitchEntry leaf = switchDB.get(device.chassisId().toString());
+        int port = (int)(location.port().toLong() - lfRadixUp.get(leaf.getDc()) - 1);
+        byte[] rmac = new byte[6];
+        rmac[0] = (byte) ((leaf.getDc() >> 4) & 0x3F);
+        rmac[1] = (byte) (((leaf.getDc() & 0xF) << 4) + ((leaf.getPod() >> 8) & 0xF));
+        rmac[2] = (byte) (leaf.getPod() & 0xFF);
+        rmac[3] = (byte) ((leaf.getLeaf() >> 4) & 0xFF);
+        rmac[4] = (byte) (((leaf.getLeaf() & 0xF) << 4) + ((port >> 8) & 0xF));
+        rmac[5] = (byte) (port & 0xFF);
+        HostEntry hostEntry = new HostEntry(host.id().toString(), rmac, host.mac().toBytes());
+        for (IpAddress ip : host.ipAddresses()) {
+            log.info("Host with MAC address " + host.mac().toString()
+                    + " and ip address " + ip.getIp4Address().toString()
+                    + " configured with RMAC address " + new MacAddress(rmac).toString());
+            hostDB.put(ip.getIp4Address().toInt(), hostEntry);
+        }
+    }
+
+    /** Listener for hosts that are moved or removed. */
+    private class InternalHostListener implements HostListener {
+        /**
+         * Overrides handler for events related to hosts.
+         * @param hostEvent     Event involving a host
+         */
+        @Override
+        public void event(final HostEvent hostEvent) {
+            switch (hostEvent.type()) {
+                case HOST_MOVED:
+                case HOST_ADDED:
+                    configureHost(hostEvent.subject());
+                    break;
+                default:
+                    break;
             }
         }
     }
