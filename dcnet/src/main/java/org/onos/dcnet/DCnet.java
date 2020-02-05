@@ -30,6 +30,8 @@ import org.onosproject.core.ApplicationId;
 import org.onosproject.core.CoreService;
 import org.onosproject.core.GroupId;
 import org.onosproject.net.*;
+import org.onosproject.net.config.NetworkConfigService;
+import org.onosproject.net.config.basics.BasicDeviceConfig;
 import org.onosproject.net.device.DeviceEvent;
 import org.onosproject.net.device.DeviceListener;
 import org.onosproject.net.device.DeviceService;
@@ -103,6 +105,10 @@ public class DCnet {
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     private GroupService groupService;
 
+    /** Service used to register network configuration information. */
+    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    private NetworkConfigService networkService;
+
     /** Holds information about switches parsed from JSON. */
     private static final class SwitchEntry {
         /** Human readable name for the switch. */
@@ -135,6 +141,10 @@ public class DCnet {
             this.dc = dcLoc;
             this.pod = podLoc;
             this.leaf = leafLoc;
+        }
+
+        private String getName() {
+            return this.name;
         }
 
         private byte[] getMac() {
@@ -784,6 +794,7 @@ public class DCnet {
         log.info("Chassis " + id + " connected");
         if (switchDB.containsKey(id)) {
             SwitchEntry entry = switchDB.get(id);
+            BasicDeviceConfig cfg = networkService.addConfig(device.id(), BasicDeviceConfig.class);
             log.info("Switch " + id + " connected");
             log.info("Level: " + entry.getLevel());
             log.info("DC: " + entry.getDc());
@@ -807,6 +818,8 @@ public class DCnet {
                     break;
             }
             addedDevices.add(device.id());
+            cfg.name(entry.getName());
+            cfg.apply();
         }
     }
 
