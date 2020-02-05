@@ -231,7 +231,8 @@ class FoldedClos(Topo):
 				"mac" : generateMac(dc_count),
 				"dc" : d,
 				"pod" : -1,
-				"leaf" : -1
+				"leaf" : -1,
+				"longitude" : ((d + 1) * pod[d] * leaf[d])/2
 			})
 			dc_count += increment
 			ss_switches.append([])
@@ -252,6 +253,7 @@ class FoldedClos(Topo):
 					"dc" : d,
 					"pod" : -1,
 					"leaf" : -1
+					"longitude" : ((d + 1) * ss * pod[d] * leaf[d])/ss_ratio[d]
 				})
 				ss_count += increment
 
@@ -273,6 +275,7 @@ class FoldedClos(Topo):
 						"dc" : d,
 						"pod" : p,
 						"leaf" : l
+						"longitude" : (d * pod[d] + p * leaf[d]) + l
 					})
 					leaf_count += increment
 	
@@ -290,6 +293,7 @@ class FoldedClos(Topo):
 						"dc" : d,
 						"pod" : p,
 						"leaf" : -1
+						"longitude" : (d * pod[d] + p * leaf[d]) + (s * leaf[d])/spine[d]
 					})
 					spine_count += increment
 					for l in range(leaf[d]):

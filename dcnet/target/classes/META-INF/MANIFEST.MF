@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1578953512924
-Build-Jdk: 11.0.3
+Bnd-LastModified: 1580940879304
+Build-Jdk: 11.0.5
 Built-By: reed226
 Bundle-Description: DCnet Application
 Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -10,8 +10,9 @@ Bundle-SymbolicName: org.onosproject.onos-app-dcnet
 Bundle-Version: 2.1.0
 Created-By: Apache Maven Bundle Plugin
 Export-Package: org.onos.dcnet;uses:="org.onosproject.core,org.onosproje
- ct.net.device,org.onosproject.net.flow,org.onosproject.net.group,org.on
- osproject.net.host,org.onosproject.net.packet";version="2.1.0"
+ ct.net.config,org.onosproject.net.device,org.onosproject.net.flow,org.o
+ nosproject.net.group,org.onosproject.net.host,org.onosproject.net.packe
+ t";version="2.1.0"
 Import-Package: 
  com.eclipsesource.json;version="[0.9,1)",
  org.onlab.packet;version="[2.1,3)",
@@ -19,6 +20,8 @@ Import-Package:
  org.onosproject.core;version="[2.1,3)",
  org.onosproject.event;version="[2.1,3)",
  org.onosproject.net;version="[2.1,3)",
+ org.onosproject.net.config;version="[2.1,3)",
+ org.onosproject.net.config.basics;version="[2.1,3)",
  org.onosproject.net.device;version="[2.1,3)",
  org.onosproject.net.flow;version="[2.1,3)",
  org.onosproject.net.flow.criteria;version="[2.1,3)",

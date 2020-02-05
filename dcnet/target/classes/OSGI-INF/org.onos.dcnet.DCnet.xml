@@ -13,6 +13,8 @@
         
     <reference name="groupService" interface="org.onosproject.net.group.GroupService" cardinality="1..1" policy="static" bind="bindGroupService" unbind="unbindGroupService"/>
         
+    <reference name="networkService" interface="org.onosproject.net.config.NetworkConfigService" cardinality="1..1" policy="static" bind="bindNetworkService" unbind="unbindNetworkService"/>
+        
     <implementation class="org.onos.dcnet.DCnet"/>
     
 </scr:component>

@@ -7,6 +7,8 @@
         
     <reference name="deviceService" interface="org.onosproject.net.device.DeviceService" cardinality="1..1" policy="static" bind="bindDeviceService" unbind="unbindDeviceService"/>
         
+    <reference name="hostService" interface="org.onosproject.net.host.HostService" cardinality="1..1" policy="static" bind="bindHostService" unbind="unbindHostService"/>
+        
     <implementation class="org.onos.dcarp.DCarp"/>
     
 </scr:component>
