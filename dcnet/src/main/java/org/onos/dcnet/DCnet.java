@@ -129,18 +129,23 @@ public class DCnet {
         /** Identifier at leaf level for a switch if it is one. */
         private int leaf;
 
+        /** Physical location of switch in topology representation. */
+        private double longitude;
+
         private SwitchEntry(final String switchName,
                             final byte[] switchMac,
                             final int switchLevel,
                             final int dcLoc,
                             final int podLoc,
-                            final int leafLoc) {
+                            final int leafLoc,
+                            final double longitude) {
             this.name = switchName;
             this.mac = switchMac;
             this.level = switchLevel;
             this.dc = dcLoc;
             this.pod = podLoc;
             this.leaf = leafLoc;
+            this.longitude = longitude;
         }
 
         private String getName() {
@@ -165,6 +170,10 @@ public class DCnet {
 
         private int getLeaf() {
             return this.leaf;
+        }
+
+        private double getLongitude() {
+            return this.longitude;
         }
     }
 
@@ -378,7 +387,8 @@ public class DCnet {
                     level,
                     config.get("dc").asInt(),
                     config.get("pod").asInt(),
-                    config.get("leaf").asInt());
+                    config.get("leaf").asInt(),
+                    config.get("longitude").asDouble());
             switchDB.put(config.get("id").asString(), entry);
         }
     }
@@ -819,6 +829,8 @@ public class DCnet {
             }
             addedDevices.add(device.id());
             cfg.name(entry.getName());
+            cfg.latitude(1.0 * entry.getLevel());
+            cfg.longitude(entry.getLongitude());
             cfg.apply();
         }
     }
