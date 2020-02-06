@@ -25,5 +25,6 @@
             "dc_radix_down": 2
         }
     ], 
-    "dc_count": 3
+    "dc_count": 3,
+    "offset": 7.5
 }
