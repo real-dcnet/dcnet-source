@@ -194,7 +194,7 @@ class FoldedClos(Topo):
 
 		# Configuration file for topology that can be used by SDN controller
 		#top_config = open("config/mininet/top_config.csv", "w+")
-		top_config = {"dc_count" : dc,"config" : []}
+		top_config = {"dc_count" : dc, "offset" : ((dc + 1) * pod[0] * leaf[0])/2.0, "config" : []}
 		for i in range(dc):
 			top_config["config"].append({
 				"dc_radix_down" : spine[i] * ss_ratio[i],

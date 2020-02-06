@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1580953332812
+Bnd-LastModified: 1580953607125
 Build-Jdk: 11.0.5
 Built-By: reed226
 Bundle-Description: DCnet Application

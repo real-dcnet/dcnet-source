@@ -150,7 +150,7 @@
             "leaf": -1, 
             "name": "s27", 
             "dc": 0, 
-            "longitude": 0, 
+            "longitude": 0.0, 
             "mac": "00:00:00:00:00:1b", 
             "pod": 0, 
             "id": "1b"
@@ -159,7 +159,7 @@
             "leaf": -1, 
             "name": "s43", 
             "dc": 0, 
-            "longitude": 3, 
+            "longitude": 3.0, 
             "mac": "00:00:00:00:00:2b", 
             "pod": 0, 
             "id": "2b"
@@ -168,7 +168,7 @@
             "leaf": -1, 
             "name": "s59", 
             "dc": 0, 
-            "longitude": 4, 
+            "longitude": 4.0, 
             "mac": "00:00:00:00:00:3b", 
             "pod": 1, 
             "id": "3b"
@@ -177,7 +177,7 @@
             "leaf": -1, 
             "name": "s75", 
             "dc": 0, 
-            "longitude": 7, 
+            "longitude": 7.0, 
             "mac": "00:00:00:00:00:4b", 
             "pod": 1, 
             "id": "4b"
@@ -186,7 +186,7 @@
             "leaf": -1, 
             "name": "s91", 
             "dc": 1, 
-            "longitude": 8, 
+            "longitude": 8.0, 
             "mac": "00:00:00:00:00:5b", 
             "pod": 0, 
             "id": "5b"
@@ -195,7 +195,7 @@
             "leaf": -1, 
             "name": "s107", 
             "dc": 1, 
-            "longitude": 11, 
+            "longitude": 11.0, 
             "mac": "00:00:00:00:00:6b", 
             "pod": 0, 
             "id": "6b"
@@ -204,7 +204,7 @@
             "leaf": -1, 
             "name": "s123", 
             "dc": 1, 
-            "longitude": 12, 
+            "longitude": 12.0, 
             "mac": "00:00:00:00:00:7b", 
             "pod": 1, 
             "id": "7b"
@@ -213,7 +213,7 @@
             "leaf": -1, 
             "name": "s139", 
             "dc": 1, 
-            "longitude": 15, 
+            "longitude": 15.0, 
             "mac": "00:00:00:00:00:8b", 
             "pod": 1, 
             "id": "8b"
@@ -224,7 +224,7 @@
             "leaf": -1, 
             "name": "d29", 
             "dc": 0, 
-            "longitude": 4, 
+            "longitude": 4.0, 
             "mac": "00:00:00:00:00:1d", 
             "pod": -1, 
             "id": "1d"
@@ -233,7 +233,7 @@
             "leaf": -1, 
             "name": "d45", 
             "dc": 1, 
-            "longitude": 12, 
+            "longitude": 12.0, 
             "mac": "00:00:00:00:00:2d", 
             "pod": -1, 
             "id": "2d"
@@ -244,7 +244,7 @@
             "leaf": -1, 
             "name": "u28", 
             "dc": 0, 
-            "longitude": 0, 
+            "longitude": 0.0, 
             "mac": "00:00:00:00:00:1c", 
             "pod": -1, 
             "id": "1c"
@@ -253,7 +253,7 @@
             "leaf": -1, 
             "name": "u44", 
             "dc": 0, 
-            "longitude": 2, 
+            "longitude": 2.3333333333333335, 
             "mac": "00:00:00:00:00:2c", 
             "pod": -1, 
             "id": "2c"
@@ -262,7 +262,7 @@
             "leaf": -1, 
             "name": "u60", 
             "dc": 0, 
-            "longitude": 4, 
+            "longitude": 4.666666666666667, 
             "mac": "00:00:00:00:00:3c", 
             "pod": -1, 
             "id": "3c"
@@ -271,7 +271,7 @@
             "leaf": -1, 
             "name": "u76", 
             "dc": 0, 
-            "longitude": 7, 
+            "longitude": 7.0, 
             "mac": "00:00:00:00:00:4c", 
             "pod": -1, 
             "id": "4c"
@@ -280,7 +280,7 @@
             "leaf": -1, 
             "name": "u92", 
             "dc": 1, 
-            "longitude": 8, 
+            "longitude": 8.0, 
             "mac": "00:00:00:00:00:5c", 
             "pod": -1, 
             "id": "5c"
@@ -289,7 +289,7 @@
             "leaf": -1, 
             "name": "u108", 
             "dc": 1, 
-            "longitude": 10, 
+            "longitude": 10.333333333333334, 
             "mac": "00:00:00:00:00:6c", 
             "pod": -1, 
             "id": "6c"
@@ -298,7 +298,7 @@
             "leaf": -1, 
             "name": "u124", 
             "dc": 1, 
-            "longitude": 12, 
+            "longitude": 12.666666666666668, 
             "mac": "00:00:00:00:00:7c", 
             "pod": -1, 
             "id": "7c"
@@ -307,7 +307,7 @@
             "leaf": -1, 
             "name": "u140", 
             "dc": 1, 
-            "longitude": 15, 
+            "longitude": 15.0, 
             "mac": "00:00:00:00:00:8c", 
             "pod": -1, 
             "id": "8c"
