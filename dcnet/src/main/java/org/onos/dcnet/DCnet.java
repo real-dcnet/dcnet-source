@@ -229,6 +229,9 @@ public class DCnet {
      * Should be higher than reactive forwarding rules */
     private static final int BASE_PRIO = 50000;
 
+    /** Offset to center topology view in gui. */
+    private double guiOffset;
+
     /** Number of data centers. */
     private int dcCount = 0;
 
@@ -337,6 +340,7 @@ public class DCnet {
                     new FileReader(configLoc + "top_config.json"))
             ).asObject();
             dcCount = config.get("dc_count").asInt();
+            guiOffset = config.get("offset").asDouble();
             addDcConfigs(config.get("config").asArray());
 
             /* Create buckets for each switch type in each data center
@@ -829,8 +833,8 @@ public class DCnet {
             }
             addedDevices.add(device.id());
             cfg.name(entry.getName());
-            cfg.latitude(20.0 * entry.getLevel());
-            cfg.longitude(20.0 * entry.getLongitude());
+            cfg.latitude(40.0 * entry.getLevel());
+            cfg.longitude(25.0 * entry.getLongitude() - guiOffset);
             cfg.apply();
         }
     }
