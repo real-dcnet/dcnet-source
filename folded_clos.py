@@ -232,7 +232,7 @@ class FoldedClos(Topo):
 				"dc" : d,
 				"pod" : -1,
 				"leaf" : -1,
-				"longitude" : (d * pod[d] * leaf[d]) + (pod[d] * leaf[d])/2
+				"longitude" : (d * pod[d] * leaf[d]) + (1.0 * pod[d] * leaf[d])/2
 			})
 			dc_count += increment
 			ss_switches.append([])
@@ -253,7 +253,8 @@ class FoldedClos(Topo):
 					"dc" : d,
 					"pod" : -1,
 					"leaf" : -1,
-					"longitude" : (d * pod[d] * leaf[d]) + (ss * (pod[d] * leaf[d] - 1))/(ss_ratio[d] * spine[d] - 1)
+					"longitude" : (d * pod[d] * leaf[d])
+								+ (1.0 * ss * (pod[d] * leaf[d] - 1))/(ss_ratio[d] * spine[d] - 1)
 				})
 				ss_count += increment
 
@@ -293,7 +294,7 @@ class FoldedClos(Topo):
 						"dc" : d,
 						"pod" : p,
 						"leaf" : -1,
-						"longitude" : (d * pod[d] * leaf[d] + p * leaf[d]) + (s * (leaf[d] - 1))/(spine[d] - 1)
+						"longitude" : (d * pod[d] * leaf[d] + p * leaf[d]) + (1.0 * s * (leaf[d] - 1))/(spine[d] - 1)
 					})
 					spine_count += increment
 					for l in range(leaf[d]):
