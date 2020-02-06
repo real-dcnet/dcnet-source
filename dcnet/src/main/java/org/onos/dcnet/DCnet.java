@@ -829,8 +829,8 @@ public class DCnet {
             }
             addedDevices.add(device.id());
             cfg.name(entry.getName());
-            cfg.latitude(1.0 * entry.getLevel());
-            cfg.longitude(entry.getLongitude());
+            cfg.latitude(20.0 * entry.getLevel());
+            cfg.longitude(20.0 * entry.getLongitude());
             cfg.apply();
         }
     }
