@@ -1118,7 +1118,7 @@ public class DCnet {
             treatment.group(new GroupId(groupDescription.givenGroupId()));
         }
         else {
-            treatment.setOutput(PortNumber.portNumber((int) (spRadixDown.get(entry.getDc())
+            treatment.setOutput(PortNumber.portNumber((int) (1 + spRadixDown.get(entry.getDc())
                     + Math.random() * spRadixUp.get(entry.getDc()))));
         }
         FlowRule flowRule = DefaultFlowRule.builder()
