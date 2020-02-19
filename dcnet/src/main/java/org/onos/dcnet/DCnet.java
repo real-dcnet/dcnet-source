@@ -483,6 +483,18 @@ public class DCnet {
         int ipSrc = ip.getSourceAddress();
         HostEntry hostDst = hostDB.get(ipDst);
         HostEntry hostSrc = hostDB.get(ipSrc);
+        if (hostDst == null) {
+            for (Host h : hostService.getHostsByIp(IpAddress.valueOf(ipDst))) {
+                configureHost(h);
+                hostDst = hostDB.get(ipDst);
+            }
+        }
+        if (hostSrc == null) {
+            for (Host h : hostService.getHostsByIp(IpAddress.valueOf(ipSrc))) {
+                configureHost(h);
+                hostSrc = hostDB.get(ipSrc);
+            }
+        }
         if (hostDst == null || hostSrc == null) {
             return;
         }
