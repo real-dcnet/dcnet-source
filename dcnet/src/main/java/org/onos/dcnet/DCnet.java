@@ -213,6 +213,8 @@ public class DCnet {
     private static String configLoc =
             System.getProperty("user.home") + "/dcnet-source/config/testbed/";
 
+    private static boolean ecmpEnabled = true;
+
     /** Macro for data center egress switches. */
     private static final int DC = 0;
 
@@ -556,8 +558,13 @@ public class DCnet {
             MacAddress hostDstMac = new MacAddress(hostDst.getRmac());
             TrafficTreatment.Builder treatment = DefaultTrafficTreatment
                     .builder()
-                    .setEthDst(hostDstMac)
-                    .group(new GroupId(groupDescription.givenGroupId()));
+                    .setEthDst(hostDstMac);
+            if (ecmpEnabled) {
+                treatment.group(new GroupId(groupDescription.givenGroupId()));
+            }
+            else {
+                treatment.setOutput(PortNumber.portNumber((int) (1 + Math.random() * lfRadixUp.get(entry.getDc()))));
+            }
             FlowRule flowRule = DefaultFlowRule.builder()
                     .fromApp(appId)
                     .makePermanent()
@@ -636,8 +643,13 @@ public class DCnet {
             MacAddress hostSrcMac = new MacAddress(hostSrc.getRmac());
             TrafficTreatment.Builder treatment = DefaultTrafficTreatment
                     .builder()
-                    .setEthDst(hostSrcMac)
-                    .group(new GroupId(groupDescription.givenGroupId()));
+                    .setEthDst(hostSrcMac);
+            if (ecmpEnabled) {
+                treatment.group(new GroupId(groupDescription.givenGroupId()));
+            }
+            else {
+                treatment.setOutput(PortNumber.portNumber((int) (1 + Math.random() * lfRadixUp.get(entry.getDc()))));
+            }
             FlowRule flowRule = DefaultFlowRule.builder()
                     .fromApp(appId)
                     .makePermanent()
@@ -703,8 +715,13 @@ public class DCnet {
             }
             TrafficTreatment.Builder treatment = DefaultTrafficTreatment
                     .builder()
-                    .setEthDst(hostMac)
-                    .group(new GroupId(groupDescription.givenGroupId()));
+                    .setEthDst(hostMac);
+            if (ecmpEnabled) {
+                treatment.group(new GroupId(groupDescription.givenGroupId()));
+            }
+            else {
+                treatment.setOutput(PortNumber.portNumber((int) (1 + Math.random() * dcRadixDown.get(entry.getDc()))));
+            }
             FlowRule flowRule = DefaultFlowRule.builder()
                     .fromApp(appId)
                     .makePermanent()
@@ -878,9 +895,13 @@ public class DCnet {
                     appId);
             groupService.addGroup(groupDescription);
         }
-        TrafficTreatment.Builder treatment = DefaultTrafficTreatment
-                .builder()
-                .group(new GroupId(groupDescription.givenGroupId()));
+        TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder();
+        if (ecmpEnabled) {
+            treatment.group(new GroupId(groupDescription.givenGroupId()));
+        }
+        else {
+            treatment.setOutput(PortNumber.portNumber((int) (1 + Math.random() * dcRadixDown.get(entry.getDc()))));
+        }
         FlowRule flowRule = DefaultFlowRule.builder()
                 .fromApp(appId)
                 .makePermanent()
@@ -1092,9 +1113,14 @@ public class DCnet {
                     appId);
             groupService.addGroup(groupDescription);
         }
-        TrafficTreatment.Builder treatment = DefaultTrafficTreatment
-                .builder()
-                .group(new GroupId(groupDescription.givenGroupId()));
+        TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder();
+        if (ecmpEnabled) {
+            treatment.group(new GroupId(groupDescription.givenGroupId()));
+        }
+        else {
+            treatment.setOutput(PortNumber.portNumber((int) (1 + spRadixDown.get(entry.getDc())
+                    + Math.random() * spRadixUp.get(entry.getDc()))));
+        }
         FlowRule flowRule = DefaultFlowRule.builder()
                 .fromApp(appId)
                 .makePermanent()
