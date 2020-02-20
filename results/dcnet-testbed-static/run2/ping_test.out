@@ -1,0 +1,176 @@
+
+Initial ping from host 128.10.126.77 to host 128.10.126.85
+PING 128.10.126.85 (128.10.126.85) 56(84) bytes of data.
+64 bytes from 128.10.126.85: icmp_seq=1 ttl=64 time=3.00 ms
+64 bytes from 128.10.126.85: icmp_seq=2 ttl=64 time=0.528 ms
+64 bytes from 128.10.126.85: icmp_seq=3 ttl=64 time=0.425 ms
+
+--- 128.10.126.85 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2005ms
+rtt min/avg/max/mdev = 0.425/1.317/3.000/1.191 ms
+Steady-state ping from host 128.10.126.77 to host 128.10.126.85
+PING 128.10.126.85 (128.10.126.85) 56(84) bytes of data.
+64 bytes from 128.10.126.85: icmp_seq=1 ttl=64 time=0.247 ms
+64 bytes from 128.10.126.85: icmp_seq=2 ttl=64 time=0.548 ms
+64 bytes from 128.10.126.85: icmp_seq=3 ttl=64 time=0.595 ms
+64 bytes from 128.10.126.85: icmp_seq=4 ttl=64 time=0.610 ms
+64 bytes from 128.10.126.85: icmp_seq=5 ttl=64 time=0.455 ms
+64 bytes from 128.10.126.85: icmp_seq=6 ttl=64 time=0.508 ms
+64 bytes from 128.10.126.85: icmp_seq=7 ttl=64 time=0.460 ms
+64 bytes from 128.10.126.85: icmp_seq=8 ttl=64 time=0.648 ms
+64 bytes from 128.10.126.85: icmp_seq=9 ttl=64 time=0.629 ms
+64 bytes from 128.10.126.85: icmp_seq=10 ttl=64 time=0.623 ms
+64 bytes from 128.10.126.85: icmp_seq=11 ttl=64 time=0.601 ms
+64 bytes from 128.10.126.85: icmp_seq=12 ttl=64 time=0.612 ms
+64 bytes from 128.10.126.85: icmp_seq=13 ttl=64 time=0.614 ms
+64 bytes from 128.10.126.85: icmp_seq=14 ttl=64 time=0.458 ms
+64 bytes from 128.10.126.85: icmp_seq=15 ttl=64 time=0.577 ms
+64 bytes from 128.10.126.85: icmp_seq=16 ttl=64 time=0.617 ms
+64 bytes from 128.10.126.85: icmp_seq=17 ttl=64 time=0.578 ms
+64 bytes from 128.10.126.85: icmp_seq=18 ttl=64 time=0.618 ms
+64 bytes from 128.10.126.85: icmp_seq=19 ttl=64 time=0.612 ms
+64 bytes from 128.10.126.85: icmp_seq=20 ttl=64 time=0.395 ms
+
+--- 128.10.126.85 ping statistics ---
+20 packets transmitted, 20 received, 0% packet loss, time 19433ms
+rtt min/avg/max/mdev = 0.247/0.550/0.648/0.100 ms
+Initial ping from host 128.10.126.77 to host 128.10.126.69
+PING 128.10.126.69 (128.10.126.69) 56(84) bytes of data.
+64 bytes from 128.10.126.69: icmp_seq=1 ttl=64 time=12.7 ms
+64 bytes from 128.10.126.69: icmp_seq=2 ttl=64 time=5.42 ms
+64 bytes from 128.10.126.69: icmp_seq=3 ttl=64 time=1.69 ms
+
+--- 128.10.126.69 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2003ms
+rtt min/avg/max/mdev = 1.697/6.631/12.771/4.600 ms
+Steady-state ping from host 128.10.126.77 to host 128.10.126.69
+PING 128.10.126.69 (128.10.126.69) 56(84) bytes of data.
+64 bytes from 128.10.126.69: icmp_seq=1 ttl=64 time=1.11 ms
+64 bytes from 128.10.126.69: icmp_seq=2 ttl=64 time=1.82 ms
+64 bytes from 128.10.126.69: icmp_seq=3 ttl=64 time=1.71 ms
+64 bytes from 128.10.126.69: icmp_seq=4 ttl=64 time=1.45 ms
+64 bytes from 128.10.126.69: icmp_seq=5 ttl=64 time=1.52 ms
+64 bytes from 128.10.126.69: icmp_seq=6 ttl=64 time=1.77 ms
+64 bytes from 128.10.126.69: icmp_seq=7 ttl=64 time=1.36 ms
+64 bytes from 128.10.126.69: icmp_seq=8 ttl=64 time=1.70 ms
+64 bytes from 128.10.126.69: icmp_seq=9 ttl=64 time=1.77 ms
+64 bytes from 128.10.126.69: icmp_seq=10 ttl=64 time=1.14 ms
+64 bytes from 128.10.126.69: icmp_seq=11 ttl=64 time=1.72 ms
+64 bytes from 128.10.126.69: icmp_seq=12 ttl=64 time=1.78 ms
+64 bytes from 128.10.126.69: icmp_seq=13 ttl=64 time=1.44 ms
+64 bytes from 128.10.126.69: icmp_seq=14 ttl=64 time=1.73 ms
+64 bytes from 128.10.126.69: icmp_seq=15 ttl=64 time=1.53 ms
+64 bytes from 128.10.126.69: icmp_seq=16 ttl=64 time=1.56 ms
+64 bytes from 128.10.126.69: icmp_seq=17 ttl=64 time=1.82 ms
+64 bytes from 128.10.126.69: icmp_seq=18 ttl=64 time=1.73 ms
+64 bytes from 128.10.126.69: icmp_seq=19 ttl=64 time=1.69 ms
+64 bytes from 128.10.126.69: icmp_seq=20 ttl=64 time=1.72 ms
+
+--- 128.10.126.69 ping statistics ---
+20 packets transmitted, 20 received, 0% packet loss, time 19030ms
+rtt min/avg/max/mdev = 1.111/1.607/1.827/0.211 ms
+Initial ping from host 128.10.126.77 to host 128.10.126.75
+PING 128.10.126.75 (128.10.126.75) 56(84) bytes of data.
+64 bytes from 128.10.126.75: icmp_seq=1 ttl=64 time=24.3 ms
+64 bytes from 128.10.126.75: icmp_seq=2 ttl=64 time=17.1 ms
+64 bytes from 128.10.126.75: icmp_seq=3 ttl=64 time=4.83 ms
+
+--- 128.10.126.75 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2000ms
+rtt min/avg/max/mdev = 4.836/15.470/24.398/8.077 ms
+Steady-state ping from host 128.10.126.77 to host 128.10.126.75
+PING 128.10.126.75 (128.10.126.75) 56(84) bytes of data.
+64 bytes from 128.10.126.75: icmp_seq=1 ttl=64 time=1.75 ms
+64 bytes from 128.10.126.75: icmp_seq=2 ttl=64 time=3.11 ms
+64 bytes from 128.10.126.75: icmp_seq=3 ttl=64 time=2.87 ms
+64 bytes from 128.10.126.75: icmp_seq=4 ttl=64 time=2.38 ms
+64 bytes from 128.10.126.75: icmp_seq=5 ttl=64 time=3.16 ms
+64 bytes from 128.10.126.75: icmp_seq=6 ttl=64 time=2.63 ms
+64 bytes from 128.10.126.75: icmp_seq=7 ttl=64 time=3.21 ms
+64 bytes from 128.10.126.75: icmp_seq=8 ttl=64 time=3.04 ms
+64 bytes from 128.10.126.75: icmp_seq=9 ttl=64 time=1.59 ms
+64 bytes from 128.10.126.75: icmp_seq=10 ttl=64 time=2.73 ms
+64 bytes from 128.10.126.75: icmp_seq=11 ttl=64 time=3.10 ms
+64 bytes from 128.10.126.75: icmp_seq=12 ttl=64 time=2.32 ms
+64 bytes from 128.10.126.75: icmp_seq=13 ttl=64 time=2.94 ms
+64 bytes from 128.10.126.75: icmp_seq=14 ttl=64 time=2.14 ms
+64 bytes from 128.10.126.75: icmp_seq=15 ttl=64 time=2.72 ms
+64 bytes from 128.10.126.75: icmp_seq=16 ttl=64 time=2.76 ms
+64 bytes from 128.10.126.75: icmp_seq=17 ttl=64 time=3.13 ms
+64 bytes from 128.10.126.75: icmp_seq=18 ttl=64 time=2.99 ms
+64 bytes from 128.10.126.75: icmp_seq=19 ttl=64 time=1.99 ms
+64 bytes from 128.10.126.75: icmp_seq=20 ttl=64 time=2.73 ms
+
+--- 128.10.126.75 ping statistics ---
+20 packets transmitted, 20 received, 0% packet loss, time 19026ms
+rtt min/avg/max/mdev = 1.594/2.669/3.212/0.472 ms
+Initial ping from host 128.10.126.77 to host 128.10.126.76
+PING 128.10.126.76 (128.10.126.76) 56(84) bytes of data.
+64 bytes from 128.10.126.76: icmp_seq=1 ttl=64 time=39.9 ms
+64 bytes from 128.10.126.76: icmp_seq=2 ttl=64 time=36.0 ms
+64 bytes from 128.10.126.76: icmp_seq=3 ttl=64 time=5.60 ms
+
+--- 128.10.126.76 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2001ms
+rtt min/avg/max/mdev = 5.602/27.199/39.962/15.356 ms
+Steady-state ping from host 128.10.126.77 to host 128.10.126.76
+PING 128.10.126.76 (128.10.126.76) 56(84) bytes of data.
+64 bytes from 128.10.126.76: icmp_seq=1 ttl=64 time=4.88 ms
+64 bytes from 128.10.126.76: icmp_seq=2 ttl=64 time=4.60 ms
+64 bytes from 128.10.126.76: icmp_seq=3 ttl=64 time=5.40 ms
+64 bytes from 128.10.126.76: icmp_seq=4 ttl=64 time=5.57 ms
+64 bytes from 128.10.126.76: icmp_seq=5 ttl=64 time=4.83 ms
+64 bytes from 128.10.126.76: icmp_seq=6 ttl=64 time=6.11 ms
+64 bytes from 128.10.126.76: icmp_seq=7 ttl=64 time=5.43 ms
+64 bytes from 128.10.126.76: icmp_seq=8 ttl=64 time=3.09 ms
+64 bytes from 128.10.126.76: icmp_seq=9 ttl=64 time=5.86 ms
+64 bytes from 128.10.126.76: icmp_seq=10 ttl=64 time=5.30 ms
+64 bytes from 128.10.126.76: icmp_seq=11 ttl=64 time=3.83 ms
+64 bytes from 128.10.126.76: icmp_seq=12 ttl=64 time=5.62 ms
+64 bytes from 128.10.126.76: icmp_seq=13 ttl=64 time=4.63 ms
+64 bytes from 128.10.126.76: icmp_seq=14 ttl=64 time=3.73 ms
+64 bytes from 128.10.126.76: icmp_seq=15 ttl=64 time=6.18 ms
+64 bytes from 128.10.126.76: icmp_seq=16 ttl=64 time=6.20 ms
+64 bytes from 128.10.126.76: icmp_seq=17 ttl=64 time=3.77 ms
+64 bytes from 128.10.126.76: icmp_seq=18 ttl=64 time=3.92 ms
+64 bytes from 128.10.126.76: icmp_seq=19 ttl=64 time=6.07 ms
+64 bytes from 128.10.126.76: icmp_seq=20 ttl=64 time=3.89 ms
+
+--- 128.10.126.76 ping statistics ---
+20 packets transmitted, 20 received, 0% packet loss, time 19028ms
+rtt min/avg/max/mdev = 3.092/4.950/6.206/0.949 ms
+Initial ping from host 128.10.126.77 to host 128.10.126.78
+PING 128.10.126.78 (128.10.126.78) 56(84) bytes of data.
+64 bytes from 128.10.126.78: icmp_seq=1 ttl=64 time=35.2 ms
+64 bytes from 128.10.126.78: icmp_seq=2 ttl=64 time=25.8 ms
+64 bytes from 128.10.126.78: icmp_seq=3 ttl=64 time=10.6 ms
+
+--- 128.10.126.78 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2002ms
+rtt min/avg/max/mdev = 10.607/23.871/35.208/10.137 ms
+Steady-state ping from host 128.10.126.77 to host 128.10.126.78
+PING 128.10.126.78 (128.10.126.78) 56(84) bytes of data.
+64 bytes from 128.10.126.78: icmp_seq=1 ttl=64 time=2.69 ms
+64 bytes from 128.10.126.78: icmp_seq=2 ttl=64 time=5.52 ms
+64 bytes from 128.10.126.78: icmp_seq=3 ttl=64 time=3.68 ms
+64 bytes from 128.10.126.78: icmp_seq=4 ttl=64 time=3.68 ms
+64 bytes from 128.10.126.78: icmp_seq=5 ttl=64 time=5.95 ms
+64 bytes from 128.10.126.78: icmp_seq=6 ttl=64 time=3.84 ms
+64 bytes from 128.10.126.78: icmp_seq=7 ttl=64 time=2.50 ms
+64 bytes from 128.10.126.78: icmp_seq=8 ttl=64 time=3.70 ms
+64 bytes from 128.10.126.78: icmp_seq=9 ttl=64 time=4.01 ms
+64 bytes from 128.10.126.78: icmp_seq=10 ttl=64 time=3.12 ms
+64 bytes from 128.10.126.78: icmp_seq=11 ttl=64 time=4.38 ms
+64 bytes from 128.10.126.78: icmp_seq=12 ttl=64 time=4.22 ms
+64 bytes from 128.10.126.78: icmp_seq=13 ttl=64 time=4.00 ms
+64 bytes from 128.10.126.78: icmp_seq=14 ttl=64 time=5.74 ms
+64 bytes from 128.10.126.78: icmp_seq=15 ttl=64 time=5.83 ms
+64 bytes from 128.10.126.78: icmp_seq=16 ttl=64 time=3.84 ms
+64 bytes from 128.10.126.78: icmp_seq=17 ttl=64 time=5.68 ms
+64 bytes from 128.10.126.78: icmp_seq=18 ttl=64 time=4.31 ms
+64 bytes from 128.10.126.78: icmp_seq=19 ttl=64 time=3.73 ms
+64 bytes from 128.10.126.78: icmp_seq=20 ttl=64 time=4.07 ms
+
+--- 128.10.126.78 ping statistics ---
+20 packets transmitted, 20 received, 0% packet loss, time 19029ms
+rtt min/avg/max/mdev = 2.502/4.229/5.950/0.995 ms

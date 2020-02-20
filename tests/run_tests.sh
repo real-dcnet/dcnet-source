@@ -12,7 +12,7 @@ do
 	fi
 done
 
-for i in $(seq 1 1)
+for i in $(seq 1 20)
 do
 	echo "Test Run $i"
 	mkdir run$i
