@@ -26,8 +26,9 @@ do
 		for k in $(seq 1 $(expr ${#TRAFFIC[@]} / 2 - 1))
 		do
 			echo "${TRAFFIC[(2 * $k)]} connect to ${TRAFFIC[(2 * $k + 1)]}" 
-			source "./tcp_traffic.sh" "${TRAFFIC[(2 * $j)]}" "${TRAFFIC[(2 * $j + 1)]}" "/dev/null"
+			source "./tcp_traffic.sh" "${TRAFFIC[(2 * $k)]}" "${TRAFFIC[(2 * $k + 1)]}" "/dev/null" &
 		done
+		sleep(5)
 		#for k in $(seq 1 19)
 		#do
 		#	source "./tcp_traffic.sh" "$SRC_IP" "${DST_IPS[$j]}" "/dev/null" $((5210 + $k))
