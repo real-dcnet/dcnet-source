@@ -1,0 +1,16 @@
+
+--- TCP bandwidth from host 128.10.126.61 to host 128.10.126.69 ---
+iperf3: error - unable to connect to server: No route to host
+
+--- TCP bandwidth from host 128.10.126.61 to host 128.10.126.77 ---
+iperf3: error - unable to connect to server: No route to host
+
+--- TCP bandwidth from host 128.10.126.61 to host 128.10.126.51 ---
+iperf3: error - unable to connect to server: No route to host
+
+--- TCP bandwidth from host 128.10.126.61 to host 128.10.126.84 ---
+iperf3: error - unable to connect to server: No route to host
+
+--- TCP bandwidth from host 128.10.126.61 to host 128.10.126.95 ---
+iperf3: error - unable to connect to server: No route to host
+
