@@ -15,13 +15,13 @@ done
 for i in $(seq 1 20)
 do
 	echo "Test Run $i"
-	mkdir run$i
-	echo "" > "run$i/ping_test.out" 
+	#mkdir run$i
+	#echo "" > "run$i/ping_test.out" 
 	echo "" > "run$i/tcp_test.out" 
 	for j in ${!DST_IPS[@]}
 	do
-		echo "Pinging ${DST_IPS[$j]} from $SRC_IP"
-		source "./ping_test.sh" "$SRC_IP" "${DST_IPS[$j]}" "run$i/ping_test.out"
+		#echo "Pinging ${DST_IPS[$j]} from $SRC_IP"
+		#source "./ping_test.sh" "$SRC_IP" "${DST_IPS[$j]}" "run$i/ping_test.out"
 		TRAFFIC=($(shuf -e ${OTHER_IPS[@]}))
 		for k in $(seq 0 $(expr ${#TRAFFIC[@]} / 2 - 1))
 		do
@@ -29,10 +29,6 @@ do
 			source "./tcp_traffic.sh" "${TRAFFIC[(2 * $k)]}" "${TRAFFIC[(2 * $k + 1)]}" "5430 + $k" "debug.out" &
 		done
 		sleep 5
-		#for k in $(seq 1 19)
-		#do
-		#	source "./tcp_traffic.sh" "$SRC_IP" "${DST_IPS[$j]}" "/dev/null" $((5210 + $k))
-		#done
 		echo "Testing bandwidth from $SRC_IP to ${DST_IPS[$j]}"
 		source "./tcp_test.sh" "$SRC_IP" "${DST_IPS[$j]}" "run$i/tcp_test.out"
 	done

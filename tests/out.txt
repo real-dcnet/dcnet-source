@@ -1,9 +1,0 @@
-PING 128.10.126.61 (128.10.126.61) 56(84) bytes of data.
-64 bytes from 128.10.126.61: icmp_seq=1 ttl=64 time=0.114 ms
-64 bytes from 128.10.126.61: icmp_seq=2 ttl=64 time=0.184 ms
-64 bytes from 128.10.126.61: icmp_seq=3 ttl=64 time=0.168 ms
-64 bytes from 128.10.126.61: icmp_seq=4 ttl=64 time=0.143 ms
-^C
---- 128.10.126.61 ping statistics ---
-4 packets transmitted, 4 received, 0% packet loss, time 3049ms
-rtt min/avg/max/mdev = 0.114/0.152/0.184/0.027 ms

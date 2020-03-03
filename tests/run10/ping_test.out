@@ -1,346 +1,346 @@
 
 --- Initial ping from host 128.10.126.61 to host 128.10.126.69 ---
 PING 128.10.126.69 (128.10.126.69) 56(84) bytes of data.
-From 128.10.126.61 icmp_seq=1 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=2 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=3 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=4 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=5 Destination Host Unreachable
+64 bytes from 128.10.126.69: icmp_seq=1 ttl=64 time=3.46 ms
+64 bytes from 128.10.126.69: icmp_seq=2 ttl=64 time=0.675 ms
+64 bytes from 128.10.126.69: icmp_seq=3 ttl=64 time=0.612 ms
+64 bytes from 128.10.126.69: icmp_seq=4 ttl=64 time=0.626 ms
+64 bytes from 128.10.126.69: icmp_seq=5 ttl=64 time=0.612 ms
 
 --- 128.10.126.69 ping statistics ---
-5 packets transmitted, 0 received, +5 errors, 100% packet loss, time 4088ms
-pipe 4
+5 packets transmitted, 5 received, 0% packet loss, time 4077ms
+rtt min/avg/max/mdev = 0.612/1.198/3.467/1.134 ms
 
 --- Steady-state ping from host 128.10.126.61 to host 128.10.126.69 ---
 PING 128.10.126.69 (128.10.126.69) 56(84) bytes of data.
-From 128.10.126.61 icmp_seq=1 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=2 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=3 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=4 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=5 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=6 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=7 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=8 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=9 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=10 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=11 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=12 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=13 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=14 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=15 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=16 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=17 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=18 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=19 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=20 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=21 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=22 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=23 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=24 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=25 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=26 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=27 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=28 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=29 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=30 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=31 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=32 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=33 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=34 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=35 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=36 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=37 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=38 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=39 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=40 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=41 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=42 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=43 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=44 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=45 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=46 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=47 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=48 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=49 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=50 Destination Host Unreachable
+64 bytes from 128.10.126.69: icmp_seq=1 ttl=64 time=0.531 ms
+64 bytes from 128.10.126.69: icmp_seq=2 ttl=64 time=0.496 ms
+64 bytes from 128.10.126.69: icmp_seq=3 ttl=64 time=0.593 ms
+64 bytes from 128.10.126.69: icmp_seq=4 ttl=64 time=0.547 ms
+64 bytes from 128.10.126.69: icmp_seq=5 ttl=64 time=0.493 ms
+64 bytes from 128.10.126.69: icmp_seq=6 ttl=64 time=0.483 ms
+64 bytes from 128.10.126.69: icmp_seq=7 ttl=64 time=0.457 ms
+64 bytes from 128.10.126.69: icmp_seq=8 ttl=64 time=0.510 ms
+64 bytes from 128.10.126.69: icmp_seq=9 ttl=64 time=0.440 ms
+64 bytes from 128.10.126.69: icmp_seq=10 ttl=64 time=0.505 ms
+64 bytes from 128.10.126.69: icmp_seq=11 ttl=64 time=0.510 ms
+64 bytes from 128.10.126.69: icmp_seq=12 ttl=64 time=0.435 ms
+64 bytes from 128.10.126.69: icmp_seq=13 ttl=64 time=0.645 ms
+64 bytes from 128.10.126.69: icmp_seq=14 ttl=64 time=0.546 ms
+64 bytes from 128.10.126.69: icmp_seq=15 ttl=64 time=0.665 ms
+64 bytes from 128.10.126.69: icmp_seq=16 ttl=64 time=0.440 ms
+64 bytes from 128.10.126.69: icmp_seq=17 ttl=64 time=0.670 ms
+64 bytes from 128.10.126.69: icmp_seq=18 ttl=64 time=0.445 ms
+64 bytes from 128.10.126.69: icmp_seq=19 ttl=64 time=0.682 ms
+64 bytes from 128.10.126.69: icmp_seq=20 ttl=64 time=0.559 ms
+64 bytes from 128.10.126.69: icmp_seq=21 ttl=64 time=0.660 ms
+64 bytes from 128.10.126.69: icmp_seq=22 ttl=64 time=0.646 ms
+64 bytes from 128.10.126.69: icmp_seq=23 ttl=64 time=0.518 ms
+64 bytes from 128.10.126.69: icmp_seq=24 ttl=64 time=0.667 ms
+64 bytes from 128.10.126.69: icmp_seq=25 ttl=64 time=0.668 ms
+64 bytes from 128.10.126.69: icmp_seq=26 ttl=64 time=0.535 ms
+64 bytes from 128.10.126.69: icmp_seq=27 ttl=64 time=0.430 ms
+64 bytes from 128.10.126.69: icmp_seq=28 ttl=64 time=0.630 ms
+64 bytes from 128.10.126.69: icmp_seq=29 ttl=64 time=0.417 ms
+64 bytes from 128.10.126.69: icmp_seq=30 ttl=64 time=0.621 ms
+64 bytes from 128.10.126.69: icmp_seq=31 ttl=64 time=0.439 ms
+64 bytes from 128.10.126.69: icmp_seq=32 ttl=64 time=0.513 ms
+64 bytes from 128.10.126.69: icmp_seq=33 ttl=64 time=0.697 ms
+64 bytes from 128.10.126.69: icmp_seq=34 ttl=64 time=0.651 ms
+64 bytes from 128.10.126.69: icmp_seq=35 ttl=64 time=0.532 ms
+64 bytes from 128.10.126.69: icmp_seq=36 ttl=64 time=0.708 ms
+64 bytes from 128.10.126.69: icmp_seq=37 ttl=64 time=0.504 ms
+64 bytes from 128.10.126.69: icmp_seq=38 ttl=64 time=0.538 ms
+64 bytes from 128.10.126.69: icmp_seq=39 ttl=64 time=0.656 ms
+64 bytes from 128.10.126.69: icmp_seq=40 ttl=64 time=0.479 ms
+64 bytes from 128.10.126.69: icmp_seq=41 ttl=64 time=0.352 ms
+64 bytes from 128.10.126.69: icmp_seq=42 ttl=64 time=0.672 ms
+64 bytes from 128.10.126.69: icmp_seq=43 ttl=64 time=0.694 ms
+64 bytes from 128.10.126.69: icmp_seq=44 ttl=64 time=0.605 ms
+64 bytes from 128.10.126.69: icmp_seq=45 ttl=64 time=0.515 ms
+64 bytes from 128.10.126.69: icmp_seq=46 ttl=64 time=0.686 ms
+64 bytes from 128.10.126.69: icmp_seq=47 ttl=64 time=0.578 ms
+64 bytes from 128.10.126.69: icmp_seq=48 ttl=64 time=0.439 ms
+64 bytes from 128.10.126.69: icmp_seq=49 ttl=64 time=0.665 ms
+64 bytes from 128.10.126.69: icmp_seq=50 ttl=64 time=0.524 ms
 
 --- 128.10.126.69 ping statistics ---
-50 packets transmitted, 0 received, +50 errors, 100% packet loss, time 50168ms
-pipe 4
+50 packets transmitted, 50 received, 0% packet loss, time 50180ms
+rtt min/avg/max/mdev = 0.352/0.557/0.708/0.097 ms
 
 --- Initial ping from host 128.10.126.61 to host 128.10.126.77 ---
 PING 128.10.126.77 (128.10.126.77) 56(84) bytes of data.
-From 128.10.126.61 icmp_seq=1 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=2 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=3 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=4 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=5 Destination Host Unreachable
+64 bytes from 128.10.126.77: icmp_seq=1 ttl=64 time=12.1 ms
+64 bytes from 128.10.126.77: icmp_seq=2 ttl=64 time=5.26 ms
+64 bytes from 128.10.126.77: icmp_seq=3 ttl=64 time=1.80 ms
+64 bytes from 128.10.126.77: icmp_seq=4 ttl=64 time=1.70 ms
+64 bytes from 128.10.126.77: icmp_seq=5 ttl=64 time=1.49 ms
 
 --- 128.10.126.77 ping statistics ---
-5 packets transmitted, 0 received, +5 errors, 100% packet loss, time 4088ms
-pipe 4
+5 packets transmitted, 5 received, 0% packet loss, time 4006ms
+rtt min/avg/max/mdev = 1.496/4.489/12.180/4.091 ms
 
 --- Steady-state ping from host 128.10.126.61 to host 128.10.126.77 ---
 PING 128.10.126.77 (128.10.126.77) 56(84) bytes of data.
-From 128.10.126.61 icmp_seq=1 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=2 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=3 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=4 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=5 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=6 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=7 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=8 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=9 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=10 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=11 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=12 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=13 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=14 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=15 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=16 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=17 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=18 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=19 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=20 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=21 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=22 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=23 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=24 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=25 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=26 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=27 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=28 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=29 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=30 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=31 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=32 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=33 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=34 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=35 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=36 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=37 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=38 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=39 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=40 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=41 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=42 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=43 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=44 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=45 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=46 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=47 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=48 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=49 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=50 Destination Host Unreachable
+64 bytes from 128.10.126.77: icmp_seq=1 ttl=64 time=1.59 ms
+64 bytes from 128.10.126.77: icmp_seq=2 ttl=64 time=1.84 ms
+64 bytes from 128.10.126.77: icmp_seq=3 ttl=64 time=1.38 ms
+64 bytes from 128.10.126.77: icmp_seq=4 ttl=64 time=1.67 ms
+64 bytes from 128.10.126.77: icmp_seq=5 ttl=64 time=1.49 ms
+64 bytes from 128.10.126.77: icmp_seq=6 ttl=64 time=1.39 ms
+64 bytes from 128.10.126.77: icmp_seq=7 ttl=64 time=1.58 ms
+64 bytes from 128.10.126.77: icmp_seq=8 ttl=64 time=1.77 ms
+64 bytes from 128.10.126.77: icmp_seq=9 ttl=64 time=1.36 ms
+64 bytes from 128.10.126.77: icmp_seq=10 ttl=64 time=1.61 ms
+64 bytes from 128.10.126.77: icmp_seq=11 ttl=64 time=1.49 ms
+64 bytes from 128.10.126.77: icmp_seq=12 ttl=64 time=1.58 ms
+64 bytes from 128.10.126.77: icmp_seq=13 ttl=64 time=1.56 ms
+64 bytes from 128.10.126.77: icmp_seq=14 ttl=64 time=1.73 ms
+64 bytes from 128.10.126.77: icmp_seq=15 ttl=64 time=1.50 ms
+64 bytes from 128.10.126.77: icmp_seq=16 ttl=64 time=1.75 ms
+64 bytes from 128.10.126.77: icmp_seq=17 ttl=64 time=1.61 ms
+64 bytes from 128.10.126.77: icmp_seq=18 ttl=64 time=1.77 ms
+64 bytes from 128.10.126.77: icmp_seq=19 ttl=64 time=1.41 ms
+64 bytes from 128.10.126.77: icmp_seq=20 ttl=64 time=1.74 ms
+64 bytes from 128.10.126.77: icmp_seq=21 ttl=64 time=1.73 ms
+64 bytes from 128.10.126.77: icmp_seq=22 ttl=64 time=1.87 ms
+64 bytes from 128.10.126.77: icmp_seq=23 ttl=64 time=1.68 ms
+64 bytes from 128.10.126.77: icmp_seq=24 ttl=64 time=1.76 ms
+64 bytes from 128.10.126.77: icmp_seq=25 ttl=64 time=1.66 ms
+64 bytes from 128.10.126.77: icmp_seq=26 ttl=64 time=1.76 ms
+64 bytes from 128.10.126.77: icmp_seq=27 ttl=64 time=1.74 ms
+64 bytes from 128.10.126.77: icmp_seq=28 ttl=64 time=1.58 ms
+64 bytes from 128.10.126.77: icmp_seq=29 ttl=64 time=1.47 ms
+64 bytes from 128.10.126.77: icmp_seq=30 ttl=64 time=1.79 ms
+64 bytes from 128.10.126.77: icmp_seq=31 ttl=64 time=1.30 ms
+64 bytes from 128.10.126.77: icmp_seq=32 ttl=64 time=1.54 ms
+64 bytes from 128.10.126.77: icmp_seq=33 ttl=64 time=1.46 ms
+64 bytes from 128.10.126.77: icmp_seq=34 ttl=64 time=1.57 ms
+64 bytes from 128.10.126.77: icmp_seq=35 ttl=64 time=1.51 ms
+64 bytes from 128.10.126.77: icmp_seq=36 ttl=64 time=1.69 ms
+64 bytes from 128.10.126.77: icmp_seq=37 ttl=64 time=1.60 ms
+64 bytes from 128.10.126.77: icmp_seq=38 ttl=64 time=1.71 ms
+64 bytes from 128.10.126.77: icmp_seq=39 ttl=64 time=1.53 ms
+64 bytes from 128.10.126.77: icmp_seq=40 ttl=64 time=1.33 ms
+64 bytes from 128.10.126.77: icmp_seq=41 ttl=64 time=1.52 ms
+64 bytes from 128.10.126.77: icmp_seq=42 ttl=64 time=1.54 ms
+64 bytes from 128.10.126.77: icmp_seq=43 ttl=64 time=1.49 ms
+64 bytes from 128.10.126.77: icmp_seq=44 ttl=64 time=1.73 ms
+64 bytes from 128.10.126.77: icmp_seq=45 ttl=64 time=1.57 ms
+64 bytes from 128.10.126.77: icmp_seq=46 ttl=64 time=1.56 ms
+64 bytes from 128.10.126.77: icmp_seq=47 ttl=64 time=1.71 ms
+64 bytes from 128.10.126.77: icmp_seq=48 ttl=64 time=1.42 ms
+64 bytes from 128.10.126.77: icmp_seq=49 ttl=64 time=1.75 ms
+64 bytes from 128.10.126.77: icmp_seq=50 ttl=64 time=1.85 ms
 
 --- 128.10.126.77 ping statistics ---
-50 packets transmitted, 0 received, +50 errors, 100% packet loss, time 50172ms
-pipe 4
+50 packets transmitted, 50 received, 0% packet loss, time 49079ms
+rtt min/avg/max/mdev = 1.306/1.609/1.874/0.144 ms
 
 --- Initial ping from host 128.10.126.61 to host 128.10.126.51 ---
 PING 128.10.126.51 (128.10.126.51) 56(84) bytes of data.
-From 128.10.126.61 icmp_seq=1 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=2 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=3 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=4 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=5 Destination Host Unreachable
+64 bytes from 128.10.126.51: icmp_seq=1 ttl=64 time=21.0 ms
+64 bytes from 128.10.126.51: icmp_seq=2 ttl=64 time=15.8 ms
+64 bytes from 128.10.126.51: icmp_seq=3 ttl=64 time=2.44 ms
+64 bytes from 128.10.126.51: icmp_seq=4 ttl=64 time=2.35 ms
+64 bytes from 128.10.126.51: icmp_seq=5 ttl=64 time=2.49 ms
 
 --- 128.10.126.51 ping statistics ---
-5 packets transmitted, 0 received, +5 errors, 100% packet loss, time 4096ms
-pipe 4
+5 packets transmitted, 5 received, 0% packet loss, time 4005ms
+rtt min/avg/max/mdev = 2.352/8.852/21.098/8.036 ms
 
 --- Steady-state ping from host 128.10.126.61 to host 128.10.126.51 ---
 PING 128.10.126.51 (128.10.126.51) 56(84) bytes of data.
-From 128.10.126.61 icmp_seq=1 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=2 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=3 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=4 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=5 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=6 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=7 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=8 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=9 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=10 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=11 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=12 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=13 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=14 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=15 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=16 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=17 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=18 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=19 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=20 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=21 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=22 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=23 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=24 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=25 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=26 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=27 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=28 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=29 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=30 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=31 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=32 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=33 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=34 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=35 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=36 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=37 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=38 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=39 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=40 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=41 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=42 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=43 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=44 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=45 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=46 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=47 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=48 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=49 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=50 Destination Host Unreachable
+64 bytes from 128.10.126.51: icmp_seq=1 ttl=64 time=3.54 ms
+64 bytes from 128.10.126.51: icmp_seq=2 ttl=64 time=3.11 ms
+64 bytes from 128.10.126.51: icmp_seq=3 ttl=64 time=2.91 ms
+64 bytes from 128.10.126.51: icmp_seq=4 ttl=64 time=3.06 ms
+64 bytes from 128.10.126.51: icmp_seq=5 ttl=64 time=2.94 ms
+64 bytes from 128.10.126.51: icmp_seq=6 ttl=64 time=2.95 ms
+64 bytes from 128.10.126.51: icmp_seq=7 ttl=64 time=3.03 ms
+64 bytes from 128.10.126.51: icmp_seq=8 ttl=64 time=2.78 ms
+64 bytes from 128.10.126.51: icmp_seq=9 ttl=64 time=2.74 ms
+64 bytes from 128.10.126.51: icmp_seq=10 ttl=64 time=2.79 ms
+64 bytes from 128.10.126.51: icmp_seq=11 ttl=64 time=2.95 ms
+64 bytes from 128.10.126.51: icmp_seq=12 ttl=64 time=2.35 ms
+64 bytes from 128.10.126.51: icmp_seq=13 ttl=64 time=2.82 ms
+64 bytes from 128.10.126.51: icmp_seq=14 ttl=64 time=2.84 ms
+64 bytes from 128.10.126.51: icmp_seq=15 ttl=64 time=2.67 ms
+64 bytes from 128.10.126.51: icmp_seq=16 ttl=64 time=2.92 ms
+64 bytes from 128.10.126.51: icmp_seq=17 ttl=64 time=2.22 ms
+64 bytes from 128.10.126.51: icmp_seq=18 ttl=64 time=2.58 ms
+64 bytes from 128.10.126.51: icmp_seq=19 ttl=64 time=2.93 ms
+64 bytes from 128.10.126.51: icmp_seq=20 ttl=64 time=2.80 ms
+64 bytes from 128.10.126.51: icmp_seq=21 ttl=64 time=2.77 ms
+64 bytes from 128.10.126.51: icmp_seq=22 ttl=64 time=1.89 ms
+64 bytes from 128.10.126.51: icmp_seq=23 ttl=64 time=3.06 ms
+64 bytes from 128.10.126.51: icmp_seq=24 ttl=64 time=2.67 ms
+64 bytes from 128.10.126.51: icmp_seq=25 ttl=64 time=2.91 ms
+64 bytes from 128.10.126.51: icmp_seq=26 ttl=64 time=2.76 ms
+64 bytes from 128.10.126.51: icmp_seq=27 ttl=64 time=1.83 ms
+64 bytes from 128.10.126.51: icmp_seq=28 ttl=64 time=2.79 ms
+64 bytes from 128.10.126.51: icmp_seq=29 ttl=64 time=3.12 ms
+64 bytes from 128.10.126.51: icmp_seq=30 ttl=64 time=2.58 ms
+64 bytes from 128.10.126.51: icmp_seq=31 ttl=64 time=2.84 ms
+64 bytes from 128.10.126.51: icmp_seq=32 ttl=64 time=1.85 ms
+64 bytes from 128.10.126.51: icmp_seq=33 ttl=64 time=2.91 ms
+64 bytes from 128.10.126.51: icmp_seq=34 ttl=64 time=2.84 ms
+64 bytes from 128.10.126.51: icmp_seq=35 ttl=64 time=2.87 ms
+64 bytes from 128.10.126.51: icmp_seq=36 ttl=64 time=2.03 ms
+64 bytes from 128.10.126.51: icmp_seq=37 ttl=64 time=2.08 ms
+64 bytes from 128.10.126.51: icmp_seq=38 ttl=64 time=2.84 ms
+64 bytes from 128.10.126.51: icmp_seq=39 ttl=64 time=2.62 ms
+64 bytes from 128.10.126.51: icmp_seq=40 ttl=64 time=2.74 ms
+64 bytes from 128.10.126.51: icmp_seq=41 ttl=64 time=2.86 ms
+64 bytes from 128.10.126.51: icmp_seq=42 ttl=64 time=2.23 ms
+64 bytes from 128.10.126.51: icmp_seq=43 ttl=64 time=2.82 ms
+64 bytes from 128.10.126.51: icmp_seq=44 ttl=64 time=2.37 ms
+64 bytes from 128.10.126.51: icmp_seq=45 ttl=64 time=2.77 ms
+64 bytes from 128.10.126.51: icmp_seq=46 ttl=64 time=2.82 ms
+64 bytes from 128.10.126.51: icmp_seq=47 ttl=64 time=2.14 ms
+64 bytes from 128.10.126.51: icmp_seq=48 ttl=64 time=2.87 ms
+64 bytes from 128.10.126.51: icmp_seq=49 ttl=64 time=2.18 ms
+64 bytes from 128.10.126.51: icmp_seq=50 ttl=64 time=2.79 ms
 
 --- 128.10.126.51 ping statistics ---
-50 packets transmitted, 0 received, +50 errors, 100% packet loss, time 50168ms
-pipe 4
+50 packets transmitted, 50 received, 0% packet loss, time 49081ms
+rtt min/avg/max/mdev = 1.837/2.700/3.548/0.358 ms
 
 --- Initial ping from host 128.10.126.61 to host 128.10.126.84 ---
 PING 128.10.126.84 (128.10.126.84) 56(84) bytes of data.
-From 128.10.126.61 icmp_seq=1 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=2 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=3 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=4 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=5 Destination Host Unreachable
+64 bytes from 128.10.126.84: icmp_seq=1 ttl=64 time=39.9 ms
+64 bytes from 128.10.126.84: icmp_seq=2 ttl=64 time=26.6 ms
+64 bytes from 128.10.126.84: icmp_seq=3 ttl=64 time=11.8 ms
+64 bytes from 128.10.126.84: icmp_seq=4 ttl=64 time=5.37 ms
+64 bytes from 128.10.126.84: icmp_seq=5 ttl=64 time=2.70 ms
 
 --- 128.10.126.84 ping statistics ---
-5 packets transmitted, 0 received, +5 errors, 100% packet loss, time 4096ms
-pipe 4
+5 packets transmitted, 5 received, 0% packet loss, time 4005ms
+rtt min/avg/max/mdev = 2.701/17.312/39.932/14.031 ms
 
 --- Steady-state ping from host 128.10.126.61 to host 128.10.126.84 ---
 PING 128.10.126.84 (128.10.126.84) 56(84) bytes of data.
-From 128.10.126.61 icmp_seq=1 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=2 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=3 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=4 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=5 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=6 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=7 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=8 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=9 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=10 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=11 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=12 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=13 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=14 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=15 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=16 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=17 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=18 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=19 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=20 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=21 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=22 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=23 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=24 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=25 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=26 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=27 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=28 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=29 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=30 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=31 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=32 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=33 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=34 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=35 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=36 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=37 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=38 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=39 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=40 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=41 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=42 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=43 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=44 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=45 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=46 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=47 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=48 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=49 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=50 Destination Host Unreachable
+64 bytes from 128.10.126.84: icmp_seq=1 ttl=64 time=5.94 ms
+64 bytes from 128.10.126.84: icmp_seq=2 ttl=64 time=5.20 ms
+64 bytes from 128.10.126.84: icmp_seq=3 ttl=64 time=3.67 ms
+64 bytes from 128.10.126.84: icmp_seq=4 ttl=64 time=6.30 ms
+64 bytes from 128.10.126.84: icmp_seq=5 ttl=64 time=4.20 ms
+64 bytes from 128.10.126.84: icmp_seq=6 ttl=64 time=5.92 ms
+64 bytes from 128.10.126.84: icmp_seq=7 ttl=64 time=6.26 ms
+64 bytes from 128.10.126.84: icmp_seq=8 ttl=64 time=3.93 ms
+64 bytes from 128.10.126.84: icmp_seq=9 ttl=64 time=6.21 ms
+64 bytes from 128.10.126.84: icmp_seq=10 ttl=64 time=4.84 ms
+64 bytes from 128.10.126.84: icmp_seq=11 ttl=64 time=4.17 ms
+64 bytes from 128.10.126.84: icmp_seq=12 ttl=64 time=6.02 ms
+64 bytes from 128.10.126.84: icmp_seq=13 ttl=64 time=5.62 ms
+64 bytes from 128.10.126.84: icmp_seq=14 ttl=64 time=3.93 ms
+64 bytes from 128.10.126.84: icmp_seq=15 ttl=64 time=5.57 ms
+64 bytes from 128.10.126.84: icmp_seq=16 ttl=64 time=5.59 ms
+64 bytes from 128.10.126.84: icmp_seq=17 ttl=64 time=5.08 ms
+64 bytes from 128.10.126.84: icmp_seq=18 ttl=64 time=4.29 ms
+64 bytes from 128.10.126.84: icmp_seq=19 ttl=64 time=5.59 ms
+64 bytes from 128.10.126.84: icmp_seq=20 ttl=64 time=5.07 ms
+64 bytes from 128.10.126.84: icmp_seq=21 ttl=64 time=5.18 ms
+64 bytes from 128.10.126.84: icmp_seq=22 ttl=64 time=5.62 ms
+64 bytes from 128.10.126.84: icmp_seq=23 ttl=64 time=3.66 ms
+64 bytes from 128.10.126.84: icmp_seq=24 ttl=64 time=5.37 ms
+64 bytes from 128.10.126.84: icmp_seq=25 ttl=64 time=5.32 ms
+64 bytes from 128.10.126.84: icmp_seq=26 ttl=64 time=5.73 ms
+64 bytes from 128.10.126.84: icmp_seq=27 ttl=64 time=5.02 ms
+64 bytes from 128.10.126.84: icmp_seq=28 ttl=64 time=3.35 ms
+64 bytes from 128.10.126.84: icmp_seq=29 ttl=64 time=5.57 ms
+64 bytes from 128.10.126.84: icmp_seq=30 ttl=64 time=4.46 ms
+64 bytes from 128.10.126.84: icmp_seq=31 ttl=64 time=5.34 ms
+64 bytes from 128.10.126.84: icmp_seq=32 ttl=64 time=6.58 ms
+64 bytes from 128.10.126.84: icmp_seq=33 ttl=64 time=4.27 ms
+64 bytes from 128.10.126.84: icmp_seq=34 ttl=64 time=6.11 ms
+64 bytes from 128.10.126.84: icmp_seq=35 ttl=64 time=5.41 ms
+64 bytes from 128.10.126.84: icmp_seq=36 ttl=64 time=4.84 ms
+64 bytes from 128.10.126.84: icmp_seq=37 ttl=64 time=5.36 ms
+64 bytes from 128.10.126.84: icmp_seq=38 ttl=64 time=5.55 ms
+64 bytes from 128.10.126.84: icmp_seq=39 ttl=64 time=4.71 ms
+64 bytes from 128.10.126.84: icmp_seq=40 ttl=64 time=5.37 ms
+64 bytes from 128.10.126.84: icmp_seq=41 ttl=64 time=5.95 ms
+64 bytes from 128.10.126.84: icmp_seq=42 ttl=64 time=5.31 ms
+64 bytes from 128.10.126.84: icmp_seq=43 ttl=64 time=5.61 ms
+64 bytes from 128.10.126.84: icmp_seq=44 ttl=64 time=5.98 ms
+64 bytes from 128.10.126.84: icmp_seq=45 ttl=64 time=4.15 ms
+64 bytes from 128.10.126.84: icmp_seq=46 ttl=64 time=5.35 ms
+64 bytes from 128.10.126.84: icmp_seq=47 ttl=64 time=5.28 ms
+64 bytes from 128.10.126.84: icmp_seq=48 ttl=64 time=4.19 ms
+64 bytes from 128.10.126.84: icmp_seq=49 ttl=64 time=3.90 ms
+64 bytes from 128.10.126.84: icmp_seq=50 ttl=64 time=5.33 ms
 
 --- 128.10.126.84 ping statistics ---
-50 packets transmitted, 0 received, +50 errors, 100% packet loss, time 50176ms
-pipe 4
+50 packets transmitted, 50 received, 0% packet loss, time 49068ms
+rtt min/avg/max/mdev = 3.355/5.149/6.580/0.784 ms
 
 --- Initial ping from host 128.10.126.61 to host 128.10.126.95 ---
 PING 128.10.126.95 (128.10.126.95) 56(84) bytes of data.
-From 128.10.126.61 icmp_seq=1 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=2 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=3 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=4 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=5 Destination Host Unreachable
+64 bytes from 128.10.126.95: icmp_seq=1 ttl=64 time=37.3 ms
+64 bytes from 128.10.126.95: icmp_seq=2 ttl=64 time=22.2 ms
+64 bytes from 128.10.126.95: icmp_seq=3 ttl=64 time=5.97 ms
+64 bytes from 128.10.126.95: icmp_seq=4 ttl=64 time=5.29 ms
+64 bytes from 128.10.126.95: icmp_seq=5 ttl=64 time=5.41 ms
 
 --- 128.10.126.95 ping statistics ---
-5 packets transmitted, 0 received, +5 errors, 100% packet loss, time 4092ms
-pipe 4
+5 packets transmitted, 5 received, 0% packet loss, time 4005ms
+rtt min/avg/max/mdev = 5.296/15.241/37.315/12.782 ms
 
 --- Steady-state ping from host 128.10.126.61 to host 128.10.126.95 ---
 PING 128.10.126.95 (128.10.126.95) 56(84) bytes of data.
-From 128.10.126.61 icmp_seq=1 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=2 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=3 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=4 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=5 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=6 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=7 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=8 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=9 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=10 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=11 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=12 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=13 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=14 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=15 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=16 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=17 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=18 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=19 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=20 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=21 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=22 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=23 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=24 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=25 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=26 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=27 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=28 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=29 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=30 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=31 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=32 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=33 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=34 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=35 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=36 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=37 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=38 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=39 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=40 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=41 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=42 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=43 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=44 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=45 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=46 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=47 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=48 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=49 Destination Host Unreachable
-From 128.10.126.61 icmp_seq=50 Destination Host Unreachable
+64 bytes from 128.10.126.95: icmp_seq=1 ttl=64 time=2.79 ms
+64 bytes from 128.10.126.95: icmp_seq=2 ttl=64 time=4.92 ms
+64 bytes from 128.10.126.95: icmp_seq=3 ttl=64 time=5.23 ms
+64 bytes from 128.10.126.95: icmp_seq=4 ttl=64 time=2.30 ms
+64 bytes from 128.10.126.95: icmp_seq=5 ttl=64 time=4.48 ms
+64 bytes from 128.10.126.95: icmp_seq=6 ttl=64 time=5.80 ms
+64 bytes from 128.10.126.95: icmp_seq=7 ttl=64 time=5.16 ms
+64 bytes from 128.10.126.95: icmp_seq=8 ttl=64 time=11.1 ms
+64 bytes from 128.10.126.95: icmp_seq=9 ttl=64 time=5.27 ms
+64 bytes from 128.10.126.95: icmp_seq=10 ttl=64 time=5.75 ms
+64 bytes from 128.10.126.95: icmp_seq=11 ttl=64 time=5.33 ms
+64 bytes from 128.10.126.95: icmp_seq=12 ttl=64 time=5.45 ms
+64 bytes from 128.10.126.95: icmp_seq=13 ttl=64 time=3.67 ms
+64 bytes from 128.10.126.95: icmp_seq=14 ttl=64 time=4.90 ms
+64 bytes from 128.10.126.95: icmp_seq=15 ttl=64 time=5.44 ms
+64 bytes from 128.10.126.95: icmp_seq=16 ttl=64 time=5.79 ms
+64 bytes from 128.10.126.95: icmp_seq=17 ttl=64 time=4.72 ms
+64 bytes from 128.10.126.95: icmp_seq=18 ttl=64 time=5.64 ms
+64 bytes from 128.10.126.95: icmp_seq=19 ttl=64 time=5.60 ms
+64 bytes from 128.10.126.95: icmp_seq=20 ttl=64 time=4.71 ms
+64 bytes from 128.10.126.95: icmp_seq=21 ttl=64 time=5.98 ms
+64 bytes from 128.10.126.95: icmp_seq=22 ttl=64 time=5.37 ms
+64 bytes from 128.10.126.95: icmp_seq=23 ttl=64 time=4.58 ms
+64 bytes from 128.10.126.95: icmp_seq=24 ttl=64 time=5.67 ms
+64 bytes from 128.10.126.95: icmp_seq=25 ttl=64 time=5.22 ms
+64 bytes from 128.10.126.95: icmp_seq=26 ttl=64 time=5.25 ms
+64 bytes from 128.10.126.95: icmp_seq=27 ttl=64 time=5.06 ms
+64 bytes from 128.10.126.95: icmp_seq=28 ttl=64 time=5.94 ms
+64 bytes from 128.10.126.95: icmp_seq=29 ttl=64 time=4.04 ms
+64 bytes from 128.10.126.95: icmp_seq=30 ttl=64 time=5.59 ms
+64 bytes from 128.10.126.95: icmp_seq=31 ttl=64 time=5.62 ms
+64 bytes from 128.10.126.95: icmp_seq=32 ttl=64 time=4.49 ms
+64 bytes from 128.10.126.95: icmp_seq=33 ttl=64 time=3.89 ms
+64 bytes from 128.10.126.95: icmp_seq=34 ttl=64 time=5.50 ms
+64 bytes from 128.10.126.95: icmp_seq=35 ttl=64 time=3.86 ms
+64 bytes from 128.10.126.95: icmp_seq=36 ttl=64 time=5.15 ms
+64 bytes from 128.10.126.95: icmp_seq=37 ttl=64 time=3.42 ms
+64 bytes from 128.10.126.95: icmp_seq=38 ttl=64 time=2.72 ms
+64 bytes from 128.10.126.95: icmp_seq=39 ttl=64 time=2.47 ms
+64 bytes from 128.10.126.95: icmp_seq=40 ttl=64 time=2.66 ms
+64 bytes from 128.10.126.95: icmp_seq=41 ttl=64 time=2.20 ms
+64 bytes from 128.10.126.95: icmp_seq=42 ttl=64 time=1.84 ms
+64 bytes from 128.10.126.95: icmp_seq=43 ttl=64 time=2.80 ms
+64 bytes from 128.10.126.95: icmp_seq=44 ttl=64 time=2.52 ms
+64 bytes from 128.10.126.95: icmp_seq=45 ttl=64 time=1.90 ms
+64 bytes from 128.10.126.95: icmp_seq=46 ttl=64 time=2.76 ms
+64 bytes from 128.10.126.95: icmp_seq=47 ttl=64 time=2.74 ms
+64 bytes from 128.10.126.95: icmp_seq=48 ttl=64 time=2.25 ms
+64 bytes from 128.10.126.95: icmp_seq=49 ttl=64 time=4.05 ms
+64 bytes from 128.10.126.95: icmp_seq=50 ttl=64 time=3.95 ms
 
 --- 128.10.126.95 ping statistics ---
-50 packets transmitted, 0 received, +50 errors, 100% packet loss, time 50180ms
-pipe 4
+50 packets transmitted, 50 received, 0% packet loss, time 49076ms
+rtt min/avg/max/mdev = 1.847/4.476/11.132/1.590 ms
 
