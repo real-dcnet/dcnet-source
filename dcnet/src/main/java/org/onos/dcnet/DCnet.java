@@ -816,8 +816,8 @@ public class DCnet {
                 if (ip == Ip4Address.valueOf("10.0.0.8").toInt()) {
                     String message = new String(eth.getPayload().getPayload().getPayload().serialize());
                     String[] addrs = message.split(":");
-                    Ip4Address dstIP = Ip4Address.valueOf(addrs[0]);
-                    Ip4Address vmIP = Ip4Address.valueOf(addrs[1]);
+                    Ip4Address dstIP = IpPrefix.valueOf(addrs[0]).address().getIp4Address();
+                    Ip4Address vmIP = IpPrefix.valueOf(addrs[1]).address().getIp4Address();
                     System.out.println("dstIP: " + dstIP.toString());
                     System.out.println("vmIP: " + vmIP.toString());
                     for (Host vmHost : hostService.getHostsByIp(vmIP)) {
