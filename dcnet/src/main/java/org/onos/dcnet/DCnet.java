@@ -75,6 +75,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 
+import static org.onlab.packet.TpPort.tpPort;
+
 /**
  * ONOS App implementing DCnet forwarding scheme.
  */
@@ -809,6 +811,20 @@ public class DCnet {
         public void process(final PacketContext context) {
             Ethernet eth = context.inPacket().parsed();
             if (eth.getEtherType() == Ethernet.TYPE_IPV4) {
+                IPv4 ipv4 = (IPv4) (eth.getPayload());
+                int ip = ipv4.getDestinationAddress();
+                if (ip == Ip4Address.valueOf("10.0.1.8").toInt()) {
+                    String message = new String(eth.getPayload().getPayload().getPayload().serialize());
+                    String[] addrs = message.split(":");
+                    Ip4Address dstIP = Ip4Address.valueOf(addrs[0]);
+                    Ip4Address vmIP = Ip4Address.valueOf(addrs[1]);
+                    for (Host vmHost : hostService.getHostsByIp(vmIP)) {
+                        removeHostFlows(vmHost);
+                        HostEntry dstEntry = hostDB.get(dstIP.toInt());
+                        HostEntry vmEntry = new HostEntry(vmHost.id().toString(), dstEntry.getRmac(), vmHost.mac().toBytes());
+                        hostDB.put(vmIP.toInt(), vmEntry);
+                    }
+                }
                 Device device = deviceService.getDevice(context.inPacket()
                         .receivedFrom().deviceId());
                 String id = device.chassisId().toString();
@@ -1174,6 +1190,23 @@ public class DCnet {
             flowRuleService.applyFlowRules(flowRule);
             installedFlows.add(flowRule);
         }
+        TrafficSelector.Builder selector = DefaultTrafficSelector
+                .builder()
+                .matchEthType(Ethernet.TYPE_IPV4)
+                .matchIPDst(IpPrefix.valueOf("10.0.1.8/24"));
+        TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                .builder()
+                .punt();
+        FlowRule flowRule = DefaultFlowRule.builder()
+                .fromApp(appId)
+                .makePermanent()
+                .withSelector(selector.build())
+                .withTreatment(treatment.build())
+                .forDevice(device.id())
+                .withPriority(BASE_PRIO + 2000)
+                .build();
+        flowRuleService.applyFlowRules(flowRule);
+        installedFlows.add(flowRule);
     }
 
     private void removeSwitch(final Device device) {
