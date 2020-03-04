@@ -20,7 +20,7 @@ do
 	echo "--- Ping during migration from $1 to $2, address $4 ---" > $HV_FILE
 	ping -c 100 128.10.126.57 >> $HV_FILE &
 	sleep 20
-	virsh -c qemu+ssh://dcnet@$1/system migrate ubuntu qemu+ssh://dcnet@$2/system tcp://$4 --live --verbose
+	source migrate_vm.sh $1 $2 $4 "128.10.126.57"
 	sleep 80
 
 
@@ -34,6 +34,6 @@ do
 	echo "--- Ping during migration from $2 to $1, address $3 ---" >> $HV_FILE
 	ping -c 100 128.10.126.57 >> $HV_FILE &
 	sleep 20
-	virsh -c qemu+ssh://dcnet@$2/system migrate ubuntu qemu+ssh://dcnet@$1/system tcp://$3 --live --verbose
+	source migrate_vm.sh $2 $1 $3 "128.10.126.57"
 	sleep 80
 done
