@@ -213,7 +213,7 @@ public class DCnet {
     /** Location where configuration information can be found.
      * Change this as necessary if configuration JSONs are stored elsewhere */
     private static String configLoc =
-            System.getProperty("user.home") + "/dcnet-source/config/mininet/";
+            System.getProperty("user.home") + "/dcnet-source/config/testbed/";
 
     private static boolean ecmpEnabled = true;
 
@@ -813,13 +813,11 @@ public class DCnet {
             if (eth.getEtherType() == Ethernet.TYPE_IPV4) {
                 IPv4 ipv4 = (IPv4) (eth.getPayload());
                 int ip = ipv4.getDestinationAddress();
-                if (ip == Ip4Address.valueOf("10.0.0.8").toInt()) {
+                if (ip == Ip4Address.valueOf("10.0.1.8").toInt()) {
                     String message = new String(eth.getPayload().getPayload().getPayload().serialize());
                     String[] addrs = message.split(":");
                     Ip4Address dstIP = IpPrefix.valueOf(addrs[0]).address().getIp4Address();
                     Ip4Address vmIP = IpPrefix.valueOf(addrs[1]).address().getIp4Address();
-                    System.out.println("dstIP: " + dstIP.toString());
-                    System.out.println("vmIP: " + vmIP.toString());
                     for (Host vmHost : hostService.getHostsByIp(vmIP)) {
                         removeHostFlows(vmHost);
                         HostEntry dstEntry = hostDB.get(dstIP.toInt());
@@ -1196,7 +1194,7 @@ public class DCnet {
                 .builder()
                 .matchEthType(Ethernet.TYPE_IPV4)
                 .matchIPProtocol(IPv4.PROTOCOL_UDP)
-                .matchIPDst(IpPrefix.valueOf("10.0.0.8/32"));
+                .matchIPDst(IpPrefix.valueOf("10.0.1.8/32"));
         TrafficTreatment.Builder treatment = DefaultTrafficTreatment
                 .builder()
                 .punt();
