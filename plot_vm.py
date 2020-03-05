@@ -75,22 +75,18 @@ parser.add_argument("file")
 
 args = parser.parse_args()
 loc = args.file
-data = {"lf5-lf5": [], "lf5-lf6": [], "lf5-lf3": [], "lf5-lf8": [], "lf5-lf14": []}
+data = {"lf5-lf5": [], "lf5-lf6": [], "lf5-lf3": [], "lf5-lf8": []}#, "lf5-lf14": []}
 for i in range(1, 11):
 	dir_path = loc + "/lf5-lf5/run" + str(i) + "/"
 	data["lf5-lf5"].append(parse_data(dir_path + "migrate_test_hv.out", dir_path + "migrate_test_vm.out", 2, i))
-for i in range(1, 11):
 	dir_path = loc + "/lf5-lf6/run" + str(i) + "/"
 	data["lf5-lf6"].append(parse_data(dir_path + "migrate_test_hv.out", dir_path + "migrate_test_vm.out", 4, i))
-for i in range(1, 11):
 	dir_path = loc + "/lf5-lf3/run" + str(i) + "/"
 	data["lf5-lf3"].append(parse_data(dir_path + "migrate_test_hv.out", dir_path + "migrate_test_vm.out", 6, i))
-for i in range(1, 11):
 	dir_path = loc + "/lf5-lf8/run" + str(i) + "/"
 	data["lf5-lf8"].append(parse_data(dir_path + "migrate_test_hv.out", dir_path + "migrate_test_vm.out", 9, i))
-for i in range(1, 11):
-	dir_path = loc + "/lf5-lf14/run" + str(i) + "/"
-	data["lf5-lf14"].append(parse_data(dir_path + "migrate_test_hv.out", dir_path + "migrate_test_vm.out", 9, i))
+#	dir_path = loc + "/lf5-lf14/run" + str(i) + "/"
+#	data["lf5-lf14"].append(parse_data(dir_path + "migrate_test_hv.out", dir_path + "migrate_test_vm.out", 9, i))
 xvals = []
 yhvdrop1 = []
 yhvdrop2 = []
@@ -103,21 +99,25 @@ yvmmax2 = []
 for result in data:
 	for run in data[result]:
 		point = run["hv_ping_first"]
-		xvals.append(point["hops"])
-		yhvdrop1.append(point["loss"])
-		yhvmax1.append(point["max"])
+		if point:
+			xvals.append(point["hops"])
+			yhvdrop1.append(point["loss"])
+			yhvmax1.append(point["max"])
 
 		point = run["hv_ping_second"]
-		yhvdrop2.append(point["loss"])
-		yhvmax2.append(point["max"])
+		if point:
+			yhvdrop2.append(point["loss"])
+			yhvmax2.append(point["max"])
 
 		point = run["vm_ping_first"]
-		yvmdrop1.append(point["loss"])
-		yvmmax1.append(point["max"])
+		if point:
+			yvmdrop1.append(point["loss"])
+			yvmmax1.append(point["max"])
 
 		point = run["vm_ping_second"]
-		yvmdrop2.append(point["loss"])
-		yvmmax2.append(point["max"])
+		if point:
+			yvmdrop2.append(point["loss"])
+			yvmmax2.append(point["max"])
 plots = []
 plots.append(go.Scatter(x=xvals, y=yhvdrop1, mode = "markers", name = "Hypervisor Packets Dropped (Pass 1)"))
 plots.append(go.Scatter(x=xvals, y=yhvdrop2, mode = "markers", name = "Hypervisor Packets Dropped (Pass 2)"))
@@ -150,12 +150,14 @@ for result in data:
 	for i in range(len(data[result])):
 		hv_pass = data[result][i]["hv_ping_first"]
 		vm_pass = data[result][i]["vm_ping_first"]
-		writer.writerow([hv_pass["test_id"], hv_pass["hops"], 1, hv_pass["max"], hv_pass["min"],
+		if hv_pass and vm_pass:
+			writer.writerow([hv_pass["test_id"], hv_pass["hops"], 1, hv_pass["max"], hv_pass["min"],
 							hv_pass["avg"], hv_pass["dev"], hv_pass["loss"], vm_pass["max"],
 							vm_pass["min"], vm_pass["avg"], vm_pass["dev"]])
 		hv_pass = data[result][i]["hv_ping_second"]
 		vm_pass = data[result][i]["vm_ping_second"]
-		writer.writerow([hv_pass["test_id"], hv_pass["hops"], 2, hv_pass["max"], hv_pass["min"],
+		if hv_pass and vm_pass:
+			writer.writerow([hv_pass["test_id"], hv_pass["hops"], 2, hv_pass["max"], hv_pass["min"],
 							hv_pass["avg"], hv_pass["dev"], hv_pass["loss"], vm_pass["max"],
 							vm_pass["min"], vm_pass["avg"], vm_pass["dev"]])
 
