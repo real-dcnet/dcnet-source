@@ -1,0 +1,133 @@
+--- Ping during migration from 128.10.126.58 to 128.10.126.50, address 128.10.126.51 ---
+PING 128.10.126.61 (128.10.126.61) 56(84) bytes of data.
+64 bytes from 128.10.126.61: icmp_seq=1 ttl=64 time=0.177 ms
+64 bytes from 128.10.126.61: icmp_seq=2 ttl=64 time=0.117 ms
+64 bytes from 128.10.126.61: icmp_seq=3 ttl=64 time=0.099 ms
+64 bytes from 128.10.126.61: icmp_seq=4 ttl=64 time=0.098 ms
+64 bytes from 128.10.126.61: icmp_seq=5 ttl=64 time=0.100 ms
+64 bytes from 128.10.126.61: icmp_seq=6 ttl=64 time=0.096 ms
+64 bytes from 128.10.126.61: icmp_seq=7 ttl=64 time=0.090 ms
+64 bytes from 128.10.126.61: icmp_seq=8 ttl=64 time=0.101 ms
+64 bytes from 128.10.126.61: icmp_seq=9 ttl=64 time=0.106 ms
+64 bytes from 128.10.126.61: icmp_seq=10 ttl=64 time=0.100 ms
+64 bytes from 128.10.126.61: icmp_seq=11 ttl=64 time=0.104 ms
+64 bytes from 128.10.126.61: icmp_seq=12 ttl=64 time=0.097 ms
+64 bytes from 128.10.126.61: icmp_seq=13 ttl=64 time=0.103 ms
+64 bytes from 128.10.126.61: icmp_seq=14 ttl=64 time=0.104 ms
+64 bytes from 128.10.126.61: icmp_seq=15 ttl=64 time=0.107 ms
+64 bytes from 128.10.126.61: icmp_seq=16 ttl=64 time=0.104 ms
+64 bytes from 128.10.126.61: icmp_seq=17 ttl=64 time=0.105 ms
+64 bytes from 128.10.126.61: icmp_seq=18 ttl=64 time=0.097 ms
+64 bytes from 128.10.126.61: icmp_seq=19 ttl=64 time=0.104 ms
+64 bytes from 128.10.126.61: icmp_seq=20 ttl=64 time=0.105 ms
+64 bytes from 128.10.126.61: icmp_seq=21 ttl=64 time=0.156 ms
+64 bytes from 128.10.126.61: icmp_seq=22 ttl=64 time=0.228 ms
+64 bytes from 128.10.126.61: icmp_seq=23 ttl=64 time=0.147 ms
+64 bytes from 128.10.126.61: icmp_seq=24 ttl=64 time=0.350 ms
+64 bytes from 128.10.126.61: icmp_seq=25 ttl=64 time=0.137 ms
+64 bytes from 128.10.126.61: icmp_seq=26 ttl=64 time=0.123 ms
+64 bytes from 128.10.126.61: icmp_seq=27 ttl=64 time=0.131 ms
+64 bytes from 128.10.126.61: icmp_seq=28 ttl=64 time=0.124 ms
+64 bytes from 128.10.126.61: icmp_seq=29 ttl=64 time=0.124 ms
+64 bytes from 128.10.126.61: icmp_seq=30 ttl=64 time=0.122 ms
+64 bytes from 128.10.126.61: icmp_seq=31 ttl=64 time=0.126 ms
+64 bytes from 128.10.126.61: icmp_seq=32 ttl=64 time=0.118 ms
+64 bytes from 128.10.126.61: icmp_seq=33 ttl=64 time=0.121 ms
+64 bytes from 128.10.126.61: icmp_seq=34 ttl=64 time=0.121 ms
+64 bytes from 128.10.126.61: icmp_seq=35 ttl=64 time=0.126 ms
+64 bytes from 128.10.126.61: icmp_seq=36 ttl=64 time=0.116 ms
+64 bytes from 128.10.126.61: icmp_seq=37 ttl=64 time=0.132 ms
+64 bytes from 128.10.126.61: icmp_seq=38 ttl=64 time=0.118 ms
+64 bytes from 128.10.126.61: icmp_seq=39 ttl=64 time=0.125 ms
+64 bytes from 128.10.126.61: icmp_seq=40 ttl=64 time=0.128 ms
+64 bytes from 128.10.126.61: icmp_seq=41 ttl=64 time=0.128 ms
+64 bytes from 128.10.126.61: icmp_seq=42 ttl=64 time=0.118 ms
+64 bytes from 128.10.126.61: icmp_seq=43 ttl=64 time=0.125 ms
+64 bytes from 128.10.126.61: icmp_seq=44 ttl=64 time=0.119 ms
+64 bytes from 128.10.126.61: icmp_seq=45 ttl=64 time=0.198 ms
+64 bytes from 128.10.126.61: icmp_seq=46 ttl=64 time=24.8 ms
+64 bytes from 128.10.126.61: icmp_seq=47 ttl=64 time=20.1 ms
+64 bytes from 128.10.126.61: icmp_seq=48 ttl=64 time=10.4 ms
+64 bytes from 128.10.126.61: icmp_seq=49 ttl=64 time=3.07 ms
+64 bytes from 128.10.126.61: icmp_seq=50 ttl=64 time=3.04 ms
+64 bytes from 128.10.126.61: icmp_seq=51 ttl=64 time=3.17 ms
+64 bytes from 128.10.126.61: icmp_seq=52 ttl=64 time=2.61 ms
+64 bytes from 128.10.126.61: icmp_seq=53 ttl=64 time=3.08 ms
+64 bytes from 128.10.126.61: icmp_seq=54 ttl=64 time=2.06 ms
+64 bytes from 128.10.126.61: icmp_seq=55 ttl=64 time=2.29 ms
+64 bytes from 128.10.126.61: icmp_seq=56 ttl=64 time=3.40 ms
+64 bytes from 128.10.126.61: icmp_seq=57 ttl=64 time=3.14 ms
+64 bytes from 128.10.126.61: icmp_seq=58 ttl=64 time=3.00 ms
+64 bytes from 128.10.126.61: icmp_seq=59 ttl=64 time=3.53 ms
+64 bytes from 128.10.126.61: icmp_seq=60 ttl=64 time=3.93 ms
+
+--- 128.10.126.61 ping statistics ---
+60 packets transmitted, 60 received, 0% packet loss, time 60085ms
+rtt min/avg/max/mdev = 0.090/1.624/24.812/4.256 ms
+
+--- Ping during migration from 128.10.126.50 to 128.10.126.58, address 128.10.126.61 ---
+PING 128.10.126.61 (128.10.126.61) 56(84) bytes of data.
+64 bytes from 128.10.126.61: icmp_seq=1 ttl=64 time=24.2 ms
+64 bytes from 128.10.126.61: icmp_seq=2 ttl=64 time=23.9 ms
+64 bytes from 128.10.126.61: icmp_seq=3 ttl=64 time=9.55 ms
+64 bytes from 128.10.126.61: icmp_seq=4 ttl=64 time=3.90 ms
+64 bytes from 128.10.126.61: icmp_seq=5 ttl=64 time=3.83 ms
+64 bytes from 128.10.126.61: icmp_seq=6 ttl=64 time=3.24 ms
+64 bytes from 128.10.126.61: icmp_seq=7 ttl=64 time=3.19 ms
+64 bytes from 128.10.126.61: icmp_seq=8 ttl=64 time=3.69 ms
+64 bytes from 128.10.126.61: icmp_seq=9 ttl=64 time=2.73 ms
+64 bytes from 128.10.126.61: icmp_seq=10 ttl=64 time=3.92 ms
+64 bytes from 128.10.126.61: icmp_seq=11 ttl=64 time=3.13 ms
+64 bytes from 128.10.126.61: icmp_seq=12 ttl=64 time=3.67 ms
+64 bytes from 128.10.126.61: icmp_seq=13 ttl=64 time=3.81 ms
+64 bytes from 128.10.126.61: icmp_seq=14 ttl=64 time=3.32 ms
+64 bytes from 128.10.126.61: icmp_seq=15 ttl=64 time=3.99 ms
+64 bytes from 128.10.126.61: icmp_seq=16 ttl=64 time=2.62 ms
+64 bytes from 128.10.126.61: icmp_seq=17 ttl=64 time=2.87 ms
+64 bytes from 128.10.126.61: icmp_seq=18 ttl=64 time=4.01 ms
+64 bytes from 128.10.126.61: icmp_seq=19 ttl=64 time=3.33 ms
+64 bytes from 128.10.126.61: icmp_seq=20 ttl=64 time=4.01 ms
+64 bytes from 128.10.126.61: icmp_seq=21 ttl=64 time=3.71 ms
+64 bytes from 128.10.126.61: icmp_seq=22 ttl=64 time=2.67 ms
+64 bytes from 128.10.126.61: icmp_seq=23 ttl=64 time=3.99 ms
+64 bytes from 128.10.126.61: icmp_seq=24 ttl=64 time=3.97 ms
+64 bytes from 128.10.126.61: icmp_seq=25 ttl=64 time=28.4 ms
+64 bytes from 128.10.126.61: icmp_seq=26 ttl=64 time=32.4 ms
+64 bytes from 128.10.126.61: icmp_seq=27 ttl=64 time=37.0 ms
+64 bytes from 128.10.126.61: icmp_seq=28 ttl=64 time=43.3 ms
+64 bytes from 128.10.126.61: icmp_seq=29 ttl=64 time=27.8 ms
+64 bytes from 128.10.126.61: icmp_seq=30 ttl=64 time=27.1 ms
+64 bytes from 128.10.126.61: icmp_seq=31 ttl=64 time=27.9 ms
+64 bytes from 128.10.126.61: icmp_seq=32 ttl=64 time=27.5 ms
+64 bytes from 128.10.126.61: icmp_seq=33 ttl=64 time=33.1 ms
+64 bytes from 128.10.126.61: icmp_seq=34 ttl=64 time=31.9 ms
+64 bytes from 128.10.126.61: icmp_seq=35 ttl=64 time=32.0 ms
+64 bytes from 128.10.126.61: icmp_seq=36 ttl=64 time=30.0 ms
+64 bytes from 128.10.126.61: icmp_seq=37 ttl=64 time=35.6 ms
+64 bytes from 128.10.126.61: icmp_seq=38 ttl=64 time=37.6 ms
+64 bytes from 128.10.126.61: icmp_seq=39 ttl=64 time=29.1 ms
+64 bytes from 128.10.126.61: icmp_seq=40 ttl=64 time=27.9 ms
+64 bytes from 128.10.126.61: icmp_seq=41 ttl=64 time=33.1 ms
+64 bytes from 128.10.126.61: icmp_seq=42 ttl=64 time=31.0 ms
+64 bytes from 128.10.126.61: icmp_seq=43 ttl=64 time=40.6 ms
+64 bytes from 128.10.126.61: icmp_seq=44 ttl=64 time=50.5 ms
+64 bytes from 128.10.126.61: icmp_seq=45 ttl=64 time=44.3 ms
+64 bytes from 128.10.126.61: icmp_seq=46 ttl=64 time=0.206 ms
+64 bytes from 128.10.126.61: icmp_seq=47 ttl=64 time=0.140 ms
+64 bytes from 128.10.126.61: icmp_seq=48 ttl=64 time=0.123 ms
+64 bytes from 128.10.126.61: icmp_seq=49 ttl=64 time=0.110 ms
+64 bytes from 128.10.126.61: icmp_seq=50 ttl=64 time=0.100 ms
+64 bytes from 128.10.126.61: icmp_seq=51 ttl=64 time=0.276 ms
+64 bytes from 128.10.126.61: icmp_seq=52 ttl=64 time=0.106 ms
+64 bytes from 128.10.126.61: icmp_seq=53 ttl=64 time=0.170 ms
+64 bytes from 128.10.126.61: icmp_seq=54 ttl=64 time=0.107 ms
+64 bytes from 128.10.126.61: icmp_seq=55 ttl=64 time=0.102 ms
+64 bytes from 128.10.126.61: icmp_seq=56 ttl=64 time=0.102 ms
+64 bytes from 128.10.126.61: icmp_seq=57 ttl=64 time=0.102 ms
+64 bytes from 128.10.126.61: icmp_seq=58 ttl=64 time=0.104 ms
+64 bytes from 128.10.126.61: icmp_seq=59 ttl=64 time=0.103 ms
+64 bytes from 128.10.126.61: icmp_seq=60 ttl=64 time=0.150 ms
+
+--- 128.10.126.61 ping statistics ---
+60 packets transmitted, 60 received, 0% packet loss, time 59393ms
+rtt min/avg/max/mdev = 0.100/14.042/50.543/15.522 ms

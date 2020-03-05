@@ -15,13 +15,14 @@ do
 	ssh -o StrictHostKeyChecking=no dcnet@128.10.126.57 \
 		"echo \"--- Ping during migration from $1 to $2, address $4 ---\" > $VM_FILE"
 	sleep 1
-	ssh -o StrictHostKeyChecking=no dcnet@128.10.126.57 "ping -c 100 $3 >> $VM_FILE &"
+	ssh -o StrictHostKeyChecking=no dcnet@128.10.126.57 "ping -c 80 $3 >> $VM_FILE &"
 	mkdir -p "$5/run$i"
 	echo "--- Ping during migration from $1 to $2, address $4 ---" > $HV_FILE
-	ping -c 100 128.10.126.57 >> $HV_FILE &
+	ping -c 80 128.10.126.57 >> $HV_FILE &
 	sleep 20
+	echo "Migration Emminent"
 	source migrate_vm.sh $1 $2 $4 "128.10.126.57"
-	sleep 80
+	sleep 60
 
 
 	ssh -o StrictHostKeyChecking=no dcnet@128.10.126.57 "echo \"\" >> $VM_FILE"
@@ -29,11 +30,12 @@ do
 	ssh -o StrictHostKeyChecking=no dcnet@128.10.126.57 \
 		"echo \"--- Ping during migration from $2 to $1, address $3 ---\" >> $VM_FILE"
 	sleep 1
-	ssh -o StrictHostKeyChecking=no dcnet@128.10.126.57 "ping -c 100 $3 >> $VM_FILE &"
+	ssh -o StrictHostKeyChecking=no dcnet@128.10.126.57 "ping -c 80 $3 >> $VM_FILE &"
 	echo "" >> $HV_FILE 
 	echo "--- Ping during migration from $2 to $1, address $3 ---" >> $HV_FILE
-	ping -c 100 128.10.126.57 >> $HV_FILE &
+	ping -c 80 128.10.126.57 >> $HV_FILE &
 	sleep 20
+	echo "Migration Emminent"
 	source migrate_vm.sh $2 $1 $3 "128.10.126.57"
-	sleep 80
+	sleep 60
 done

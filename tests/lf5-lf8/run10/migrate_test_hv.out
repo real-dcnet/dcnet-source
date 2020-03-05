@@ -1,0 +1,13 @@
+--- Ping during migration from 128.10.126.58 to 128.10.126.82, address 128.10.126.84 ---
+PING 128.10.126.57 (128.10.126.57) 56(84) bytes of data.
+
+--- 128.10.126.57 ping statistics ---
+80 packets transmitted, 0 received, 100% packet loss, time 80893ms
+
+
+--- Ping during migration from 128.10.126.82 to 128.10.126.58, address 128.10.126.61 ---
+PING 128.10.126.57 (128.10.126.57) 56(84) bytes of data.
+
+--- 128.10.126.57 ping statistics ---
+80 packets transmitted, 0 received, 100% packet loss, time 80894ms
+
