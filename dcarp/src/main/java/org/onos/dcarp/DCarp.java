@@ -25,14 +25,15 @@ import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.onlab.packet.*;
+import org.onosproject.app.ApplicationService;
+import org.onosproject.core.Application;
 import org.onosproject.core.ApplicationId;
 import org.onosproject.core.CoreService;
 import org.onosproject.net.*;
 import org.onosproject.net.device.DeviceService;
-import org.onosproject.net.flow.DefaultTrafficSelector;
-import org.onosproject.net.flow.DefaultTrafficTreatment;
-import org.onosproject.net.flow.TrafficSelector;
-import org.onosproject.net.flow.TrafficTreatment;
+import org.onosproject.net.flow.*;
+import org.onosproject.net.flow.criteria.Criterion;
+import org.onosproject.net.flow.criteria.IPCriterion;
 import org.onosproject.net.host.HostEvent;
 import org.onosproject.net.host.HostListener;
 import org.onosproject.net.host.HostService;
@@ -75,6 +76,14 @@ public class DCarp {
     /** Service used to register and obtain host information. */
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     private HostService hostService;
+
+    /** Service used to manage flow rules installed on switches. */
+    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    private FlowRuleService flowRuleService;
+
+    /** Service used to manage flow rules installed on switches. */
+    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    private ApplicationService applicationService;
 
     /** Holds information about switches parsed from JSON. */
     private static final class SwitchEntry {
@@ -372,6 +381,23 @@ public class DCarp {
                     log.info("Leaf received ARP packet with destination: "
                             + eth.getDestinationMAC().toString());
                     processPacketArp(context, eth, device, entry);
+                }
+            }
+            if (eth.getEtherType() == Ethernet.TYPE_IPV4) {
+                IPv4 ipv4 = (IPv4) (eth.getPayload());
+                int ip = ipv4.getDestinationAddress();
+                if (ip == Ip4Address.valueOf("10.0.1.8").toInt()) {
+                    String message = new String(eth.getPayload().getPayload().getPayload().serialize());
+                    String[] addrs = message.split(":");
+                    if (addrs[0].equals("reactive")) {
+                        Ip4Address vmIP = IpPrefix.valueOf(addrs[1]).address().getIp4Address();
+                        for (FlowRule f : flowRuleService.getFlowEntriesById(applicationService.getId("org.onos.fwd"))) {
+                            IPCriterion selector = (IPCriterion) f.selector().getCriterion(Criterion.Type.IPV4_DST);
+                            if (selector != null && selector.ip().toString().equals(vmIP.toString())) {
+                                flowRuleService.removeFlowRules(f);
+                            }
+                        }
+                    }
                 }
             }
         }

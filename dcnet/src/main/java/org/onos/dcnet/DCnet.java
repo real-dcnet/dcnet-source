@@ -825,19 +825,21 @@ public class DCnet {
                         hostDB.put(vmIP.toInt(), vmEntry);
                     }
                 }
-                Device device = deviceService.getDevice(context.inPacket()
-                        .receivedFrom().deviceId());
-                String id = device.chassisId().toString();
-                SwitchEntry entry = switchDB.get(id);
-                if (entry != null) {
-                    if (entry.getLevel() == LEAF) {
-                        log.info("Leaf received IPv4 packet with destination: "
-                                + eth.getDestinationMAC().toString());
-                        processPacketLeaf(context, eth, device, entry);
-                    } else if (entry.getLevel() == DC) {
-                        log.info("DC received packet with destination: "
-                                + eth.getDestinationMAC().toString());
-                        //processPacketDc(context, eth, device, entry);
+                else {
+                    Device device = deviceService.getDevice(context.inPacket()
+                            .receivedFrom().deviceId());
+                    String id = device.chassisId().toString();
+                    SwitchEntry entry = switchDB.get(id);
+                    if (entry != null) {
+                        if (entry.getLevel() == LEAF) {
+                            log.info("Leaf received IPv4 packet with destination: "
+                                    + eth.getDestinationMAC().toString());
+                            processPacketLeaf(context, eth, device, entry);
+                        } else if (entry.getLevel() == DC) {
+                            log.info("DC received packet with destination: "
+                                    + eth.getDestinationMAC().toString());
+                            //processPacketDc(context, eth, device, entry);
+                        }
                     }
                 }
             }
