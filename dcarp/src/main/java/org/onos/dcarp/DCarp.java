@@ -388,10 +388,11 @@ public class DCarp {
                     String[] addrs = message.split(":");
                     if (addrs[0].equals("reactive")) {
                         Ip4Address vmIP = IpPrefix.valueOf(addrs[1]).address().getIp4Address();
+                        log.info("VM IP: " + vmIP.toInt());
                         HostEntry host = hostDB.get(vmIP.toInt());
                         for (FlowRule f : flowRuleService.getFlowEntriesById(applicationService.getId("org.onosproject.fwd"))) {
                             EthCriterion selector = (EthCriterion) f.selector().getCriterion(Criterion.Type.ETH_DST);
-                            if (selector != null && Arrays.equals(selector.mac().toBytes(), host.idmac)) {
+                            if (selector != null && Arrays.equals(selector.mac().toBytes(), host.getIdmac())) {
                                 flowRuleService.removeFlowRules(f);
                             }
                         }
