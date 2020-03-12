@@ -11,7 +11,8 @@ do
 		loc=$(echo $line | awk '{print $1}')
 		src=$(echo $line | awk '{print $2}')
 		dst=$(echo $line | awk '{print $3}')
-		echo "Testing bandwidth from $SRC_IP to ${DST_IPS[$j]}"
-		source "./tcp_test.sh" "$src" "$dst" "run$i/"$loc"_tcp.out"
+		echo "Testing bandwidth from $src to $dst"
+		echo "" > "run$i/"$loc"_tcp.out"
+		#source "./tcp_test.sh" "$src" "$dst" "run$i/"$loc"_tcp.out"
 	done < "$input"
 done
