@@ -389,7 +389,7 @@ public class DCarp {
                     if (addrs[0].equals("reactive")) {
                         Ip4Address vmIP = IpPrefix.valueOf(addrs[1]).address().getIp4Address();
                         HostEntry host = hostDB.get(vmIP.toInt());
-                        for (FlowRule f : flowRuleService.getFlowEntriesById(applicationService.getId("Reactive Forwarding"))) {
+                        for (FlowRule f : flowRuleService.getFlowEntriesById(applicationService.getId("org.onosproject.fwd"))) {
                             EthCriterion selector = (EthCriterion) f.selector().getCriterion(Criterion.Type.ETH_DST);
                             if (selector != null && Arrays.equals(selector.mac().toBytes(), host.idmac)) {
                                 flowRuleService.removeFlowRules(f);
