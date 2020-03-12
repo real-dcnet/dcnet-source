@@ -33,6 +33,7 @@ import org.onosproject.net.*;
 import org.onosproject.net.device.DeviceService;
 import org.onosproject.net.flow.*;
 import org.onosproject.net.flow.criteria.Criterion;
+import org.onosproject.net.flow.criteria.EthCriterion;
 import org.onosproject.net.flow.criteria.IPCriterion;
 import org.onosproject.net.host.HostEvent;
 import org.onosproject.net.host.HostListener;
@@ -49,11 +50,7 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * ONOS App implementing DCnet ARP resolution.
@@ -386,14 +383,15 @@ public class DCarp {
             if (eth.getEtherType() == Ethernet.TYPE_IPV4) {
                 IPv4 ipv4 = (IPv4) (eth.getPayload());
                 int ip = ipv4.getDestinationAddress();
-                if (ip == Ip4Address.valueOf("10.0.1.8").toInt()) {
+                if (ip == Ip4Address.valueOf("10.0.0.10").toInt()) {
                     String message = new String(eth.getPayload().getPayload().getPayload().serialize());
                     String[] addrs = message.split(":");
                     if (addrs[0].equals("reactive")) {
                         Ip4Address vmIP = IpPrefix.valueOf(addrs[1]).address().getIp4Address();
-                        for (FlowRule f : flowRuleService.getFlowEntriesById(applicationService.getId("org.onos.fwd"))) {
-                            IPCriterion selector = (IPCriterion) f.selector().getCriterion(Criterion.Type.IPV4_DST);
-                            if (selector != null && selector.ip().toString().equals(vmIP.toString())) {
+                        HostEntry host = hostDB.get(vmIP.toInt());
+                        for (FlowRule f : flowRuleService.getFlowEntriesById(applicationService.getId("Reactive Forwarding"))) {
+                            EthCriterion selector = (EthCriterion) f.selector().getCriterion(Criterion.Type.ETH_DST);
+                            if (selector != null && Arrays.equals(selector.mac().toBytes(), host.idmac)) {
                                 flowRuleService.removeFlowRules(f);
                             }
                         }
