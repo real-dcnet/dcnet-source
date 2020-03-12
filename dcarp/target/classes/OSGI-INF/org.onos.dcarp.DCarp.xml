@@ -9,6 +9,10 @@
         
     <reference name="hostService" interface="org.onosproject.net.host.HostService" cardinality="1..1" policy="static" bind="bindHostService" unbind="unbindHostService"/>
         
+    <reference name="flowRuleService" interface="org.onosproject.net.flow.FlowRuleService" cardinality="1..1" policy="static" bind="bindFlowRuleService" unbind="unbindFlowRuleService"/>
+        
+    <reference name="applicationService" interface="org.onosproject.app.ApplicationService" cardinality="1..1" policy="static" bind="bindApplicationService" unbind="unbindApplicationService"/>
+        
     <implementation class="org.onos.dcarp.DCarp"/>
     
 </scr:component>
