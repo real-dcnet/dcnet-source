@@ -380,7 +380,6 @@ public class DCarp {
                     processPacketArp(context, eth, device, entry);
                 }
             }
-            log.info(String.valueOf(eth.getEtherType()));
             if (eth.getEtherType() == Ethernet.TYPE_IPV4) {
                 IPv4 ipv4 = (IPv4) (eth.getPayload());
                 int ip = ipv4.getDestinationAddress();
