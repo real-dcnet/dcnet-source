@@ -171,7 +171,7 @@ public class DCarp {
     /** Location where configuration information can be found.
      * Change this as necessary if configuration JSONs are stored elsewhere */
     private static String configLoc =
-            System.getProperty("user.home") + "/dcnet-source/config/testbed/";
+            System.getProperty("user.home") + "/dcnet-source/config/mininet/";
 
     /** Macro for data center egress switches. */
     private static final int DC = 0;
@@ -383,14 +383,16 @@ public class DCarp {
             if (eth.getEtherType() == Ethernet.TYPE_IPV4) {
                 IPv4 ipv4 = (IPv4) (eth.getPayload());
                 int ip = ipv4.getDestinationAddress();
-                if (ip == Ip4Address.valueOf("10.0.1.8").toInt()) {
+                if (ip == Ip4Address.valueOf("10.0.0.8").toInt()) {
                     String message = new String(eth.getPayload().getPayload().getPayload().serialize());
                     String[] addrs = message.split(":");
                     if (addrs[0].equals("reactive")) {
                         Ip4Address vmIP = IpPrefix.valueOf(addrs[1]).address().getIp4Address();
                         HostEntry host = hostDB.get(vmIP.toInt());
+                        log.info("Erasing rules for IP " + addrs[1]);
                         for (FlowRule f : flowRuleService.getFlowEntriesById(applicationService.getId("org.onosproject.fwd"))) {
                             EthCriterion selector = (EthCriterion) f.selector().getCriterion(Criterion.Type.ETH_SRC);
+                            log.info(f.toString());
                             if (selector != null && Arrays.equals(selector.mac().toBytes(), host.getIdmac())) {
                                 flowRuleService.removeFlowRules(f);
                             }
