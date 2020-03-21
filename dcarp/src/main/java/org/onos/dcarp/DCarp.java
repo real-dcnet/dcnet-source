@@ -380,12 +380,15 @@ public class DCarp {
                     processPacketArp(context, eth, device, entry);
                 }
             }
+            log.info(String.valueOf(eth.getEtherType()));
             if (eth.getEtherType() == Ethernet.TYPE_IPV4) {
                 IPv4 ipv4 = (IPv4) (eth.getPayload());
                 int ip = ipv4.getDestinationAddress();
+                log.info("Processing IPv4");
                 if (ip == Ip4Address.valueOf("10.0.0.8").toInt()) {
                     String message = new String(eth.getPayload().getPayload().getPayload().serialize());
                     String[] addrs = message.split(":");
+                    log.info("Message " + message);
                     if (addrs[0].equals("reactive")) {
                         Ip4Address vmIP = IpPrefix.valueOf(addrs[1]).address().getIp4Address();
                         HostEntry host = hostDB.get(vmIP.toInt());
