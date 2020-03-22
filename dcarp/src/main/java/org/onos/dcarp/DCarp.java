@@ -171,9 +171,9 @@ public class DCarp {
     /** Location where configuration information can be found.
      * Change this as necessary if configuration JSONs are stored elsewhere */
     private static String configLoc =
-            System.getProperty("user.home") + "/dcnet-source/config/mininet/";
+            System.getProperty("user.home") + "/dcnet-source/config/testbed/";
 
-    private static String controllerIP = "10.0.0.8";
+    private static String controllerIP = "10.0.1.8";
 
     /** Macro for data center egress switches. */
     private static final int DC = 0;
