@@ -824,6 +824,7 @@ public class DCnet {
                         HostEntry vmEntry = new HostEntry(vmHost.id().toString(), dstEntry.getRmac(), vmHost.mac().toBytes());
                         hostDB.put(vmIP.toInt(), vmEntry);
                     }
+                    context.block();
                 }
                 else {
                     Device device = deviceService.getDevice(context.inPacket()

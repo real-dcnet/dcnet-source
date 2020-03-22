@@ -173,6 +173,8 @@ public class DCarp {
     private static String configLoc =
             System.getProperty("user.home") + "/dcnet-source/config/mininet/";
 
+    private static String controllerIP = "10.0.0.8";
+
     /** Macro for data center egress switches. */
     private static final int DC = 0;
 
@@ -384,7 +386,7 @@ public class DCarp {
                 IPv4 ipv4 = (IPv4) (eth.getPayload());
                 int ip = ipv4.getDestinationAddress();
                 log.info("Processing IPv4");
-                if (ip == Ip4Address.valueOf("10.0.0.8").toInt()) {
+                if (ip == Ip4Address.valueOf(controllerIP).toInt()) {
                     String message = new String(eth.getPayload().getPayload().getPayload().serialize());
                     String[] addrs = message.split(":");
                     log.info("Message " + message);
@@ -404,6 +406,7 @@ public class DCarp {
                             }
                         }
                     }
+                    context.block();
                 }
             }
         }
