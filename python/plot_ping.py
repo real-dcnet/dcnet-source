@@ -73,9 +73,9 @@ pio.write_html(go.Figure(data = plots, layout = layout),
 
 output = open(loc + "/ping_data.csv", 'w')
 writer = csv.writer(output)
-writer.writerow(["Test ID", "Number Hops", "Initial Ping (Max)", "Initial Ping (Min)", "Initial Ping (Avg)",
-					"Initial Ping (Dev)", "Steady Ping (Max)", "Steady Ping (Min)", "Steady Ping (Avg)",
-					"Steady Ping (Dev)"])
+writer.writerow(["test_id", "number_hops", "initial_ping_max", "initial_ping_min", "initial_ping_avg",
+					"initial_ping_dev", "steady_ping_max", "steady_ping_min", "steady_ping_avg",
+					"steady_ping_dev"])
 
 for result in data:
 	for i in range(len(result["initial_ping"])):

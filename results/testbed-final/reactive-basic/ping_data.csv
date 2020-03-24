@@ -1,4 +1,4 @@
-Test ID,Number Hops,Initial Ping (Max),Initial Ping (Min),Initial Ping (Avg),Initial Ping (Dev),Steady Ping (Max),Steady Ping (Min),Steady Ping (Avg),Steady Ping (Dev)
+test_id,number_hops,initial_ping_max,initial_ping_min,initial_ping_avg,initial_ping_dev,steady_ping_max,steady_ping_min,steady_ping_avg,steady_ping_dev
 1,2,21.438,0.461,4.755,8.341,0.705,0.408,0.605,0.092
 1,4,44.222,1.903,10.459,16.881,2.225,1.014,1.846,0.337
 1,6,71.021,1.981,16.239,27.395,3.219,1.328,2.7,0.474

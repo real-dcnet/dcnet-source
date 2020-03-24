@@ -142,9 +142,9 @@ pio.write_html(go.Figure(data = plots, layout = layout),
 
 output = open(loc + "/vm_data.csv", 'w')
 writer = csv.writer(output)
-writer.writerow(["Test ID", "Number Hops", "Pass Number", "Hypervisor Ping (Max)", "Hypervisor Ping (Min)", 
-					"Hypervisor Ping (Avg)", "Hypervisor Ping (Dev)", "Hypervisor Drops", "VM Ping (Max)",
-					"VM Ping (Min)", "VM Ping (Avg)", "VM Ping (Dev)", "VM Drops"])
+writer.writerow(["test_id", "number_hops", "pass_number", "hv_ping_max", "hv_ping_min", 
+					"hv_ping_avg", "hv_ping_dev", "hv_drops", "vm_ping_max",
+					"vm_ping_min", "vm_ping_avg", "vm_ping_dev", "vm_drops"])
 
 for result in data:
 	for i in range(len(data[result])):
@@ -159,5 +159,5 @@ for result in data:
 		if hv_pass and vm_pass:
 			writer.writerow([hv_pass["test_id"], hv_pass["hops"], 2, hv_pass["max"], hv_pass["min"],
 							hv_pass["avg"], hv_pass["dev"], hv_pass["loss"], vm_pass["max"],
-							vm_pass["min"], vm_pass["avg"], vm_pass["dev"]])
+							vm_pass["min"], vm_pass["avg"], vm_pass["dev"], vm_pass["loss"]])
 

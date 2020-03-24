@@ -70,7 +70,7 @@ pio.write_html(go.Figure(data = plots, layout = layout),
 
 output = open(loc + "/tcp_data.csv", 'w')
 writer = csv.writer(output)
-writer.writerow(["Test ID", "Number Hops", "Bytes Transferred (GB)", "Throughput (Mbps)"])
+writer.writerow(["test_id", "number_hops", "bytes_transferred_gb", "throughput_mbps"])
 
 for result in data:
 	for i in range(len(result["tcp_send"])):
