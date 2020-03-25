@@ -4,10 +4,7 @@ import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.sun.org.apache.xpath.internal.operations.Bool;
-import org.apache.felix.scr.annotations.Activate;
-import org.apache.felix.scr.annotations.Deactivate;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
+import org.apache.felix.scr.annotations.*;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -37,6 +34,7 @@ import java.util.*;
 /**
  * ONOS App implementing DCLab forwarding scheme.
  */
+@Component(immediate = true)
 public class DClab {
     /** Logs information, errors, and warnings during runtime. */
     private static Logger log = LoggerFactory.getLogger(DClab.class);
@@ -92,7 +90,7 @@ public class DClab {
     /** Allows application to be started by ONOS controller. */
     @Activate
     public void activate() {
-        appId = coreService.registerApplication("org.onosproject.dcnet");
+        appId = coreService.registerApplication("org.onosproject.dclab");
         analyzeTopology();
         log.info("Started");
     }
