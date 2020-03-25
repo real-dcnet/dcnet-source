@@ -4,6 +4,8 @@ import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.apache.felix.scr.annotations.Activate;
+import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.jgrapht.Graph;
@@ -12,10 +14,15 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
+import org.onosproject.core.ApplicationId;
+import org.onosproject.core.CoreService;
 import org.onosproject.net.Device;
+import org.onosproject.net.DeviceId;
+import org.onosproject.net.Host;
 import org.onosproject.net.Port;
 import org.onosproject.net.device.DeviceAdminService;
 import org.onosproject.net.device.DeviceService;
+import org.onosproject.net.packet.PacketPriority;
 import org.onosproject.net.topology.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,11 +43,18 @@ public class DClab {
 
     /** Service used to manage flow rules installed on switches. */
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    private static CoreService coreService;
+
+    /** Service used to manage flow rules installed on switches. */
+    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     private static DeviceService deviceService;
 
     /** Service used to manage flow rules installed on switches. */
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     private static DeviceAdminService deviceAdminService;
+
+    /** Used to identify flow rules belonging to DCnet. */
+    private ApplicationId appId;
 
     public static class RestPaths {
         private static final String PROTO = "http://";
@@ -71,6 +85,19 @@ public class DClab {
         }
     }
 
+    /** Allows application to be started by ONOS controller. */
+    @Activate
+    public void activate() {
+        appId = coreService.registerApplication("org.onosproject.dcnet");
+        log.info("Started");
+    }
+
+    /** Allows application to be stopped by ONOS controller. */
+    @Deactivate
+    public void deactivate() {
+        log.info("Stopped");
+    }
+
     public static void analyzeTopology(TopologyService topologyService) {
         Topology topo = topologyService.currentTopology();
         TopologyGraph topoGraph = topologyService.getGraph(topo);
@@ -95,7 +122,6 @@ public class DClab {
             for (Graph<TopologyVertex, DefaultEdge> g : graphNew) {
                 for (TopologyVertex u : g.vertexSet()) {
                     if (v.equals(u)) {
-                        // TODO: Check edges to find which ports are needed
                         for (TopologyEdge e : graphOld.getEdgesFrom(v)) {
                             boolean exitTwo = false;
                             for (DefaultEdge f : g.outgoingEdgesOf(u)) {
@@ -105,7 +131,7 @@ public class DClab {
                                 }
                             }
                             if (!exitTwo) {
-                                // TODO: Remove port associated with edge
+                                deviceAdminService.changePortState(v.deviceId(), e.link().src().port(), false);
                             }
                         }
                         exit = true;
