@@ -186,7 +186,7 @@ public class DClab {
         for (TopologyVertex v : graph.vertexSet()) {
             for (TopologyVertex u : graph.vertexSet()) {
                 GraphPath path = DijkstraShortestPath.findPathBetween(graph, v, u);
-                if (path.getLength() == size) {
+                if (path != null && path.getLength() == size) {
                     boolean exit = false;
                     for (Object k : path.getVertexList()) {
                         if (addedVertices.contains(k)) {
