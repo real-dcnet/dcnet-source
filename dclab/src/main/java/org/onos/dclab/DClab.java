@@ -19,6 +19,7 @@ import org.onosproject.net.Host;
 import org.onosproject.net.Port;
 import org.onosproject.net.device.DeviceAdminService;
 import org.onosproject.net.device.DeviceService;
+import org.onosproject.net.link.LinkAdminService;
 import org.onosproject.net.packet.PacketPriority;
 import org.onosproject.net.topology.*;
 import org.slf4j.Logger;
@@ -54,6 +55,10 @@ public class DClab {
     /** Service used to manage flow rules installed on switches. */
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     private DeviceAdminService deviceAdminService;
+
+    /** Service used to manage flow rules installed on switches. */
+    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    private LinkAdminService linkAdminService;
 
     /** Used to identify flow rules belonging to DCnet. */
     private ApplicationId appId;
@@ -134,7 +139,7 @@ public class DClab {
                                 }
                             }
                             if (!exitTwo) {
-                                deviceAdminService.changePortState(v.deviceId(), e.link().src().port(), false);
+                                linkAdminService.removeLink(e.link().src(), e.link().dst());
                             }
                         }
                         exit = true;
@@ -146,10 +151,7 @@ public class DClab {
                 }
             }
             if (!exit) {
-                List<Port> ports = deviceService.getPorts(v.deviceId());
-                for (Port p : ports) {
-                    deviceAdminService.changePortState(v.deviceId(), p.number(), false);
-                }
+                linkAdminService.removeLinks(v.deviceId());
             }
         }
     }
