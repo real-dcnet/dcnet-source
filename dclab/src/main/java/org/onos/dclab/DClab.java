@@ -51,6 +51,10 @@ public class DClab {
 
     /** Service used to manage flow rules installed on switches. */
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    private static TopologyService topologyService;
+
+    /** Service used to manage flow rules installed on switches. */
+    @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     private static DeviceAdminService deviceAdminService;
 
     /** Used to identify flow rules belonging to DCnet. */
@@ -89,6 +93,7 @@ public class DClab {
     @Activate
     public void activate() {
         appId = coreService.registerApplication("org.onosproject.dcnet");
+        analyzeTopology();
         log.info("Started");
     }
 
@@ -98,7 +103,7 @@ public class DClab {
         log.info("Stopped");
     }
 
-    public static void analyzeTopology(TopologyService topologyService) {
+    public static void analyzeTopology() {
         Topology topo = topologyService.currentTopology();
         TopologyGraph topoGraph = topologyService.getGraph(topo);
         Graph<TopologyVertex, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
