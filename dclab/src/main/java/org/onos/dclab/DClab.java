@@ -41,19 +41,19 @@ public class DClab {
 
     /** Service used to manage flow rules installed on switches. */
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
-    private static CoreService coreService;
+    private CoreService coreService;
 
     /** Service used to manage flow rules installed on switches. */
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
-    private static DeviceService deviceService;
+    private DeviceService deviceService;
 
     /** Service used to manage flow rules installed on switches. */
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
-    private static TopologyService topologyService;
+    private TopologyService topologyService;
 
     /** Service used to manage flow rules installed on switches. */
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
-    private static DeviceAdminService deviceAdminService;
+    private DeviceAdminService deviceAdminService;
 
     /** Used to identify flow rules belonging to DCnet. */
     private ApplicationId appId;
@@ -101,7 +101,7 @@ public class DClab {
         log.info("Stopped");
     }
 
-    public static void analyzeTopology() {
+    public void analyzeTopology() {
         Topology topo = topologyService.currentTopology();
         TopologyGraph topoGraph = topologyService.getGraph(topo);
         Graph<TopologyVertex, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -119,7 +119,7 @@ public class DClab {
         disablePorts(topoGraph, topos);
     }
 
-    public static void disablePorts(TopologyGraph graphOld, List<Graph<TopologyVertex, DefaultEdge>> graphNew) {
+    public void disablePorts(TopologyGraph graphOld, List<Graph<TopologyVertex, DefaultEdge>> graphNew) {
         for (TopologyVertex v : graphOld.getVertexes()) {
             boolean exit = false;
             for (Graph<TopologyVertex, DefaultEdge> g : graphNew) {
@@ -154,7 +154,7 @@ public class DClab {
         }
     }
 
-    public static List<Graph<TopologyVertex, DefaultEdge>> createLinearTopos(Graph<TopologyVertex, DefaultEdge> graph, int size) {
+    public List<Graph<TopologyVertex, DefaultEdge>> createLinearTopos(Graph<TopologyVertex, DefaultEdge> graph, int size) {
         while(true) {
             int max = 0;
             GraphPath longest = null;
@@ -205,7 +205,7 @@ public class DClab {
         return topos;
     }
 
-    public static List<List<TopologyVertex>> createStarTopos(Graph<TopologyVertex, DefaultEdge> graph, int size) {
+    public List<List<TopologyVertex>> createStarTopos(Graph<TopologyVertex, DefaultEdge> graph, int size) {
         List<List<TopologyVertex>> components = new ArrayList<>();
         List<Integer> points = new ArrayList<>();
         for (TopologyVertex v : graph.vertexSet()) {
@@ -319,12 +319,12 @@ public class DClab {
         }
     }
 
-    public static void configureSwitch(final Device device) {
+    public void configureSwitch(final Device device) {
         String token = getToken();
         log.info(token);
     }
 
-    public static String getToken() {
+    public String getToken() {
         String[] params = {"admin", "admin"};
         JsonObject ret = restCall(RestPaths.PROTO + "10.0.1.99" + RestPaths.AUTH, params, "login", null);
         if (ret != null) {
@@ -333,7 +333,7 @@ public class DClab {
         return "";
     }
 
-    public static JsonObject restCall(String path, String[] params, String method, String token) {
+    public JsonObject restCall(String path, String[] params, String method, String token) {
         JsonObject request = new JsonObject()
                 .add("jsonrpc", "2.0")
                 .add("id", 1)
