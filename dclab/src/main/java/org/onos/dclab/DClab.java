@@ -251,13 +251,25 @@ public class DClab {
                             int dist = path.getLength();
                             if (dist < compDist.get(i).get(j)) {
                                 compDist.get(i).set(j, dist);
-                                closestVert.get(i).get(j).set(0, v);
-                                closestVert.get(i).get(j).set(1, u);
+                                if (closestVert.get(i).get(j).size() > 0) {
+                                    closestVert.get(i).get(j).set(0, v);
+                                    closestVert.get(i).get(j).set(1, u);
+                                }
+                                else {
+                                    closestVert.get(i).get(j).add(v);
+                                    closestVert.get(i).get(j).add(u);
+                                }
                             }
                             if (dist < compDist.get(j).get(i)) {
                                 compDist.get(j).set(i, dist);
-                                closestVert.get(j).get(i).set(0, u);
-                                closestVert.get(j).get(i).set(1, v);
+                                if (closestVert.get(i).get(j).size() > 0) {
+                                    closestVert.get(j).get(i).set(0, u);
+                                    closestVert.get(j).get(i).set(1, v);
+                                }
+                                else {
+                                    closestVert.get(j).get(i).add(u);
+                                    closestVert.get(j).get(i).add(v);
+                                }
                             }
                         }
                     }
