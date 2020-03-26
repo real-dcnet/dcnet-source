@@ -240,7 +240,7 @@ public class DClab {
             }
 
             /* Find shortest distance between all pairs of components */
-            for (int i = 0; i < components.size(); i++) {
+            for (int i = 0; i < components.size() - 1; i++) {
                 for (int j = i + 1; j < components.size(); j++) {
                     for (TopologyVertex v : components.get(i)) {
                         for (TopologyVertex u : components.get(j)) {
@@ -262,7 +262,7 @@ public class DClab {
                             }
                             if (dist < compDist.get(j).get(i)) {
                                 compDist.get(j).set(i, dist);
-                                if (closestVert.get(i).get(j).size() > 0) {
+                                if (closestVert.get(j).get(i).size() > 0) {
                                     closestVert.get(j).get(i).set(0, u);
                                     closestVert.get(j).get(i).set(1, v);
                                 }
