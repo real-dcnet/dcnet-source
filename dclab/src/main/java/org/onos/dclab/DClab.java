@@ -119,7 +119,8 @@ public class DClab {
             }
         }
         log.info(graph.toString());
-        List<Graph<TopologyVertex, DefaultEdge>> topos = createLinearTopos(graph, 3);
+        //List<Graph<TopologyVertex, DefaultEdge>> topos = createLinearTopos(graph, 3);
+        List<Graph<TopologyVertex, DefaultEdge>> topos = createStarTopos(graph, 3);
         log.info(topos.toString());
         disablePorts(topoGraph, topos);
     }
@@ -207,8 +208,9 @@ public class DClab {
         return topos;
     }
 
-    public List<List<TopologyVertex>> createStarTopos(Graph<TopologyVertex, DefaultEdge> graph, int size) {
+    public List<Graph<TopologyVertex, DefaultEdge>> createStarTopos(Graph<TopologyVertex, DefaultEdge> graph, int size) {
         List<List<TopologyVertex>> components = new ArrayList<>();
+        List<List<TopologyVertex>> finalComp = new ArrayList<>();
         List<Integer> points = new ArrayList<>();
         for (TopologyVertex v : graph.vertexSet()) {
             if (graph.degreeOf(v) == 1) {
@@ -237,14 +239,16 @@ public class DClab {
                 }
             }
 
-            // TODO: Use a temporary graph so that edges can be removed during Gale-Shapley
             /* Find shortest distance between all pairs of components */
             for (int i = 0; i < components.size(); i++) {
                 for (int j = i + 1; j < components.size(); j++) {
                     for (TopologyVertex v : components.get(i)) {
                         for (TopologyVertex u : components.get(j)) {
-                            // TODO: Store closest nodes for each pair of components so they do not need to be found again
-                            int dist = DijkstraShortestPath.findPathBetween(partitions, v, u).getLength();
+                            GraphPath path = DijkstraShortestPath.findPathBetween(partitions, v, u);
+                            if (path == null) {
+                                continue;
+                            }
+                            int dist = path.getLength();
                             if (dist < compDist.get(i).get(j)) {
                                 compDist.get(i).set(j, dist);
                                 closestVert.get(i).get(j).set(0, v);
@@ -273,6 +277,7 @@ public class DClab {
             List<List<TopologyVertex>> tempComp = new ArrayList<>();
             List<Integer> tempPoints = new ArrayList<>();
             // TODO: Gale-Shapley Matching
+            boolean changed = false;
             while (true) {
                 int minDist = Integer.MAX_VALUE;
                 GraphPath minPath = null;
@@ -295,30 +300,80 @@ public class DClab {
                             minPath = path;
                             minI = i;
                             minJ = compQueue.get(i).peek().getValue();
+                            changed = true;
                         }
                     }
                 }
                 if (minPath == null) {
                     break;
                 }
-                tempComp.add(new ArrayList<>());
-                for (Object x : minPath.getVertexList()) {
-                    tempComp.get(tempComp.size() - 1).add((TopologyVertex) x);
-                    matched.put((TopologyVertex) x, true);
+                int newPoints = points.get(minI) + points.get(minJ);
+                if (newPoints >= size) {
+                    finalComp.add(new ArrayList<>());
+                    for (Object x : minPath.getVertexList()) {
+                        partitions.removeAllEdges(partitions.edgesOf((TopologyVertex) x));
+                        partitions.removeVertex((TopologyVertex) x);
+                        finalComp.get(finalComp.size() - 1).add((TopologyVertex) x);
+                        matched.put((TopologyVertex) x, true);
+                    }
+                    for (TopologyVertex x : components.get(minI)) {
+                        partitions.removeAllEdges(partitions.edgesOf(x));
+                        partitions.removeVertex(x);
+                        finalComp.get(finalComp.size() - 1).add(x);
+                        matched.put(x, true);
+                    }
+                    for (TopologyVertex x : components.get(minJ)) {
+                        partitions.removeAllEdges(partitions.edgesOf(x));
+                        partitions.removeVertex(x);
+                        finalComp.get(finalComp.size() - 1).add(x);
+                        matched.put(x, true);
+                    }
                 }
-                for(TopologyVertex x : components.get(minI)) {
-                    tempComp.get(tempComp.size() - 1).add((TopologyVertex) x);
-                    matched.put((TopologyVertex) x, true);
+                else {
+                    tempComp.add(new ArrayList<>());
+                    for (Object x : minPath.getVertexList()) {
+                        tempComp.get(tempComp.size() - 1).add((TopologyVertex) x);
+                        matched.put((TopologyVertex) x, true);
+                    }
+                    for (TopologyVertex x : components.get(minI)) {
+                        tempComp.get(tempComp.size() - 1).add(x);
+                        matched.put(x, true);
+                    }
+                    for (TopologyVertex x : components.get(minJ)) {
+                        tempComp.get(tempComp.size() - 1).add(x);
+                        matched.put(x, true);
+                    }
+                    tempPoints.add(newPoints);
                 }
-                for(TopologyVertex x : components.get(minJ)) {
-                    tempComp.get(tempComp.size() - 1).add((TopologyVertex) x);
-                    matched.put((TopologyVertex) x, true);
+                for (int i = 0; i < components.size(); i++) {
+                    if (i != minI && i != minJ) {
+                        tempComp.add(components.get(i));
+                        tempPoints.add(points.get(i));
+                    }
                 }
-
-                // TODO: Add unmatched components to tempComp
-
+                components = tempComp;
+                points = tempPoints;
+            }
+            if (!changed) {
+                break;
             }
         }
+        // TODO: Connect vertexes in final components with edges
+        List<Graph<TopologyVertex, DefaultEdge>> topos = new ArrayList<>();
+        for (int i = 0; i < finalComp.size(); i++) {
+            topos.add(new SimpleGraph<>(DefaultEdge.class));
+            for (TopologyVertex v : finalComp.get(i)) {
+                topos.get(i).addVertex(v);
+                for (DefaultEdge e : graph.edgesOf(v)) {
+                    for (TopologyVertex u : finalComp.get(i)) {
+                        if (graph.getEdgeTarget(e).equals(u)) {
+                            topos.get(i).addEdge(v, u);
+                        }
+                    }
+                }
+            }
+        }
+        return topos;
     }
 
     public void configureSwitch(final Device device) {
