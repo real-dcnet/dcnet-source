@@ -288,7 +288,6 @@ public class DClab {
 
             Map<TopologyVertex, Boolean> matched = new HashMap<>();
             List<List<TopologyVertex>> tempComp = new ArrayList<>();
-            Graph<TopologyVertex, DefaultEdge> tempPart = partitions;
             List<Integer> tempPoints = new ArrayList<>();
             // TODO: Gale-Shapley Matching
             boolean changed = false;
@@ -326,22 +325,28 @@ public class DClab {
                     finalComp.add(new ArrayList<>());
                     for (Object x : minPath.getVertexList()) {
                         Set<DefaultEdge> edges = new HashSet<>(partitions.edgesOf((TopologyVertex) x));
-                        tempPart.removeAllEdges(edges);
-                        tempPart.removeVertex((TopologyVertex) x);
+                        partitions.removeAllEdges(edges);
+                        partitions.removeVertex((TopologyVertex) x);
                         finalComp.get(finalComp.size() - 1).add((TopologyVertex) x);
                         matched.put((TopologyVertex) x, true);
                     }
                     for (TopologyVertex x : components.get(minI)) {
+                        if (!partitions.containsVertex(x)) {
+                            continue;
+                        }
                         Set<DefaultEdge> edges = new HashSet<>(partitions.edgesOf(x));
-                        tempPart.removeAllEdges(edges);
-                        tempPart.removeVertex(x);
+                        partitions.removeAllEdges(edges);
+                        partitions.removeVertex(x);
                         finalComp.get(finalComp.size() - 1).add(x);
                         matched.put(x, true);
                     }
                     for (TopologyVertex x : components.get(minJ)) {
+                        if (!partitions.containsVertex(x)) {
+                            continue;
+                        }
                         Set<DefaultEdge> edges = new HashSet<>(partitions.edgesOf(x));
-                        tempPart.removeAllEdges(edges);
-                        tempPart.removeVertex(x);
+                        partitions.removeAllEdges(edges);
+                        partitions.removeVertex(x);
                         finalComp.get(finalComp.size() - 1).add(x);
                         matched.put(x, true);
                     }
@@ -369,7 +374,6 @@ public class DClab {
                     }
                 }
                 components = tempComp;
-                partitions = tempPart;
                 points = tempPoints;
                 break;
             }
