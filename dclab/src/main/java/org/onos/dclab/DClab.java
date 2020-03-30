@@ -288,6 +288,7 @@ public class DClab {
 
             Map<TopologyVertex, Boolean> matched = new HashMap<>();
             List<List<TopologyVertex>> tempComp = new ArrayList<>();
+            Graph<TopologyVertex, DefaultEdge> tempPart = partitions;
             List<Integer> tempPoints = new ArrayList<>();
             // TODO: Gale-Shapley Matching
             boolean changed = false;
@@ -325,22 +326,22 @@ public class DClab {
                     finalComp.add(new ArrayList<>());
                     for (Object x : minPath.getVertexList()) {
                         Set<DefaultEdge> edges = partitions.edgesOf((TopologyVertex) x);
-                        partitions.removeAllEdges(edges);
-                        partitions.removeVertex((TopologyVertex) x);
+                        tempPart.removeAllEdges(edges);
+                        tempPart.removeVertex((TopologyVertex) x);
                         finalComp.get(finalComp.size() - 1).add((TopologyVertex) x);
                         matched.put((TopologyVertex) x, true);
                     }
                     for (TopologyVertex x : components.get(minI)) {
                         Set<DefaultEdge> edges = partitions.edgesOf(x);
-                        partitions.removeAllEdges(edges);
-                        partitions.removeVertex(x);
+                        tempPart.removeAllEdges(edges);
+                        tempPart.removeVertex(x);
                         finalComp.get(finalComp.size() - 1).add(x);
                         matched.put(x, true);
                     }
                     for (TopologyVertex x : components.get(minJ)) {
                         Set<DefaultEdge> edges = partitions.edgesOf(x);
-                        partitions.removeAllEdges(edges);
-                        partitions.removeVertex(x);
+                        tempPart.removeAllEdges(edges);
+                        tempPart.removeVertex(x);
                         finalComp.get(finalComp.size() - 1).add(x);
                         matched.put(x, true);
                     }
@@ -368,6 +369,7 @@ public class DClab {
                     }
                 }
                 components = tempComp;
+                partitions = tempPart;
                 points = tempPoints;
                 break;
             }
