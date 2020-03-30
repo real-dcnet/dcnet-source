@@ -390,6 +390,7 @@ public class DClab {
                 for (DefaultEdge e : graph.edgesOf(v)) {
                     for (TopologyVertex u : finalComp.get(i)) {
                         if (graph.getEdgeTarget(e).equals(u) && !topos.get(i).containsEdge(v, u)) {
+                            topos.get(i).addVertex(u);
                             topos.get(i).addEdge(v, u);
                         }
                     }
