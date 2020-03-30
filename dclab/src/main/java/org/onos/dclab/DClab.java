@@ -260,6 +260,7 @@ public class DClab {
                                     closestVert.get(i).get(j).add(u);
                                 }
                             }
+
                             if (dist < compDist.get(j).get(i)) {
                                 compDist.get(j).set(i, dist);
                                 if (closestVert.get(j).get(i).size() > 0) {
@@ -365,6 +366,7 @@ public class DClab {
                 }
                 components = tempComp;
                 points = tempPoints;
+                break;
             }
             if (!changed) {
                 break;
