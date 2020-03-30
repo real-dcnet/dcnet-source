@@ -325,31 +325,22 @@ public class DClab {
                 if (newPoints >= size) {
                     finalComp.add(new ArrayList<>());
                     for (Object x : minPath.getVertexList()) {
-                        Set<DefaultEdge> edges = partitions.edgesOf((TopologyVertex) x);
-                        Iterator<DefaultEdge> iterator = edges.iterator();
-                        while (iterator.hasNext()) {
-                            tempPart.removeEdge(iterator.next());
-                        }
+                        Set<DefaultEdge> edges = new HashSet<>(partitions.edgesOf((TopologyVertex) x));
+                        tempPart.removeAllEdges(edges);
                         tempPart.removeVertex((TopologyVertex) x);
                         finalComp.get(finalComp.size() - 1).add((TopologyVertex) x);
                         matched.put((TopologyVertex) x, true);
                     }
                     for (TopologyVertex x : components.get(minI)) {
-                        Set<DefaultEdge> edges = partitions.edgesOf(x);
-                        Iterator<DefaultEdge> iterator = edges.iterator();
-                        while (iterator.hasNext()) {
-                            tempPart.removeEdge(iterator.next());
-                        }
+                        Set<DefaultEdge> edges = new HashSet<>(partitions.edgesOf(x));
+                        tempPart.removeAllEdges(edges);
                         tempPart.removeVertex(x);
                         finalComp.get(finalComp.size() - 1).add(x);
                         matched.put(x, true);
                     }
                     for (TopologyVertex x : components.get(minJ)) {
-                        Set<DefaultEdge> edges = partitions.edgesOf(x);
-                        Iterator<DefaultEdge> iterator = edges.iterator();
-                        while (iterator.hasNext()) {
-                            tempPart.removeEdge(iterator.next());
-                        }
+                        Set<DefaultEdge> edges = new HashSet<>(partitions.edgesOf(x));
+                        tempPart.removeAllEdges(edges);
                         tempPart.removeVertex(x);
                         finalComp.get(finalComp.size() - 1).add(x);
                         matched.put(x, true);
