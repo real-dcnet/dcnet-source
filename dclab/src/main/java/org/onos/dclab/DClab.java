@@ -385,6 +385,7 @@ public class DClab {
         List<Graph<TopologyVertex, DefaultEdge>> topos = new ArrayList<>();
         for (int i = 0; i < finalComp.size(); i++) {
             topos.add(new SimpleGraph<>(DefaultEdge.class));
+            log.info(finalComp.get(i).toString() + "\n\n");
             for (TopologyVertex v : finalComp.get(i)) {
                 topos.get(i).addVertex(v);
                 for (DefaultEdge e : graph.edgesOf(v)) {
