@@ -326,21 +326,27 @@ public class DClab {
                     finalComp.add(new ArrayList<>());
                     for (Object x : minPath.getVertexList()) {
                         Set<DefaultEdge> edges = partitions.edgesOf((TopologyVertex) x);
-                        tempPart.removeAllEdges(edges);
+                        for (DefaultEdge e : edges) {
+                            tempPart.removeEdge(e);
+                        }
                         tempPart.removeVertex((TopologyVertex) x);
                         finalComp.get(finalComp.size() - 1).add((TopologyVertex) x);
                         matched.put((TopologyVertex) x, true);
                     }
                     for (TopologyVertex x : components.get(minI)) {
                         Set<DefaultEdge> edges = partitions.edgesOf(x);
-                        tempPart.removeAllEdges(edges);
+                        for (DefaultEdge e : edges) {
+                            tempPart.removeEdge(e);
+                        }
                         tempPart.removeVertex(x);
                         finalComp.get(finalComp.size() - 1).add(x);
                         matched.put(x, true);
                     }
                     for (TopologyVertex x : components.get(minJ)) {
                         Set<DefaultEdge> edges = partitions.edgesOf(x);
-                        tempPart.removeAllEdges(edges);
+                        for (DefaultEdge e : edges) {
+                            tempPart.removeEdge(e);
+                        }
                         tempPart.removeVertex(x);
                         finalComp.get(finalComp.size() - 1).add(x);
                         matched.put(x, true);
