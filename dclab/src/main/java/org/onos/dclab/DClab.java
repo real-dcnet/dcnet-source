@@ -324,19 +324,22 @@ public class DClab {
                 if (newPoints >= size) {
                     finalComp.add(new ArrayList<>());
                     for (Object x : minPath.getVertexList()) {
-                        partitions.removeAllEdges(partitions.edgesOf((TopologyVertex) x));
+                        Set<DefaultEdge> edges = partitions.edgesOf((TopologyVertex) x);
+                        partitions.removeAllEdges(edges);
                         partitions.removeVertex((TopologyVertex) x);
                         finalComp.get(finalComp.size() - 1).add((TopologyVertex) x);
                         matched.put((TopologyVertex) x, true);
                     }
                     for (TopologyVertex x : components.get(minI)) {
-                        partitions.removeAllEdges(partitions.edgesOf(x));
+                        Set<DefaultEdge> edges = partitions.edgesOf(x);
+                        partitions.removeAllEdges(edges);
                         partitions.removeVertex(x);
                         finalComp.get(finalComp.size() - 1).add(x);
                         matched.put(x, true);
                     }
                     for (TopologyVertex x : components.get(minJ)) {
-                        partitions.removeAllEdges(partitions.edgesOf(x));
+                        Set<DefaultEdge> edges = partitions.edgesOf(x);
+                        partitions.removeAllEdges(edges);
                         partitions.removeVertex(x);
                         finalComp.get(finalComp.size() - 1).add(x);
                         matched.put(x, true);
