@@ -394,10 +394,12 @@ public class DClab {
                 for (int i = 0; i < components.size(); i++) {
                     if (i != minI && i != minJ) {
                         tempComp.add(components.get(i));
+                        tempEdges.add(compEdges.get(i));
                         tempPoints.add(points.get(i));
                     }
                 }
                 components = tempComp;
+                compEdges = tempEdges;
                 points = tempPoints;
                 break;
             }
