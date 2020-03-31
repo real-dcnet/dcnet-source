@@ -14,10 +14,10 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<app name="org.onosproject.dcnet" origin="ON.Lab" version="2.1.0"
-        title="DCnet App" category="Monitoring" url="http://onosproject.org"
-        featuresRepo="mvn:org.onosproject/onos-app-dcnet/2.1.0/xml/features"
-        features="onos-app-dcnet" apps="">
-    <description>DCnet Application</description>
-    <artifact>mvn:org.onosproject/onos-app-dcnet/2.1.0</artifact>
+<app name="org.onosproject.dclab" origin="ON.Lab" version="2.1.0"
+        title="DClab App" category="Monitoring" url="http://onosproject.org"
+        featuresRepo="mvn:org.onosproject/onos-app-dclab/2.1.0/xml/features"
+        features="onos-app-dclab" apps="">
+    <description>DClab Application</description>
+    <artifact>mvn:org.onosproject/onos-app-dclab/2.1.0</artifact>
 </app>
