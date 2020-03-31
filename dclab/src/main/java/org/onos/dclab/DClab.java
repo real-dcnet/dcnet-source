@@ -3,6 +3,7 @@ package org.onos.dclab;
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.felix.scr.annotations.*;
 import org.jgrapht.Graph;
@@ -25,9 +26,7 @@ import org.onosproject.net.topology.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
@@ -59,6 +58,9 @@ public class DClab {
     /** Service used to manage flow rules installed on switches. */
     @Reference(cardinality = ReferenceCardinality.MANDATORY_UNARY)
     private LinkAdminService linkAdminService;
+
+    private static String configLoc =
+            System.getProperty("user.home") + "/dcnet-source/config/dclab/";
 
     /** Used to identify flow rules belonging to DCnet. */
     private ApplicationId appId;
@@ -119,10 +121,46 @@ public class DClab {
             }
         }
         log.info(graph.toString());
-        //List<Graph<TopologyVertex, DefaultEdge>> topos = createLinearTopos(graph, 3);
-        List<Graph<TopologyVertex, DefaultEdge>> topos = createStarTopos(graph, 3);
-        log.info(topos.toString());
-        disablePorts(topoGraph, topos);
+        try {
+            JsonArray config = Json.parse(new BufferedReader(
+                    new FileReader(configLoc + "test_config.json"))
+            ).asArray();
+            for (JsonValue obj : config) {
+                JsonObject spec = obj.asObject();
+                String type = spec.get("type").asString();
+                List<Graph<TopologyVertex, DefaultEdge>> topos = null;
+                int count = 1000;
+                switch (type) {
+                    case "linear":
+                        int length = spec.getInt("length", 3);
+                        count = spec.getInt("count", 1000);
+                        topos = createLinearTopos(graph, length, count);
+                        break;
+                    case "star":
+                        int points = spec.getInt("points", 3);
+                        count = spec.getInt("count", 1000);
+                        topos = createStarTopos(graph, points, count);
+                        break;
+                    case "tree":
+                        int depth = spec.getInt("depth", 3);
+                        int fanout = spec.getInt("fanout", 2);
+                        count = spec.getInt("count", 1000);
+                        break;
+                    case "clos":
+                        int spines = spec.getInt("spines", 2);
+                        int leaves = spec.getInt("leaves", 4);
+                        count = spec.getInt("count", 1000);
+                        break;
+                    default:
+                        log.info("Invalid topology type");
+                        topos = new ArrayList<>();
+                }
+                log.info(topos.toString());
+                disablePorts(topoGraph, topos);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void disablePorts(TopologyGraph graphOld, List<Graph<TopologyVertex, DefaultEdge>> graphNew) {
@@ -157,7 +195,7 @@ public class DClab {
         }
     }
 
-    public List<Graph<TopologyVertex, DefaultEdge>> createLinearTopos(Graph<TopologyVertex, DefaultEdge> graph, int size) {
+    public List<Graph<TopologyVertex, DefaultEdge>> createLinearTopos(Graph<TopologyVertex, DefaultEdge> graph, int length, int count) {
         while(true) {
             int max = 0;
             GraphPath longest = null;
@@ -170,29 +208,30 @@ public class DClab {
                     }
                 }
             }
-            if(max <= size || longest == null) {
+            if(max <= length || longest == null) {
                 break;
             }
-            int count = 1;
+            int counter = 1;
             for(Object e : longest.getEdgeList()) {
-                if(count == size) {
+                if(counter == length) {
                     graph.removeEdge((DefaultEdge) e);
-                    count = 1;
+                    counter = 1;
                 }
                 else {
-                    count++;
+                    counter++;
                 }
             }
         }
         List<Graph<TopologyVertex, DefaultEdge>> topos = new ArrayList<>();
         List<TopologyVertex> addedVertices = new ArrayList<>();
+        int counter = 0;
         for (TopologyVertex v : graph.vertexSet()) {
             for (TopologyVertex u : graph.vertexSet()) {
                 GraphPath path = DijkstraShortestPath.findPathBetween(graph, v, u);
-                if (path != null && path.getLength() == size) {
+                if (path != null && path.getLength() == length) {
                     boolean exit = false;
                     for (Object k : path.getVertexList()) {
-                        if (addedVertices.contains(k)) {
+                        if (addedVertices.contains((TopologyVertex) k)) {
                             exit = true;
                             break;
                         }
@@ -202,25 +241,29 @@ public class DClab {
                     }
                     addedVertices.addAll(path.getVertexList());
                     topos.add(path.getGraph());
+                    counter++;
+                }
+                if (counter >= count) {
+                    return topos;
                 }
             }
         }
         return topos;
     }
 
-    public List<Graph<TopologyVertex, DefaultEdge>> createStarTopos(Graph<TopologyVertex, DefaultEdge> graph, int size) {
+    public List<Graph<TopologyVertex, DefaultEdge>> createStarTopos(Graph<TopologyVertex, DefaultEdge> graph, int points, int count) {
         List<List<TopologyVertex>> components = new ArrayList<>();
         List<List<DefaultEdge>> compEdges = new ArrayList<>();
         List<List<TopologyVertex>> finalComp = new ArrayList<>();
         List<List<DefaultEdge>> finalEdges = new ArrayList<>();
-        List<Integer> points = new ArrayList<>();
+        List<Integer> pointList = new ArrayList<>();
         for (TopologyVertex v : graph.vertexSet()) {
             if (graph.degreeOf(v) == 1) {
                 List<TopologyVertex> component = new ArrayList<>();
                 component.add(v);
                 components.add(component);
                 compEdges.add(new ArrayList<>());
-                points.add(1);
+                pointList.add(1);
             }
         }
         Graph<TopologyVertex, DefaultEdge> partitions = new SimpleGraph<>(DefaultEdge.class);
@@ -230,6 +273,7 @@ public class DClab {
         for (DefaultEdge e : graph.edgeSet()) {
             partitions.addEdge(graph.getEdgeSource(e), graph.getEdgeTarget(e));
         }
+        int counter = 0;
         while (true) {
             List<List<Integer>> compDist = new ArrayList<>();
             List<List<List<TopologyVertex>>> closestVert = new ArrayList<>();
@@ -324,8 +368,8 @@ public class DClab {
                 if (minPath == null) {
                     break;
                 }
-                int newPoints = points.get(minI) + points.get(minJ);
-                if (newPoints >= size) {
+                int newPoints = pointList.get(minI) + pointList.get(minJ);
+                if (newPoints >= points) {
                     finalComp.add(new ArrayList<>());
                     finalEdges.add(new ArrayList<>());
                     for (Object x : minPath.getVertexList()) {
@@ -364,6 +408,7 @@ public class DClab {
                     for (DefaultEdge e : compEdges.get(minJ)) {
                         finalEdges.get(finalEdges.size() - 1).add(e);
                     }
+                    counter++;
                 }
                 else {
                     tempComp.add(new ArrayList<>());
@@ -395,15 +440,15 @@ public class DClab {
                     if (i != minI && i != minJ) {
                         tempComp.add(components.get(i));
                         tempEdges.add(compEdges.get(i));
-                        tempPoints.add(points.get(i));
+                        tempPoints.add(pointList.get(i));
                     }
                 }
                 components = tempComp;
                 compEdges = tempEdges;
-                points = tempPoints;
+                pointList = tempPoints;
                 break;
             }
-            if (!changed) {
+            if (!changed || counter >= count) {
                 break;
             }
         }
