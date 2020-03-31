@@ -6,6 +6,7 @@ import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.felix.scr.annotations.*;
+import org.graalvm.compiler.lir.LIRInstruction;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -239,8 +240,16 @@ public class DClab {
                     if (exit) {
                         break;
                     }
-                    addedVertices.addAll(path.getVertexList());
-                    topos.add(path.getGraph());
+                    Graph<TopologyVertex, DefaultEdge> topo = new SimpleGraph<>(DefaultEdge.class);
+                    for (Object x : path.getVertexList()) {
+                        addedVertices.add((TopologyVertex) x);
+                        topo.addVertex((TopologyVertex) x);
+                    }
+                    for (Object e : path.getEdgeList()) {
+                        DefaultEdge edge = (DefaultEdge) e;
+                        topo.addEdge(graph.getEdgeSource(edge), graph.getEdgeTarget(edge));
+                    }
+                    topos.add(topo);
                     counter++;
                 }
                 if (counter >= count) {
