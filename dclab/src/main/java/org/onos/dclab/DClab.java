@@ -353,14 +353,16 @@ public class DClab {
                 GraphPath minPath = null;
                 int minI = 0;
                 int minJ = 0;
+                int pos = 0;
                 for (int i = 0; i < compQueue.size(); i++) {
-                    if (compQueue.get(i).peek() != null && compQueue.get(i).peek().getKey() < minDist) {
+                    while (compQueue.get(i).peek() != null && compQueue.get(i).peek().getKey() < minDist) {
                         TopologyVertex v = closestVert.get(i).get(compQueue.get(i).peek().getValue()).get(0);
                         TopologyVertex u = closestVert.get(i).get(compQueue.get(i).peek().getValue()).get(1);
                         GraphPath path = DijkstraShortestPath.findPathBetween(partitions, v, u);
                         boolean used = false;
                         for (Object x : path.getVertexList()) {
                             if (matched.containsKey((TopologyVertex) x)) {
+                                compQueue.get(i).remove();
                                 used = true;
                                 break;
                             }
@@ -371,12 +373,15 @@ public class DClab {
                             minI = i;
                             minJ = compQueue.get(i).peek().getValue();
                             changed = true;
+                            pos = i;
+                            break;
                         }
                     }
                 }
                 if (minPath == null) {
                     break;
                 }
+                compQueue.get(pos).remove();
                 boolean exit = false;
                 int newPoints = pointList.get(minI) + pointList.get(minJ);
                 List<TopologyVertex> newComp = new ArrayList<>();
@@ -389,7 +394,6 @@ public class DClab {
                         partitions.removeAllEdges(edges);
                         partitions.removeVertex((TopologyVertex) x);
                         finalComp.get(finalComp.size() - 1).add((TopologyVertex) x);
-                        matched.put((TopologyVertex) x, true);
                     }
                     for (Object e : minPath.getEdgeList()) {
                         finalEdges.get(finalEdges.size() - 1).add((DefaultEdge) e);
@@ -402,7 +406,6 @@ public class DClab {
                         partitions.removeAllEdges(edges);
                         partitions.removeVertex(x);
                         finalComp.get(finalComp.size() - 1).add(x);
-                        matched.put(x, true);
                     }
                     for (DefaultEdge e : compEdges.get(minI)) {
                         finalEdges.get(finalEdges.size() - 1).add(e);
@@ -415,7 +418,6 @@ public class DClab {
                         partitions.removeAllEdges(edges);
                         partitions.removeVertex(x);
                         finalComp.get(finalComp.size() - 1).add(x);
-                        matched.put(x, true);
                     }
                     for (DefaultEdge e : compEdges.get(minJ)) {
                         finalEdges.get(finalEdges.size() - 1).add(e);
