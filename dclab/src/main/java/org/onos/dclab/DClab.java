@@ -409,6 +409,9 @@ public class DClab {
                         finalComp.get(finalComp.size() - 1).add(x);
                     }
                     for (DefaultEdge e : compEdges.get(minI)) {
+                        if (!partitions.containsEdge(e)) {
+                            continue;
+                        }
                         finalEdges.get(finalEdges.size() - 1).add(e);
                     }
                     for (TopologyVertex x : components.get(minJ)) {
@@ -421,6 +424,9 @@ public class DClab {
                         finalComp.get(finalComp.size() - 1).add(x);
                     }
                     for (DefaultEdge e : compEdges.get(minJ)) {
+                        if (!partitions.containsEdge(e)) {
+                            continue;
+                        }
                         finalEdges.get(finalEdges.size() - 1).add(e);
                     }
                     counter++;
@@ -428,27 +434,45 @@ public class DClab {
                 }
                 else {
                     for (Object x : minPath.getVertexList()) {
+                        if (newComp.contains((TopologyVertex) x)) {
+                            continue;
+                        }
                         newComp.add((TopologyVertex) x);
                         matched.put((TopologyVertex) x, true);
                         log.info("Vertex " + (TopologyVertex) x + " now used");
                     }
                     for (Object e : minPath.getEdgeList()) {
+                        if (newEdges.contains((DefaultEdge) e)) {
+                            continue;
+                        }
                         newEdges.add((DefaultEdge) e);
                     }
                     for (TopologyVertex x : components.get(minI)) {
+                        if (newComp.contains(x)) {
+                            continue;
+                        }
                         newComp.add(x);
                         matched.put(x, true);
                         log.info("Vertex " + (TopologyVertex) x + " now used");
                     }
                     for (DefaultEdge e : compEdges.get(minI)) {
+                        if (newEdges.contains(e)) {
+                            continue;
+                        }
                         newEdges.add(e);
                     }
                     for (TopologyVertex x : components.get(minJ)) {
+                        if (newComp.contains(x)) {
+                            continue;
+                        }
                         newComp.add(x);
                         matched.put(x, true);
                         log.info("Vertex " + (TopologyVertex) x + " now used");
                     }
                     for (DefaultEdge e : compEdges.get(minJ)) {
+                        if (newEdges.contains(e)) {
+                            continue;
+                        }
                         newEdges.add(e);
                     }
                 }
