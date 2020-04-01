@@ -351,6 +351,9 @@ public class DClab {
             while (true) {
                 int minDist = Integer.MAX_VALUE;
                 GraphPath minPath = null;
+                tempComp = new ArrayList<>();
+                tempEdges = new ArrayList<>();
+                tempPoints = new ArrayList<>();
                 int minI = 0;
                 int minJ = 0;
                 int pos = 0;
