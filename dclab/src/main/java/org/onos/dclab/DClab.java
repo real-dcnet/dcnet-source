@@ -412,7 +412,7 @@ public class DClab {
                         finalComp.get(finalComp.size() - 1).add(x);
                     }
                     for (DefaultEdge e : compEdges.get(minI)) {
-                        if (!partitions.containsEdge(e)) {
+                        if (finalEdges.contains(e)) {
                             continue;
                         }
                         finalEdges.get(finalEdges.size() - 1).add(e);
@@ -427,7 +427,7 @@ public class DClab {
                         finalComp.get(finalComp.size() - 1).add(x);
                     }
                     for (DefaultEdge e : compEdges.get(minJ)) {
-                        if (!partitions.containsEdge(e)) {
+                        if (finalEdges.contains(e)) {
                             continue;
                         }
                         finalEdges.get(finalEdges.size() - 1).add(e);
