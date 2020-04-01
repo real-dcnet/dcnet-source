@@ -196,6 +196,46 @@ public class DClab {
         }
     }
 
+    public void trimEdges(Graph<TopologyVertex, DefaultEdge> graph, List<TopologyVertex> nodes, List<DefaultEdge> edges, int trims) {
+        Map<TopologyVertex, List<TopologyVertex>> outgoingEdges = new HashMap<>();
+        for (TopologyVertex v : nodes) {
+            outgoingEdges.put(v, new ArrayList<>());
+        }
+        for (DefaultEdge e : edges) {
+            outgoingEdges.get(graph.getEdgeSource(e)).add(graph.getEdgeTarget(e));
+            outgoingEdges.get(graph.getEdgeTarget(e)).add(graph.getEdgeSource(e));
+        }
+        List<TopologyVertex> trimmedVertices = new ArrayList<>();
+        List<DefaultEdge> trimmedEdges = new ArrayList<>();
+        int counter = 0;
+        for (TopologyVertex v : outgoingEdges.keySet()) {
+            if (outgoingEdges.get(v).size() == 1) {
+                trimmedVertices.add(v);
+                TopologyVertex u = outgoingEdges.get(v).get(0);
+                while (outgoingEdges.get(u).size() == 2) {
+                    trimmedVertices.add(u);
+                    trimmedEdges.add(graph.getEdge(v, u));
+                    v = u;
+                    u = outgoingEdges.get(v).get(0);
+                    if (u == v) {
+                        u = outgoingEdges.get(v).get(1);
+                    }
+                }
+                trimmedEdges.add(graph.getEdge(v, u));
+                counter++;
+            }
+            if (counter == trims) {
+                break;
+            }
+        }
+        for (TopologyVertex v : trimmedVertices) {
+            nodes.remove(v);
+        }
+        for (DefaultEdge e : trimmedEdges) {
+            edges.remove(e);
+        }
+    }
+
     public List<Graph<TopologyVertex, DefaultEdge>> createLinearTopos(Graph<TopologyVertex, DefaultEdge> graph, int length, int count) {
         while(true) {
             int max = 0;
@@ -431,6 +471,9 @@ public class DClab {
                             continue;
                         }
                         finalEdges.get(finalEdges.size() - 1).add(e);
+                    }
+                    if (newPoints > points) {
+                        trimEdges(graph, finalComp.get(finalComp.size() - 1), finalEdges.get(finalEdges.size() - 1), newPoints - points);
                     }
                     counter++;
                     exit = true;
