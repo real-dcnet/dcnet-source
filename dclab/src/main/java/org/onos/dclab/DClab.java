@@ -477,6 +477,7 @@ public class DClab {
                     }
                 }
                 log.info("Component created");
+                System.err.println("Component created");
                 for (int i = 0; i < components.size(); i++) {
                     if (i != minI && i != minJ) {
                         tempComp.add(components.get(i));
