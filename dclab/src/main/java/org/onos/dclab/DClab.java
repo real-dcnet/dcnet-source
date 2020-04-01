@@ -354,6 +354,7 @@ public class DClab {
                 int minI = 0;
                 int minJ = 0;
                 int pos = 0;
+                log.info(compQueue.toString());
                 for (int i = 0; i < compQueue.size(); i++) {
                     while (compQueue.get(i).peek() != null && compQueue.get(i).peek().getKey() < minDist) {
                         TopologyVertex v = closestVert.get(i).get(compQueue.get(i).peek().getValue()).get(0);
