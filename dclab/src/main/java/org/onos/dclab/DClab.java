@@ -229,7 +229,7 @@ public class DClab {
         for (TopologyVertex v : graph.vertexSet()) {
             for (TopologyVertex u : graph.vertexSet()) {
                 GraphPath path = DijkstraShortestPath.findPathBetween(graph, v, u);
-                if (path != null && path.getLength() == length) {
+                if (path != null && path.getLength() == length - 1) {
                     boolean exit = false;
                     for (Object k : path.getVertexList()) {
                         if (addedVertices.contains((TopologyVertex) k)) {
