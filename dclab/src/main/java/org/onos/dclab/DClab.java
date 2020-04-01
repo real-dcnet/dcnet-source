@@ -354,7 +354,6 @@ public class DClab {
                 int minI = 0;
                 int minJ = 0;
                 int pos = 0;
-                log.info(compQueue.toString());
                 for (int i = 0; i < compQueue.size(); i++) {
                     while (compQueue.get(i).peek() != null && compQueue.get(i).peek().getKey() < minDist) {
                         TopologyVertex v = closestVert.get(i).get(compQueue.get(i).peek().getValue()).get(0);
@@ -363,6 +362,7 @@ public class DClab {
                         boolean used = false;
                         for (Object x : path.getVertexList()) {
                             if (matched.containsKey((TopologyVertex) x)) {
+                                log.info("Vertex " + (TopologyVertex) x + " already used, dequeueing");
                                 compQueue.get(i).remove();
                                 used = true;
                                 break;
@@ -430,6 +430,7 @@ public class DClab {
                     for (Object x : minPath.getVertexList()) {
                         newComp.add((TopologyVertex) x);
                         matched.put((TopologyVertex) x, true);
+                        log.info("Vertex " + (TopologyVertex) x + " now used");
                     }
                     for (Object e : minPath.getEdgeList()) {
                         newEdges.add((DefaultEdge) e);
@@ -437,6 +438,7 @@ public class DClab {
                     for (TopologyVertex x : components.get(minI)) {
                         newComp.add(x);
                         matched.put(x, true);
+                        log.info("Vertex " + (TopologyVertex) x + " now used");
                     }
                     for (DefaultEdge e : compEdges.get(minI)) {
                         newEdges.add(e);
@@ -444,6 +446,7 @@ public class DClab {
                     for (TopologyVertex x : components.get(minJ)) {
                         newComp.add(x);
                         matched.put(x, true);
+                        log.info("Vertex " + (TopologyVertex) x + " now used");
                     }
                     for (DefaultEdge e : compEdges.get(minJ)) {
                         newEdges.add(e);
