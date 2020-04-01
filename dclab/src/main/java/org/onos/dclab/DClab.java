@@ -215,6 +215,7 @@ public class DClab {
                 while (outgoingEdges.get(u).size() == 2) {
                     trimmedVertices.add(u);
                     trimmedEdges.add(graph.getEdge(v, u));
+                    trimmedEdges.add(graph.getEdge(u, v));
                     v = u;
                     u = outgoingEdges.get(v).get(0);
                     if (u == v) {
@@ -222,6 +223,7 @@ public class DClab {
                     }
                 }
                 trimmedEdges.add(graph.getEdge(v, u));
+                trimmedEdges.add(graph.getEdge(u, v));
                 counter++;
             }
             if (counter == trims) {
