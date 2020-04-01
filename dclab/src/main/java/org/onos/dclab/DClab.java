@@ -358,14 +358,14 @@ public class DClab {
                         TopologyVertex v = closestVert.get(i).get(compQueue.get(i).peek().getValue()).get(0);
                         TopologyVertex u = closestVert.get(i).get(compQueue.get(i).peek().getValue()).get(1);
                         GraphPath path = DijkstraShortestPath.findPathBetween(partitions, v, u);
-                        boolean exit = false;
+                        boolean used = false;
                         for (Object x : path.getVertexList()) {
                             if (matched.containsKey((TopologyVertex) x)) {
-                                exit = true;
+                                used = true;
                                 break;
                             }
                         }
-                        if (!exit) {
+                        if (!used) {
                             minDist = compQueue.get(i).peek().getKey();
                             minPath = path;
                             minI = i;
@@ -379,6 +379,8 @@ public class DClab {
                 }
                 boolean exit = false;
                 int newPoints = pointList.get(minI) + pointList.get(minJ);
+                List<TopologyVertex> newComp = new ArrayList<>();
+                List<DefaultEdge> newEdges = new ArrayList<>();
                 if (newPoints >= points) {
                     finalComp.add(new ArrayList<>());
                     finalEdges.add(new ArrayList<>());
@@ -422,36 +424,43 @@ public class DClab {
                     exit = true;
                 }
                 else {
-                    tempComp.add(new ArrayList<>());
-                    tempEdges.add(new ArrayList<>());
                     for (Object x : minPath.getVertexList()) {
-                        tempComp.get(tempComp.size() - 1).add((TopologyVertex) x);
+                        newComp.add((TopologyVertex) x);
                         matched.put((TopologyVertex) x, true);
                     }
                     for (Object e : minPath.getEdgeList()) {
-                        tempEdges.get(tempEdges.size() - 1).add((DefaultEdge) e);
+                        newEdges.add((DefaultEdge) e);
                     }
                     for (TopologyVertex x : components.get(minI)) {
-                        tempComp.get(tempComp.size() - 1).add(x);
+                        newComp.add(x);
                         matched.put(x, true);
                     }
                     for (DefaultEdge e : compEdges.get(minI)) {
-                        tempEdges.get(tempEdges.size() - 1).add(e);
+                        newEdges.add(e);
                     }
                     for (TopologyVertex x : components.get(minJ)) {
-                        tempComp.get(tempComp.size() - 1).add(x);
+                        newComp.add(x);
                         matched.put(x, true);
                     }
                     for (DefaultEdge e : compEdges.get(minJ)) {
-                        tempEdges.get(tempEdges.size() - 1).add(e);
+                        newEdges.add(e);
                     }
-                    tempPoints.add(newPoints);
                 }
                 for (int i = 0; i < components.size(); i++) {
                     if (i != minI && i != minJ) {
                         tempComp.add(components.get(i));
                         tempEdges.add(compEdges.get(i));
                         tempPoints.add(pointList.get(i));
+                    }
+                    else if (i == minI && newPoints < points) {
+                        tempComp.add(newComp);
+                        tempEdges.add(newEdges);
+                        tempPoints.add(newPoints);
+                    }
+                    else {
+                        tempComp.add(new ArrayList<>());
+                        tempEdges.add(new ArrayList<>());
+                        tempPoints.add(0);
                     }
                 }
                 components = tempComp;
@@ -464,6 +473,19 @@ public class DClab {
             if (!changed || counter >= count) {
                 break;
             }
+            tempComp = new ArrayList<>();
+            tempEdges = new ArrayList<>();
+            tempPoints = new ArrayList<>();
+            for (int i = 0; i < components.size(); i++) {
+                if (!components.get(i).isEmpty()) {
+                    tempComp.add(components.get(i));
+                    tempEdges.add(compEdges.get(i));
+                    tempPoints.add(pointList.get(i));
+                }
+            }
+            components = tempComp;
+            compEdges = tempEdges;
+            pointList = tempPoints;
         }
         // TODO: Connect vertexes in final components with edges
         List<Graph<TopologyVertex, DefaultEdge>> topos = new ArrayList<>();
