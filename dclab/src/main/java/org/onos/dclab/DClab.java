@@ -377,6 +377,7 @@ public class DClab {
                 if (minPath == null) {
                     break;
                 }
+                boolean exit = false;
                 int newPoints = pointList.get(minI) + pointList.get(minJ);
                 if (newPoints >= points) {
                     finalComp.add(new ArrayList<>());
@@ -418,6 +419,7 @@ public class DClab {
                         finalEdges.get(finalEdges.size() - 1).add(e);
                     }
                     counter++;
+                    exit = true;
                 }
                 else {
                     tempComp.add(new ArrayList<>());
@@ -455,7 +457,9 @@ public class DClab {
                 components = tempComp;
                 compEdges = tempEdges;
                 pointList = tempPoints;
-                break;
+                if (exit) {
+                    break;
+                }
             }
             if (!changed || counter >= count) {
                 break;

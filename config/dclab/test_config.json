@@ -1,7 +1,7 @@
 [
   {
-    "type": "linear",
-    "length": 5,
+    "type": "star",
+    "points": 5,
     "count": 2
   }
 ]
