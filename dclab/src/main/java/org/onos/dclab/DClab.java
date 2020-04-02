@@ -216,12 +216,12 @@ public class DClab {
                 while (outgoingEdges.get(u).size() == 2) {
                     trimmedVertices.add(u);
                     trimmedEdges.add(graph.getEdge(v, u));
-                    TopologyVertex temp = u;
+                    TopologyVertex old = v;
+                    v = u;
                     u = outgoingEdges.get(v).get(0);
-                    if (u == v) {
+                    if (u == old) {
                         u = outgoingEdges.get(v).get(1);
                     }
-                    v = temp;
                 }
                 trimmedEdges.add(graph.getEdge(v, u));
                 counter++;
