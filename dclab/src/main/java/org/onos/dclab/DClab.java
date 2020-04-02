@@ -207,6 +207,7 @@ public class DClab {
         }
         List<TopologyVertex> trimmedVertices = new ArrayList<>();
         List<DefaultEdge> trimmedEdges = new ArrayList<>();
+        log.info(outgoingEdges.toString());
         int counter = 0;
         for (TopologyVertex v : outgoingEdges.keySet()) {
             if (outgoingEdges.get(v).size() == 1) {
