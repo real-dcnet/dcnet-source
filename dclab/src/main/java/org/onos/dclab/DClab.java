@@ -227,6 +227,8 @@ public class DClab {
                 break;
             }
         }
+        log.info("Before: " + nodes.toString());
+        log.info("Before: " + edges.toString());
         for (TopologyVertex v : trimmedVertices) {
             log.info("Trimmed node: " + v);
             nodes.remove(v);
@@ -235,6 +237,8 @@ public class DClab {
             log.info("Trimmed edge: " + e);
             edges.remove(e);
         }
+        log.info("After: " + nodes.toString());
+        log.info("After: " + edges.toString());
     }
 
     public List<Graph<TopologyVertex, DefaultEdge>> createLinearTopos(Graph<TopologyVertex, DefaultEdge> graph, int length, int count) {
