@@ -126,10 +126,11 @@ public class DClab {
             JsonArray config = Json.parse(new BufferedReader(
                     new FileReader(configLoc + "test_config.json"))
             ).asArray();
+            List<Graph<TopologyVertex, DefaultEdge>> allTopos = new ArrayList<>();
             for (JsonValue obj : config) {
                 JsonObject spec = obj.asObject();
                 String type = spec.get("type").asString();
-                List<Graph<TopologyVertex, DefaultEdge>> topos = null;
+                List<Graph<TopologyVertex, DefaultEdge>> topos = new ArrayList<>();
                 int count = 1000;
                 switch (type) {
                     case "linear":
@@ -156,9 +157,11 @@ public class DClab {
                         log.info("Invalid topology type");
                         topos = new ArrayList<>();
                 }
+                allTopos.addAll(topos);
                 log.info(topos.toString());
-                disablePorts(topoGraph, topos);
+                removeSubTopology(graph, topos);
             }
+            disablePorts(topoGraph, allTopos);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -192,6 +195,23 @@ public class DClab {
             }
             if (!exit) {
                 linkAdminService.removeLinks(v.deviceId());
+            }
+        }
+    }
+
+    public void removeSubTopology(Graph<TopologyVertex, DefaultEdge> graph, List<Graph<TopologyVertex, DefaultEdge>> topos) {
+        for (Graph<TopologyVertex, DefaultEdge> t : topos) {
+            for (DefaultEdge e : t.edgeSet()) {
+                for (DefaultEdge f : graph.edgeSet()) {
+                    if (t.getEdgeSource(e).equals(graph.getEdgeSource(f)) &&
+                            t.getEdgeTarget(e).equals(graph.getEdgeTarget(f))) {
+                        graph.removeEdge(f);
+                        break;
+                    }
+                }
+            }
+            for (TopologyVertex v : t.vertexSet()) {
+                graph.removeVertex(v);
             }
         }
     }
@@ -238,15 +258,13 @@ public class DClab {
         }
         for (DefaultEdge e : trimmedEdges) {
             log.info("Trimmed edge: " + e);
-            int loc = -1;
-            for (int i = 0; i < edges.size(); i++) {
-                if (graph.getEdgeSource(edges.get(i)).equals(graph.getEdgeSource(e)) &&
-                        graph.getEdgeTarget(edges.get(i)).equals(graph.getEdgeTarget(e)))  {
-                    loc = i;
+            for (DefaultEdge f : edges) {
+                if (graph.getEdgeSource(e).equals(graph.getEdgeSource(f)) &&
+                        graph.getEdgeTarget(e).equals(graph.getEdgeTarget(f)))  {
+                    edges.remove(f);
                     break;
                 }
             }
-            edges.remove(loc);
         }
         log.info("After: " + nodes.toString());
         log.info("After: " + edges.toString());

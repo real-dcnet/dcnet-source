@@ -1,7 +1,17 @@
 [
   {
     "type": "star",
+    "points": 4,
+    "count": 1
+  },
+  {
+    "type": "linear",
     "points": 5,
     "count": 2
+  },
+  {
+    "type": "star",
+    "points": 3,
+    "count": 1
   }
 ]
