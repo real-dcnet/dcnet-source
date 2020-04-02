@@ -203,6 +203,7 @@ public class DClab {
         }
         for (DefaultEdge e : edges) {
             outgoingEdges.get(graph.getEdgeSource(e)).add(graph.getEdgeTarget(e));
+            outgoingEdges.get(graph.getEdgeTarget(e)).add(graph.getEdgeSource(e));
         }
         List<TopologyVertex> trimmedVertices = new ArrayList<>();
         List<DefaultEdge> trimmedEdges = new ArrayList<>();
