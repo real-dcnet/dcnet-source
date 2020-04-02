@@ -203,7 +203,6 @@ public class DClab {
         }
         for (DefaultEdge e : edges) {
             outgoingEdges.get(graph.getEdgeSource(e)).add(graph.getEdgeTarget(e));
-            outgoingEdges.get(graph.getEdgeTarget(e)).add(graph.getEdgeSource(e));
         }
         List<TopologyVertex> trimmedVertices = new ArrayList<>();
         List<DefaultEdge> trimmedEdges = new ArrayList<>();
@@ -215,7 +214,6 @@ public class DClab {
                 while (outgoingEdges.get(u).size() == 2) {
                     trimmedVertices.add(u);
                     trimmedEdges.add(graph.getEdge(v, u));
-                    trimmedEdges.add(graph.getEdge(u, v));
                     v = u;
                     u = outgoingEdges.get(v).get(0);
                     if (u == v) {
@@ -223,7 +221,6 @@ public class DClab {
                     }
                 }
                 trimmedEdges.add(graph.getEdge(v, u));
-                trimmedEdges.add(graph.getEdge(u, v));
                 counter++;
             }
             if (counter == trims) {
