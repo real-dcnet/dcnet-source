@@ -235,7 +235,15 @@ public class DClab {
         }
         for (DefaultEdge e : trimmedEdges) {
             log.info("Trimmed edge: " + e);
-            edges.remove(e);
+            int loc = -1;
+            for (int i = 0; i < edges.size(); i++) {
+                if (graph.getEdgeSource(edges.get(i)).equals(graph.getEdgeSource(e)) &&
+                        graph.getEdgeTarget(edges.get(i)).equals(graph.getEdgeTarget(e)))  {
+                    loc = i;
+                    break;
+                }
+            }
+            edges.remove(loc);
         }
         log.info("After: " + nodes.toString());
         log.info("After: " + edges.toString());
