@@ -231,9 +231,11 @@ public class DClab {
             }
         }
         for (TopologyVertex v : trimmedVertices) {
+            log.info("Trimmed node: " + v);
             nodes.remove(v);
         }
         for (DefaultEdge e : trimmedEdges) {
+            log.info("Trimmed edge: " + e);
             edges.remove(e);
         }
     }
