@@ -242,7 +242,7 @@ public class DClab {
                     if (u == old) {
                         u = outgoingEdges.get(v).get(1);
                     }
-                    if (counter < trims || outgoingEdges.get(u).size() != 2) {
+                    if (counter < trims || outgoingEdges.get(u).size() == 2) {
                         trimmedVertices.add(v);
                         trimmedEdges.add(graph.getEdge(old, v));
                     }
