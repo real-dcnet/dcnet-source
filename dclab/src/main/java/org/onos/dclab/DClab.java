@@ -242,12 +242,18 @@ public class DClab {
                     if (u == old) {
                         u = outgoingEdges.get(v).get(1);
                     }
+                    if (counter < trims || outgoingEdges.get(u).size() != 2) {
+                        trimmedVertices.add(v);
+                        trimmedEdges.add(graph.getEdge(old, v));
+                    }
+                    else {
+                        u = v;
+                        v = old;
+                        break;
+                    }
                 }
                 trimmedEdges.add(graph.getEdge(v, u));
                 counter++;
-            }
-            if (counter == trims) {
-                break;
             }
         }
         log.info("Before: " + nodes.toString());
@@ -334,6 +340,7 @@ public class DClab {
         return topos;
     }
 
+    // TODO: Split into multiple functions
     public List<Graph<TopologyVertex, DefaultEdge>> createStarTopos(Graph<TopologyVertex, DefaultEdge> graph, int points, int count) {
         List<List<TopologyVertex>> components = new ArrayList<>();
         List<List<DefaultEdge>> compEdges = new ArrayList<>();
@@ -614,6 +621,7 @@ public class DClab {
         return topos;
     }
 
+    /*
     public void configureSwitch(final Device device) {
         String token = getToken();
         log.info(token);
@@ -661,7 +669,7 @@ public class DClab {
             os.write(input.getBytes());
             os.flush();
 
-            /* Don't wait for response for apply methods since switch must restart its network processes */
+            // Don't wait for response for apply methods since switch must restart its network processes
             if (!method.equals("apply")) {
                 BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 
@@ -682,5 +690,5 @@ public class DClab {
             return null;
         }
 
-    }
+    }*/
 }
