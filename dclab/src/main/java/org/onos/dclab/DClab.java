@@ -4,32 +4,22 @@ import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.felix.scr.annotations.*;
-import org.graalvm.compiler.lir.LIRInstruction;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 import org.onosproject.core.ApplicationId;
 import org.onosproject.core.CoreService;
-import org.onosproject.net.Device;
-import org.onosproject.net.DeviceId;
-import org.onosproject.net.Host;
-import org.onosproject.net.Port;
 import org.onosproject.net.device.DeviceAdminService;
 import org.onosproject.net.device.DeviceService;
 import org.onosproject.net.link.LinkAdminService;
-import org.onosproject.net.packet.PacketPriority;
 import org.onosproject.net.topology.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.*;
 
 /**
@@ -63,16 +53,6 @@ public class DClab {
     private static String configLoc =
             System.getProperty("user.home") + "/dcnet-source/config/dclab/";
 
-    /** Used to identify flow rules belonging to DCnet. */
-    private ApplicationId appId;
-
-    public static class RestPaths {
-        private static final String PROTO = "http://";
-        private static final String AUTH = "/cgi-bin/luci/rpc/auth";
-        private static final String UCI = "/cgi-bin/luci/rpc/uci";
-        private static final String SYS = "/cgi-bin/luci/rpc/sys";
-    }
-
     public static class QueueEntry implements Comparable<QueueEntry> {
         private int key;
         private int value;
@@ -82,11 +62,11 @@ public class DClab {
             this.value = value;
         }
 
-        public int getKey() {
+        private int getKey() {
             return this.key;
         }
 
-        public int getValue() {
+        private int getValue() {
             return this.value;
         }
 
@@ -98,7 +78,7 @@ public class DClab {
     /** Allows application to be started by ONOS controller. */
     @Activate
     public void activate() {
-        appId = coreService.registerApplication("org.onosproject.dclab");
+        coreService.registerApplication("org.onosproject.dclab");
         analyzeTopology();
         log.info("Started");
     }
@@ -109,7 +89,7 @@ public class DClab {
         log.info("Stopped");
     }
 
-    public void analyzeTopology() {
+    private void analyzeTopology() {
         Topology topo = topologyService.currentTopology();
         TopologyGraph topoGraph = topologyService.getGraph(topo);
         Graph<TopologyVertex, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
@@ -131,7 +111,7 @@ public class DClab {
                 JsonObject spec = obj.asObject();
                 String type = spec.get("type").asString();
                 List<Graph<TopologyVertex, DefaultEdge>> topos = new ArrayList<>();
-                int count = 1000;
+                int count;
                 switch (type) {
                     case "linear":
                         int length = spec.getInt("length", 3);
@@ -167,7 +147,7 @@ public class DClab {
         }
     }
 
-    public void disablePorts(TopologyGraph graphOld, List<Graph<TopologyVertex, DefaultEdge>> graphNew) {
+    private void disablePorts(TopologyGraph graphOld, List<Graph<TopologyVertex, DefaultEdge>> graphNew) {
         for (TopologyVertex v : graphOld.getVertexes()) {
             boolean exit = false;
             for (Graph<TopologyVertex, DefaultEdge> g : graphNew) {
@@ -199,7 +179,7 @@ public class DClab {
         }
     }
 
-    public void removeSubTopology(Graph<TopologyVertex, DefaultEdge> graph, List<Graph<TopologyVertex, DefaultEdge>> topos) {
+    private void removeSubTopology(Graph<TopologyVertex, DefaultEdge> graph, List<Graph<TopologyVertex, DefaultEdge>> topos) {
         for (Graph<TopologyVertex, DefaultEdge> t : topos) {
             for (DefaultEdge e : t.edgeSet()) {
                 for (DefaultEdge f : graph.edgeSet()) {
@@ -216,7 +196,7 @@ public class DClab {
         }
     }
 
-    public void trimEdges(Graph<TopologyVertex, DefaultEdge> graph, List<TopologyVertex> nodes, List<DefaultEdge> edges, int trims, boolean cut) {
+    private void trimEdges(Graph<TopologyVertex, DefaultEdge> graph, List<TopologyVertex> nodes, List<DefaultEdge> edges, int trims, boolean cut) {
         Map<TopologyVertex, List<TopologyVertex>> outgoingEdges = new HashMap<>();
         for (TopologyVertex v : nodes) {
             outgoingEdges.put(v, new ArrayList<>());
@@ -286,7 +266,7 @@ public class DClab {
         }
     }
 
-    public List<Graph<TopologyVertex, DefaultEdge>> createLinearTopos(Graph<TopologyVertex, DefaultEdge> graph, int length, int count) {
+    private List<Graph<TopologyVertex, DefaultEdge>> createLinearTopos(Graph<TopologyVertex, DefaultEdge> graph, int length, int count) {
         while(true) {
             int max = 0;
             GraphPath longest = null;
@@ -350,9 +330,9 @@ public class DClab {
         return topos;
     }
 
-    public void calculateComponentDistances(Graph<TopologyVertex, DefaultEdge> partitions,
-                                            List<List<TopologyVertex>> components, List<List<Integer>> compDist,
-                                            List<List<List<TopologyVertex>>> closestVert) {
+    private void calculateComponentDistances(Graph<TopologyVertex, DefaultEdge> partitions,
+                                             List<List<TopologyVertex>> components, List<List<Integer>> compDist,
+                                             List<List<List<TopologyVertex>>> closestVert) {
         for (int i = 0; i < components.size(); i++) {
             compDist.add(new ArrayList<>());
             closestVert.add(new ArrayList<>());
@@ -401,8 +381,8 @@ public class DClab {
         }
     }
 
-    public Graph<TopologyVertex, DefaultEdge> initializePartitions(Graph<TopologyVertex, DefaultEdge> graph, List<List<TopologyVertex>> components,
-                                     List<List<DefaultEdge>> compEdges, List<Integer> pointList) {
+    private Graph<TopologyVertex, DefaultEdge> initializePartitions(Graph<TopologyVertex, DefaultEdge> graph, List<List<TopologyVertex>> components,
+                                                                    List<List<DefaultEdge>> compEdges, List<Integer> pointList) {
         for (TopologyVertex v : graph.vertexSet()) {
             if (graph.degreeOf(v) == 1) {
                 List<TopologyVertex> component = new ArrayList<>();
@@ -422,9 +402,9 @@ public class DClab {
         return partitions;
     }
 
-    public void createFinalComponent(int minI, int minJ, Graph<TopologyVertex, DefaultEdge> partitions, GraphPath minPath,
-                                List<List<TopologyVertex>> components, List<List<DefaultEdge>> compEdges,
-                                List<List<TopologyVertex>> finalComp, List<List<DefaultEdge>> finalEdges) {
+    private void createFinalComponent(int minI, int minJ, Graph<TopologyVertex, DefaultEdge> partitions, GraphPath minPath,
+                                      List<List<TopologyVertex>> components, List<List<DefaultEdge>> compEdges,
+                                      List<List<TopologyVertex>> finalComp, List<List<DefaultEdge>> finalEdges) {
         finalComp.add(new ArrayList<>());
         finalEdges.add(new ArrayList<>());
         for (Object x : minPath.getVertexList()) {
@@ -468,9 +448,9 @@ public class DClab {
         }
     }
 
-    public void mergeComponents(int minI, int minJ, GraphPath minPath, Map<TopologyVertex, Boolean> matched,
-                                List<List<TopologyVertex>> components, List<List<DefaultEdge>> compEdges,
-                                List<TopologyVertex> newComp, List<DefaultEdge> newEdges) {
+    private void mergeComponents(int minI, int minJ, GraphPath minPath, Map<TopologyVertex, Boolean> matched,
+                                 List<List<TopologyVertex>> components, List<List<DefaultEdge>> compEdges,
+                                 List<TopologyVertex> newComp, List<DefaultEdge> newEdges) {
         for (Object x : minPath.getVertexList()) {
             if (newComp.contains((TopologyVertex) x)) {
                 continue;
@@ -512,8 +492,14 @@ public class DClab {
         }
     }
 
-    // TODO: Split into multiple functions
-    public List<Graph<TopologyVertex, DefaultEdge>> createStarTopos(Graph<TopologyVertex, DefaultEdge> graph, int points, int count) {
+    private void updateComponents(List<List<TopologyVertex>> targetComp, List<List<DefaultEdge>> targetEdges, List<Integer> targetPoints,
+                                  List<TopologyVertex> newComp, List<DefaultEdge> newEdges, int newPoints) {
+        targetComp.add(newComp);
+        targetEdges.add(newEdges);
+        targetPoints.add(newPoints);
+    }
+
+    private List<Graph<TopologyVertex, DefaultEdge>> createStarTopos(Graph<TopologyVertex, DefaultEdge> graph, int points, int count) {
         List<List<TopologyVertex>> components = new ArrayList<>();
         List<List<DefaultEdge>> compEdges = new ArrayList<>();
         List<List<TopologyVertex>> finalComp = new ArrayList<>();
@@ -575,37 +561,34 @@ public class DClab {
                     break;
                 }
                 compQueue.get(pos).remove();
-                boolean exit = false;
+                boolean exit = true;
                 int newPoints = pointList.get(minI) + pointList.get(minJ);
                 List<TopologyVertex> newComp = new ArrayList<>();
                 List<DefaultEdge> newEdges = new ArrayList<>();
-                if (newPoints >= points) {
+                if (newPoints == points) {
                     createFinalComponent(minI, minJ, partitions, minPath, components, compEdges, finalComp, finalEdges);
-                    if (newPoints > points) {
-                        trimEdges(graph, finalComp.get(finalComp.size() - 1), finalEdges.get(finalEdges.size() - 1), newPoints - points, true);
-                    }
                     trimEdges(graph, finalComp.get(finalComp.size() - 1), finalEdges.get(finalEdges.size() - 1), points, false);
                     counter++;
-                    exit = true;
+                }
+                else if (newPoints > points) {
+                    createFinalComponent(minI, minJ, partitions, minPath, components, compEdges, finalComp, finalEdges);
+                    trimEdges(graph, finalComp.get(finalComp.size() - 1), finalEdges.get(finalEdges.size() - 1), newPoints - points, true);
+                    trimEdges(graph, finalComp.get(finalComp.size() - 1), finalEdges.get(finalEdges.size() - 1), points, false);
+                    counter++;
                 }
                 else {
                     mergeComponents(minI, minJ, minPath, matched, components, compEdges, newComp, newEdges);
+                    exit = false;
                 }
                 for (int i = 0; i < components.size(); i++) {
                     if (i != minI && i != minJ) {
-                        tempComp.add(components.get(i));
-                        tempEdges.add(compEdges.get(i));
-                        tempPoints.add(pointList.get(i));
+                        updateComponents(tempComp, tempEdges, tempPoints, components.get(i), compEdges.get(i), pointList.get(i));
                     }
                     else if (i == minI && newPoints < points) {
-                        tempComp.add(newComp);
-                        tempEdges.add(newEdges);
-                        tempPoints.add(newPoints);
+                        updateComponents(tempComp, tempEdges, tempPoints, newComp, newEdges, newPoints);
                     }
                     else {
-                        tempComp.add(new ArrayList<>());
-                        tempEdges.add(new ArrayList<>());
-                        tempPoints.add(0);
+                        updateComponents(tempComp, tempEdges, tempPoints, new ArrayList<>(), new ArrayList<>(), 0);
                     }
                 }
                 components = tempComp;
@@ -623,9 +606,7 @@ public class DClab {
             List<Integer> tempPoints = new ArrayList<>();
             for (int i = 0; i < components.size(); i++) {
                 if (!components.get(i).isEmpty()) {
-                    tempComp.add(components.get(i));
-                    tempEdges.add(compEdges.get(i));
-                    tempPoints.add(pointList.get(i));
+                    updateComponents(tempComp, tempEdges, tempPoints, components.get(i), compEdges.get(i), pointList.get(i));
                 }
             }
             components = tempComp;
@@ -646,6 +627,13 @@ public class DClab {
     }
 
     /*
+    public static class RestPaths {
+        private static final String PROTO = "http://";
+        private static final String AUTH = "/cgi-bin/luci/rpc/auth";
+        private static final String UCI = "/cgi-bin/luci/rpc/uci";
+        private static final String SYS = "/cgi-bin/luci/rpc/sys";
+    }
+
     public void configureSwitch(final Device device) {
         String token = getToken();
         log.info(token);
