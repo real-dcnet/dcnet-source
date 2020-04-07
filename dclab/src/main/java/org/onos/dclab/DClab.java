@@ -231,9 +231,9 @@ public class DClab {
         int counter = 0;
         for (TopologyVertex v : outgoingEdges.keySet()) {
             if (outgoingEdges.get(v).size() == 1) {
-                trimmedVertices.add(v);
                 TopologyVertex u = outgoingEdges.get(v).get(0);
                 if (cut) {
+                    trimmedVertices.add(v);
                     while (outgoingEdges.get(u).size() == 2) {
                         trimmedVertices.add(u);
                         trimmedEdges.add(graph.getEdge(v, u));
@@ -247,6 +247,7 @@ public class DClab {
                     trimmedEdges.add(graph.getEdge(v, u));
                 }
                 else if (outgoingEdges.get(u).size() == 2) {
+                    trimmedVertices.add(v);
                     while (true) {
                         TopologyVertex old = v;
                         v = u;
