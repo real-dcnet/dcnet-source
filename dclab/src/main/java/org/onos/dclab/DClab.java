@@ -233,7 +233,7 @@ public class DClab {
             if (outgoingEdges.get(v).size() == 1) {
                 trimmedVertices.add(v);
                 TopologyVertex u = outgoingEdges.get(v).get(0);
-                if(cut) {
+                if (cut) {
                     while (outgoingEdges.get(u).size() == 2) {
                         trimmedVertices.add(u);
                         trimmedEdges.add(graph.getEdge(v, u));
@@ -245,7 +245,7 @@ public class DClab {
                         }
                     }
                 }
-                else {
+                else if (outgoingEdges.get(u).size() == 2) {
                     while (true) {
                         TopologyVertex old = v;
                         v = u;
