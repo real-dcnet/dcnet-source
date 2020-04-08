@@ -643,6 +643,7 @@ public class DClab {
         for (int counter = 0; counter < count; counter++) {
             while (currDepth < depth) {
                 int targetFan = (int) Math.round(Math.pow(fanout, depth - currDepth));
+                log.info("" + targetFan);
                 while (true) {
                     List<List<Integer>> compDist = new ArrayList<>();
                     List<List<List<TopologyVertex>>> closestVert = new ArrayList<>();
