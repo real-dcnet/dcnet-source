@@ -692,6 +692,9 @@ public class DClab {
                                         pos = i;
                                         break;
                                     }
+                                    else {
+                                        compQueue.get(i).remove();
+                                    }
                                 }
                             }
                         }

@@ -1,8 +1,12 @@
 [
-  {
-    "type": "tree",
-    "depth": 3,
-    "fanout": 2,
-    "count": 1
-  }
+    {
+        "type": "linear",
+        "length": 2,
+        "count": 2
+    },
+    {
+        "type": "star",
+        "points": 6,
+        "count": 3
+    }
 ]
