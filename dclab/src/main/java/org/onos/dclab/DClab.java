@@ -683,7 +683,7 @@ public class DClab {
                                 }
                                 if (!used) {
                                     minDist = compQueue.get(i).peek().getKey();
-                                    if (minDist > 2) {
+                                    if (minDist > 1) {
                                         minPath = path;
                                         minI = i;
                                         minJ = compQueue.get(i).peek().getValue();
@@ -767,6 +767,8 @@ public class DClab {
                     for (int i = 0; i < components.size(); i++) {
                         pointList.add(targetFan);
                     }
+                    log.info(components.toString());
+                    log.info(compEdges.toString());
                 }
             }
             if (!changed) {
