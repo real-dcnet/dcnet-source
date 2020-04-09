@@ -770,6 +770,8 @@ public class DClab {
                     for (int i = 0; i < components.size(); i++) {
                         pointList.add(targetFan);
                     }
+                    log.info(finalComp.toString());
+                    log.info(finalEdges.toString());
                     log.info(components.toString());
                     log.info(compEdges.toString());
                 }
