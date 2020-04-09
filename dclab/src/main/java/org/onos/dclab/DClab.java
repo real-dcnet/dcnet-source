@@ -755,6 +755,9 @@ public class DClab {
                     pointList = tempPoints;
                 }
                 if (!changed) {
+                    log.info("breaking");
+                    log.info(components.toString());
+                    log.info(compEdges.toString());
                     break;
                 }
                 if (currDepth < depth) {
