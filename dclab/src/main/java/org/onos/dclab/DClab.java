@@ -737,7 +737,7 @@ public class DClab {
                             break;
                         }
                     }
-                    if (currFan >= targetFan) {
+                    if (currFan >= fanout) {
                         currDepth++;
                         break;
                     }
