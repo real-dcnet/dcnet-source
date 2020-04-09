@@ -703,10 +703,16 @@ public class DClab {
                         List<TopologyVertex> newComp = new ArrayList<>();
                         List<DefaultEdge> newEdges = new ArrayList<>();
                         if (newPoints == targetFan) {
+                            log.info(minPath.toString());
+                            log.info(components.toString());
+                            log.info(compEdges.toString());
                             createFinalComponent(minI, minJ, partitions, minPath, components, compEdges, finalComp, finalEdges);
                             trimEdges(graph, finalComp.get(finalComp.size() - 1), finalEdges.get(finalEdges.size() - 1), fanout, false);
                             currFan++;
                         } else if (newPoints > targetFan) {
+                            log.info(minPath.toString());
+                            log.info(components.toString());
+                            log.info(compEdges.toString());
                             createFinalComponent(minI, minJ, partitions, minPath, components, compEdges, finalComp, finalEdges);
                             trimEdges(graph, finalComp.get(finalComp.size() - 1), finalEdges.get(finalEdges.size() - 1), newPoints - fanout, true);
                             trimEdges(graph, finalComp.get(finalComp.size() - 1), finalEdges.get(finalEdges.size() - 1), fanout, false);
@@ -770,8 +776,6 @@ public class DClab {
                     for (int i = 0; i < components.size(); i++) {
                         pointList.add(targetFan);
                     }
-                    log.info(finalComp.toString());
-                    log.info(finalEdges.toString());
                     log.info(components.toString());
                     log.info(compEdges.toString());
                 }
