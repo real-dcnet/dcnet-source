@@ -642,7 +642,7 @@ public class DClab {
         int currDepth = 0;
         for (int counter = 0; counter < count; counter++) {
             while (currDepth < depth) {
-                int targetFan = (int) Math.round(Math.pow(fanout, depth - currDepth));
+                int targetFan = (int) Math.round(Math.pow(fanout, currDepth + 1));
                 log.info("" + targetFan);
                 while (true) {
                     List<List<Integer>> compDist = new ArrayList<>();
@@ -707,15 +707,15 @@ public class DClab {
                             log.info(components.toString());
                             log.info(compEdges.toString());
                             createFinalComponent(minI, minJ, partitions, minPath, components, compEdges, finalComp, finalEdges);
-                            trimEdges(graph, finalComp.get(finalComp.size() - 1), finalEdges.get(finalEdges.size() - 1), fanout, false);
+                            trimEdges(graph, finalComp.get(finalComp.size() - 1), finalEdges.get(finalEdges.size() - 1), targetFan, false);
                             currFan++;
                         } else if (newPoints > targetFan) {
                             log.info(minPath.toString());
                             log.info(components.toString());
                             log.info(compEdges.toString());
                             createFinalComponent(minI, minJ, partitions, minPath, components, compEdges, finalComp, finalEdges);
-                            trimEdges(graph, finalComp.get(finalComp.size() - 1), finalEdges.get(finalEdges.size() - 1), newPoints - fanout, true);
-                            trimEdges(graph, finalComp.get(finalComp.size() - 1), finalEdges.get(finalEdges.size() - 1), fanout, false);
+                            trimEdges(graph, finalComp.get(finalComp.size() - 1), finalEdges.get(finalEdges.size() - 1), newPoints - targetFan, true);
+                            trimEdges(graph, finalComp.get(finalComp.size() - 1), finalEdges.get(finalEdges.size() - 1), targetFan, false);
                             currFan++;
                         } else {
                             mergeComponents(minI, minJ, minPath, matched, components, compEdges, newComp, newEdges);
