@@ -684,17 +684,12 @@ public class DClab {
                                 }
                                 if (!used) {
                                     minDist = compQueue.get(i).peek().getKey();
-                                    if (minDist > 1) {
-                                        minPath = path;
-                                        minI = i;
-                                        minJ = compQueue.get(i).peek().getValue();
-                                        changed = true;
-                                        pos = i;
-                                        break;
-                                    }
-                                    else {
-                                        compQueue.get(i).remove();
-                                    }
+                                    minPath = path;
+                                    minI = i;
+                                    minJ = compQueue.get(i).peek().getValue();
+                                    changed = true;
+                                    pos = i;
+                                    break;
                                 }
                             }
                         }
