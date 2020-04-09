@@ -684,6 +684,7 @@ public class DClab {
                                 }
                                 if (!used) {
                                     minDist = compQueue.get(i).peek().getKey();
+                                    // TODO: Make sure distance large enough
                                     minPath = path;
                                     minI = i;
                                     minJ = compQueue.get(i).peek().getValue();
@@ -787,7 +788,7 @@ public class DClab {
             }
         }
         List<Graph<TopologyVertex, DefaultEdge>> topos = new ArrayList<>();
-        for (int i = 0; i < finalComp.size(); i++) {
+        for (int i = 0; i < treeComp.size(); i++) {
             topos.add(new SimpleGraph<>(DefaultEdge.class));
             for (TopologyVertex v : treeComp.get(i)) {
                 topos.get(i).addVertex(v);
