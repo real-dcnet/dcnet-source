@@ -713,20 +713,14 @@ public class DClab {
                         int newPoints = pointList.get(minI) + pointList.get(minJ);
                         List<TopologyVertex> newComp = new ArrayList<>();
                         List<DefaultEdge> newEdges = new ArrayList<>();
-                        if (newPoints == targetFan) {
+                        if (newPoints >= targetFan) {
                             log.info("equal path: " + minPath.toString());
                             log.info("equal comps: " + components.toString());
                             log.info("equal edges: " + compEdges.toString());
                             createFinalComponent(minI, minJ, partitions, minPath, components, compEdges, finalComp, finalEdges);
-                            trimEdges(graph, finalComp.get(finalComp.size() - 1), finalEdges.get(finalEdges.size() - 1), targetFan, false);
-                            currFan++;
-                        } else if (newPoints > targetFan) {
-                            log.info("greater path: " + minPath.toString());
-                            log.info("greater comps: " + components.toString());
-                            log.info("greater edges: " + compEdges.toString());
-                            createFinalComponent(minI, minJ, partitions, minPath, components, compEdges, finalComp, finalEdges);
-                            trimEdges(graph, finalComp.get(finalComp.size() - 1), finalEdges.get(finalEdges.size() - 1), newPoints - targetFan, true);
-                            trimEdges(graph, finalComp.get(finalComp.size() - 1), finalEdges.get(finalEdges.size() - 1), targetFan, false);
+                            if (currDepth == depth - 1) {
+                                trimEdges(graph, finalComp.get(finalComp.size() - 1), finalEdges.get(finalEdges.size() - 1), targetFan, false);
+                            }
                             currFan++;
                         } else {
                             mergeComponents(minI, minJ, minPath, matched, components, compEdges, newComp, newEdges);
