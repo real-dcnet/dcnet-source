@@ -62,7 +62,7 @@ class DClabShell(Cmd):
         self.config = json.load(file)
 
     def do_run(self, inp):
-        '''Run DClab using configuration location'''
+        '''Run DClab using currently saved configuration file'''
         os.system("/opt/onos/bin/onos-app 127.0.0.1 uninstall org.onosproject.dclab")
         os.system("/opt/onos/bin/onos-app 127.0.0.1 reinstall! ~/dcnet-source/dclab/target/onos-app-dclab-2.1.0.oar ")
 
