@@ -198,6 +198,9 @@ public class DClab {
     }
 
     private void trimEdges(Graph<TopologyVertex, DefaultEdge> graph, List<TopologyVertex> nodes, List<DefaultEdge> edges, int trims, boolean cut) {
+        if (!cut && trims < 3) {
+            return;
+        }
         Map<TopologyVertex, List<TopologyVertex>> outgoingEdges = new HashMap<>();
         for (TopologyVertex v : nodes) {
             outgoingEdges.put(v, new ArrayList<>());
