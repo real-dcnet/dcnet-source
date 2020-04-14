@@ -770,13 +770,15 @@ public class DClab {
                 if (currDepth < depth) {
                     pointList = new ArrayList<>();
                     partitions = copyGraph(originalParts);
+                    log.info("looping " + finalComp.toString());
+                    log.info("looping " + finalEdges.toString());
                     components = finalComp;
                     compEdges = finalEdges;
                     for (int i = 0; i < components.size(); i++) {
                         pointList.add(targetFan);
                     }
-                    log.info(components.toString());
-                    log.info(compEdges.toString());
+                    log.info("looping " + components.toString());
+                    log.info("looping " + compEdges.toString());
                 }
             }
             if (!changed) {
