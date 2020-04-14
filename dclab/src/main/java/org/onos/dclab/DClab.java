@@ -679,7 +679,6 @@ public class DClab {
                         List<Integer> tempPoints = new ArrayList<>();
                         int minI = 0;
                         int minJ = 0;
-                        int pos = 0;
                         for (int i = 0; i < compQueue.size(); i++) {
                             while (compQueue.get(i).peek() != null && compQueue.get(i).peek().getKey() < minDist) {
                                 TopologyVertex v = closestVert.get(i).get(compQueue.get(i).peek().getValue()).get(0);
@@ -694,13 +693,13 @@ public class DClab {
                                     }
                                 }
                                 if (!used) {
+                                    log.info("loop min dist");
                                     minDist = compQueue.get(i).peek().getKey();
                                     // TODO: Make sure distance large enough
                                     minPath = path;
                                     minI = i;
                                     minJ = compQueue.get(i).peek().getValue();
                                     changed = true;
-                                    pos = i;
                                     break;
                                 }
                             }
@@ -708,7 +707,7 @@ public class DClab {
                         if (minPath == null) {
                             break;
                         }
-                        compQueue.get(pos).remove();
+                        compQueue.get(minI).remove();
                         boolean exit = true;
                         int newPoints = pointList.get(minI) + pointList.get(minJ);
                         List<TopologyVertex> newComp = new ArrayList<>();
