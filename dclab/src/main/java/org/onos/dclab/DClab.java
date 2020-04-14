@@ -697,6 +697,10 @@ public class DClab {
                                     log.info("loop min dist");
                                     minDist = compQueue.get(i).peek().getKey();
                                     // TODO: Make sure distance large enough
+                                    if (minDist <= 2) {
+                                        compQueue.get(i).remove();
+                                        continue;
+                                    }
                                     minPath = path;
                                     minI = i;
                                     minJ = compQueue.get(i).peek().getValue();
