@@ -382,8 +382,8 @@ public class DClab {
         }
     }
 
-    private Graph<TopologyVertex, DefaultEdge> initializePartitions(Graph<TopologyVertex, DefaultEdge> graph, List<List<TopologyVertex>> components,
-                                                                    List<List<DefaultEdge>> compEdges, List<Integer> pointList) {
+    private void initializeComponents(Graph<TopologyVertex, DefaultEdge> graph, List<List<TopologyVertex>> components,
+                                          List<List<DefaultEdge>> compEdges, List<Integer> pointList) {
         for (TopologyVertex v : graph.vertexSet()) {
             if (graph.degreeOf(v) == 1) {
                 List<TopologyVertex> component = new ArrayList<>();
@@ -393,6 +393,9 @@ public class DClab {
                 pointList.add(1);
             }
         }
+    }
+
+    private Graph<TopologyVertex, DefaultEdge> copyGraph(Graph<TopologyVertex, DefaultEdge> graph) {
         Graph<TopologyVertex, DefaultEdge> partitions = new SimpleGraph<>(DefaultEdge.class);
         for (TopologyVertex v : graph.vertexSet()) {
             partitions.addVertex(v);
@@ -506,7 +509,8 @@ public class DClab {
         List<List<TopologyVertex>> finalComp = new ArrayList<>();
         List<List<DefaultEdge>> finalEdges = new ArrayList<>();
         List<Integer> pointList = new ArrayList<>();
-        Graph<TopologyVertex, DefaultEdge> partitions = initializePartitions(graph, components, compEdges, pointList);
+        initializeComponents(graph, components, compEdges, pointList);
+        Graph<TopologyVertex, DefaultEdge> partitions = copyGraph(graph);
         int counter = 0;
         while (true) {
             List<List<Integer>> compDist = new ArrayList<>();
@@ -635,8 +639,9 @@ public class DClab {
         List<List<TopologyVertex>> treeComp = new ArrayList<>();
         List<List<DefaultEdge>> treeEdges = new ArrayList<>();
         List<Integer> pointList = new ArrayList<>();
-        Graph<TopologyVertex, DefaultEdge> partitions = initializePartitions(graph, components, compEdges, pointList);
-        Graph<TopologyVertex, DefaultEdge> originalParts = initializePartitions(graph, components, compEdges, pointList);
+        initializeComponents(graph, components, compEdges, pointList);
+        Graph<TopologyVertex, DefaultEdge> partitions = copyGraph(graph);
+        Graph<TopologyVertex, DefaultEdge> originalParts = copyGraph(graph);
         boolean changed = false;
         int currFan = 0;
         int currDepth = 0;
@@ -764,13 +769,7 @@ public class DClab {
                 }
                 if (currDepth < depth) {
                     pointList = new ArrayList<>();
-                    partitions = new SimpleGraph<>(DefaultEdge.class);
-                    for (TopologyVertex v : originalParts.vertexSet()) {
-                        partitions.addVertex(v);
-                    }
-                    for (DefaultEdge e : originalParts.edgeSet()) {
-                        partitions.addEdge(graph.getEdgeSource(e), graph.getEdgeTarget(e));
-                    }
+                    partitions = copyGraph(originalParts);
                     components = finalComp;
                     compEdges = finalEdges;
                     for (int i = 0; i < components.size(); i++) {
@@ -785,13 +784,7 @@ public class DClab {
             }
             treeComp.add(finalComp.get(0));
             treeEdges.add(finalEdges.get(0));
-            originalParts = new SimpleGraph<>(DefaultEdge.class);
-            for (TopologyVertex v : partitions.vertexSet()) {
-                originalParts.addVertex(v);
-            }
-            for (DefaultEdge e : partitions.edgeSet()) {
-                originalParts.addEdge(graph.getEdgeSource(e), graph.getEdgeTarget(e));
-            }
+            originalParts = copyGraph(partitions);
         }
         List<Graph<TopologyVertex, DefaultEdge>> topos = new ArrayList<>();
         for (int i = 0; i < treeComp.size(); i++) {
