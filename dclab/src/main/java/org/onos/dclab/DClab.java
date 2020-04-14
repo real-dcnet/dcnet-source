@@ -651,6 +651,7 @@ public class DClab {
         for (int counter = 0; counter < count; counter++) {
             while (currDepth < depth) {
                 int targetFan = (int) Math.round(Math.pow(fanout, currDepth + 1));
+                currFan = 0;
                 finalComp = new ArrayList<>();
                 finalEdges = new ArrayList<>();
                 log.info("" + targetFan);
@@ -747,7 +748,13 @@ public class DClab {
                             break;
                         }
                     }
-                    if (currFan >= fanout) {
+                    /*if (currFan >= fanout && currDepth == depth - 1) {
+                        // TODO: Make trees
+                        currDepth++;
+                        break;
+                    }*/
+                    if (currFan >= fanout && !changed) {
+                        changed = true;
                         currDepth++;
                         break;
                     }
