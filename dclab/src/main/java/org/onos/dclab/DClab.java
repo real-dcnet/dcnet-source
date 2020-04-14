@@ -651,6 +651,7 @@ public class DClab {
         for (int counter = 0; counter < count; counter++) {
             while (currDepth < depth) {
                 int targetFan = (int) Math.round(Math.pow(fanout, currDepth + 1));
+                changed = false;
                 currFan = 0;
                 finalComp = new ArrayList<>();
                 finalEdges = new ArrayList<>();
