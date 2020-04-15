@@ -449,7 +449,6 @@ public class DClab {
         for (Object x : minPath.getVertexList()) {
             Set<DefaultEdge> edges = new HashSet<>(partitions.edgesOf((TopologyVertex) x));
             partitions.removeAllEdges(edges);
-            partitions.removeVertex((TopologyVertex) x);
             finalComp.get(finalComp.size() - 1).add((TopologyVertex) x);
         }
         for (Object e : minPath.getEdgeList()) {
@@ -461,7 +460,6 @@ public class DClab {
             }
             Set<DefaultEdge> edges = new HashSet<>(partitions.edgesOf(x));
             partitions.removeAllEdges(edges);
-            partitions.removeVertex(x);
             finalComp.get(finalComp.size() - 1).add(x);
         }
         for (DefaultEdge e : compEdges.get(minI)) {
@@ -476,7 +474,6 @@ public class DClab {
             }
             Set<DefaultEdge> edges = new HashSet<>(partitions.edgesOf(x));
             partitions.removeAllEdges(edges);
-            partitions.removeVertex(x);
             finalComp.get(finalComp.size() - 1).add(x);
         }
         for (DefaultEdge e : compEdges.get(minJ)) {
