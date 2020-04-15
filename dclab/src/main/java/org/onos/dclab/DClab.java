@@ -336,7 +336,7 @@ public class DClab {
 
     private void calculateComponentDistances(Graph<TopologyVertex, DefaultEdge> partitions,
                                              List<List<TopologyVertex>> components, List<List<Integer>> compDist,
-                                             List<List<List<TopologyVertex>>> closestVert) {
+                                             List<List<List<TopologyVertex>>> closestVert, int minDist) {
         for (int i = 0; i < components.size(); i++) {
             compDist.add(new ArrayList<>());
             closestVert.add(new ArrayList<>());
@@ -346,9 +346,40 @@ public class DClab {
             }
         }
 
+        /* Prevent components with less than minDist nodes between them from being added to queue */
+        List<List<Integer>> blacklist = new ArrayList<>();
+        if (minDist > 0) {
+            for (int i = 0; i < components.size() - 1; i++) {
+                blacklist.add(new ArrayList<>());
+                for (int j = i + 1; j < components.size(); j++) {
+                    boolean flag = false;
+                    for (TopologyVertex v : components.get(i)) {
+                        for (TopologyVertex u : components.get(j)) {
+                            GraphPath path = DijkstraShortestPath.findPathBetween(partitions, v, u);
+                            if (path == null) {
+                                continue;
+                            }
+                            int dist = path.getLength();
+                            if (dist < minDist) {
+                                blacklist.get(i).add(j);
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if (flag) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         /* Find shortest distance between all pairs of components */
         for (int i = 0; i < components.size() - 1; i++) {
             for (int j = i + 1; j < components.size(); j++) {
+                if (blacklist.get(i).contains(j)) {
+                    continue;
+                }
                 for (TopologyVertex v : components.get(i)) {
                     for (TopologyVertex u : components.get(j)) {
                         GraphPath path = DijkstraShortestPath.findPathBetween(partitions, v, u);
@@ -356,6 +387,7 @@ public class DClab {
                             continue;
                         }
                         int dist = path.getLength();
+
                         if (dist < compDist.get(i).get(j)) {
                             compDist.get(i).set(j, dist);
                             if (closestVert.get(i).get(j).size() > 0) {
@@ -518,7 +550,7 @@ public class DClab {
         while (true) {
             List<List<Integer>> compDist = new ArrayList<>();
             List<List<List<TopologyVertex>>> closestVert = new ArrayList<>();
-            calculateComponentDistances(partitions, components, compDist, closestVert);
+            calculateComponentDistances(partitions, components, compDist, closestVert, 0);
 
             /* Put distances into a minheap */
             List<PriorityQueue<QueueEntry>> compQueue = new ArrayList<>();
@@ -658,7 +690,7 @@ public class DClab {
                 while (true) {
                     List<List<Integer>> compDist = new ArrayList<>();
                     List<List<List<TopologyVertex>>> closestVert = new ArrayList<>();
-                    calculateComponentDistances(partitions, components, compDist, closestVert);
+                    calculateComponentDistances(partitions, components, compDist, closestVert,3);
 
                     /* Put distances into a minheap */
                     List<PriorityQueue<QueueEntry>> compQueue = new ArrayList<>();
@@ -696,11 +728,6 @@ public class DClab {
                                 if (!used) {
                                     log.info("loop min dist");
                                     minDist = compQueue.get(i).peek().getKey();
-                                    // TODO: Make sure distance large enough
-                                    if (minDist <= 2) {
-                                        compQueue.get(i).remove();
-                                        continue;
-                                    }
                                     minPath = path;
                                     minI = i;
                                     minJ = compQueue.get(i).peek().getValue();
