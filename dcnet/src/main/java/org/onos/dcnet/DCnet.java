@@ -213,7 +213,7 @@ public class DCnet {
     /** Location where configuration information can be found.
      * Change this as necessary if configuration JSONs are stored elsewhere */
     private static String configLoc =
-            System.getProperty("user.home") + "/dcnet-source/config/testbed/";
+            System.getProperty("user.home") + "/dcnet-source/config/mininet/";
 
     private static boolean ecmpEnabled = true;
 
