@@ -709,6 +709,7 @@ public class DClab {
                         List<Integer> tempPoints = new ArrayList<>();
                         int minI = 0;
                         int minJ = 0;
+                        // TODO: Use nodes in min path
                         for (int i = 0; i < compQueue.size(); i++) {
                             while (compQueue.get(i).peek() != null && compQueue.get(i).peek().getKey() < minDist) {
                                 TopologyVertex v = closestVert.get(i).get(compQueue.get(i).peek().getValue()).get(0);
