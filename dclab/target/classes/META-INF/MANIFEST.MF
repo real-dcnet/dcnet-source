@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1585597624030
+Bnd-LastModified: 1586912773544
 Build-Jdk: 11.0.6
 Built-By: reed226
 Bundle-Description: DClab Application
@@ -9,10 +9,9 @@ Bundle-Name: onos-app-dclab
 Bundle-SymbolicName: org.onosproject.onos-app-dclab
 Bundle-Version: 2.1.0
 Created-By: Apache Maven Bundle Plugin
-Export-Package: org.onos.dclab;uses:="com.eclipsesource.json,org.jgrapht
- ,org.jgrapht.graph,org.onosproject.core,org.onosproject.net,org.onospro
- ject.net.device,org.onosproject.net.link,org.onosproject.net.topology";
- version="2.1.0"
+Export-Package: org.onos.dclab;uses:="org.onosproject.core,org.onosproje
+ ct.net.device,org.onosproject.net.link,org.onosproject.net.topology";ve
+ rsion="2.1.0"
 Import-Package: 
  com.eclipsesource.json;version="[0.9,1)",
  org.jgrapht;version="[1.4,2)",

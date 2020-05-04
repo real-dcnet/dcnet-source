@@ -204,7 +204,7 @@ class FoldedClos(Topo):
 				"lf_radix_up" : spine[i],
 				"lf_radix_down" : fanout[i]
 			})
-		config = open("../config/mininet/top_config.json", "w+")
+		config = open("../../config/mininet/top_config.json", "w+")
 		config.write(json.dumps(top_config, indent = 4))
 		# Configuration file for switches that can be used by SDN controller
 		#switch_config = open("config/mininet/switch_config.csv", "w+")
@@ -370,9 +370,9 @@ class FoldedClos(Topo):
 			self.addLink(dc_switches[d1], host_name,
 						cls = TCLink, bw = 10, delay = "1ms")
 
-		config = open("../config/mininet/switch_config.json", "w+")
+		config = open("../../config/mininet/switch_config.json", "w+")
 		config.write(json.dumps(switch_config, indent = 4))
-		config = open("../config/mininet/host_config.json", "w+")
+		config = open("../../config/mininet/host_config.json", "w+")
 		config.write(json.dumps(host_config, indent = 4))
 
 if __name__ == "__main__":
