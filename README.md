@@ -6,7 +6,7 @@ sudo apt install mininet
 sudo apt install default-jdk
 sudo apt install maven
 wget http://repo1.maven.org/maven2/org/onosproject/onos-releases/2.1.0/onos-2.1.0.tar.gz
-tar xvf onos-2.1.0.tar.gz
+tar -xvf onos-2.1.0.tar.gz
 ```
 
 ## Generating Mininet Topology
@@ -65,7 +65,7 @@ To start the DCnet application for ONOS, change directory to dcnet-source/dcnet,
 mvn clean install -Dcheckstyle.skip
 ```
 
-In the target directory this generates an oar file named onos-app-dcnet-2.1.0.oar that can be used by ONOS. Change directory back to onos-2.1.0/bin, and use the command:
+In the target directory this generates an OAR file named onos-app-dcnet-2.1.0.oar that can be used by ONOS. Change directory back to onos-2.1.0/bin, and use the command:
 ```
 ./onos-app 127.0.0.1 reinstall! <Path to oar>
 ```
