@@ -223,7 +223,7 @@ class FoldedClos(Topo):
 			ip_addr = "10.0.1" + format(switch_count >> 8, "02d") + "."
 			ip_addr += format(switch_count & 0xFF, "d") + "/12"
 			self.addSwitch(dc_name, ip = ip_addr)
-			switch_count += 1;
+			switch_count += 1
 			dc_switches.append(dc_name)
 			switch_config["dcs"].append({
 				"id" : format(dc_count, "x"),
@@ -244,7 +244,7 @@ class FoldedClos(Topo):
 				ip_addr = "10.0.1" + format(switch_count >> 8, "02d") + "."
 				ip_addr += format(switch_count & 0xFF, "d") + "/12"
 				self.addSwitch(ss_name, ip = ip_addr)
-				switch_count += 1;
+				switch_count += 1
 				ss_switches[d].append(ss_name)
 				switch_config["supers"].append({
 					"id" : format(ss_count, "x"),
@@ -286,7 +286,7 @@ class FoldedClos(Topo):
 					ip_addr = "10.0.1" + format(switch_count >> 8, "02d") + "."
 					ip_addr += format(switch_count & 0xFF, "d") + "/12"
 					self.addSwitch(spine_name, ip = ip_addr)
-					switch_count += 1;
+					switch_count += 1
 					switch_config["spines"].append({
 						"id" : format(spine_count, "x"),
 						"name" : spine_name,

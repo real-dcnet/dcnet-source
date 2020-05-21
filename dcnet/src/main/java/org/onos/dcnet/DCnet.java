@@ -848,7 +848,7 @@ public class DCnet {
     }
 
     /**
-     * Initializes flow rules for a switch basedon level in topology.
+     * Initializes flow rules for a switch based on level in topology.
      * @param device    Switch that flows are being installed for
      */
     private synchronized void setupFlows(final Device device) {
