@@ -11,6 +11,7 @@ import traceback
 import random
 import time
 import json
+import os
 
 # Function to parse the command line arguments
 def parseOptions():
@@ -393,15 +394,18 @@ if __name__ == "__main__":
 			host.cmd(command)
 
 		# Run ping and TCP tests
-		if test != "":
+		if test:
+			tests_path = os.path.join(os.getcwd(), "test")
+			if not os.path.exists(tests_path):
+				os.mkdirs(tests_path)
 			time.sleep(10)
 			print("*** Running performance tests (no load)")
-			runPingTests(net, leaf, pod, fanout, dc, False, test)
+			runPingTests(net, leaf, pod, fanout, dc, False, "test")
 			#runTCPTests(net, leaf, pod, fanout, dc, False)
 		
 			print("*** Running performance tests (with load)")
 			#runPingTests(net, leaf, pod, fanout, dc, True)
-			runTCPTests(net, leaf, pod, fanout, dc, True, test)
+			runTCPTests(net, leaf, pod, fanout, dc, True, "test")
 
 		CLI(net)
 	finally:
