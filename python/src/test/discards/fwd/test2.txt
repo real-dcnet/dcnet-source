@@ -1,0 +1,64 @@
+
+--- Ping Test 1 Results ---
+PING 10.0.0.2 (10.0.0.2) 56(84) bytes of data.
+64 bytes from 10.0.0.2: icmp_seq=1 ttl=64 time=24.0 ms
+64 bytes from 10.0.0.2: icmp_seq=2 ttl=64 time=4.35 ms
+64 bytes from 10.0.0.2: icmp_seq=3 ttl=64 time=4.13 ms
+64 bytes from 10.0.0.2: icmp_seq=4 ttl=64 time=4.23 ms
+64 bytes from 10.0.0.2: icmp_seq=5 ttl=64 time=4.25 ms
+
+--- 10.0.0.2 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4004ms
+rtt min/avg/max/mdev = 4.136/8.203/24.029/7.913 ms
+--
+
+--- Ping Test 3 Results ---
+PING 10.0.0.4 (10.0.0.4) 56(84) bytes of data.
+64 bytes from 10.0.0.4: icmp_seq=1 ttl=64 time=61.1 ms
+64 bytes from 10.0.0.4: icmp_seq=2 ttl=64 time=9.43 ms
+64 bytes from 10.0.0.4: icmp_seq=3 ttl=64 time=8.11 ms
+64 bytes from 10.0.0.4: icmp_seq=4 ttl=64 time=8.29 ms
+64 bytes from 10.0.0.4: icmp_seq=5 ttl=64 time=8.35 ms
+
+--- 10.0.0.4 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4004ms
+rtt min/avg/max/mdev = 8.114/19.063/61.123/21.035 ms
+--
+
+--- Ping Test 5 Results ---
+PING 10.0.0.7 (10.0.0.7) 56(84) bytes of data.
+64 bytes from 10.0.0.7: icmp_seq=1 ttl=64 time=80.6 ms
+64 bytes from 10.0.0.7: icmp_seq=2 ttl=64 time=13.6 ms
+64 bytes from 10.0.0.7: icmp_seq=3 ttl=64 time=12.7 ms
+64 bytes from 10.0.0.7: icmp_seq=4 ttl=64 time=12.7 ms
+64 bytes from 10.0.0.7: icmp_seq=5 ttl=64 time=12.6 ms
+
+--- 10.0.0.7 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4005ms
+rtt min/avg/max/mdev = 12.657/26.468/80.620/27.078 ms
+--
+
+--- Ping Test 7 Results ---
+PING 10.0.0.19 (10.0.0.19) 56(84) bytes of data.
+64 bytes from 10.0.0.19: icmp_seq=1 ttl=64 time=117 ms
+64 bytes from 10.0.0.19: icmp_seq=2 ttl=64 time=20.3 ms
+64 bytes from 10.0.0.19: icmp_seq=3 ttl=64 time=19.3 ms
+64 bytes from 10.0.0.19: icmp_seq=4 ttl=64 time=19.3 ms
+64 bytes from 10.0.0.19: icmp_seq=5 ttl=64 time=19.3 ms
+
+--- 10.0.0.19 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4003ms
+rtt min/avg/max/mdev = 19.334/39.249/117.823/39.289 ms
+--
+
+--- Ping Test 9 Results ---
+PING 10.0.0.37 (10.0.0.37) 56(84) bytes of data.
+64 bytes from 10.0.0.37: icmp_seq=1 ttl=64 time=137 ms
+64 bytes from 10.0.0.37: icmp_seq=2 ttl=64 time=20.2 ms
+64 bytes from 10.0.0.37: icmp_seq=3 ttl=64 time=19.0 ms
+64 bytes from 10.0.0.37: icmp_seq=4 ttl=64 time=18.2 ms
+64 bytes from 10.0.0.37: icmp_seq=5 ttl=64 time=18.4 ms
+
+--- 10.0.0.37 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4005ms
+rtt min/avg/max/mdev = 18.244/42.708/137.522/47.412 ms

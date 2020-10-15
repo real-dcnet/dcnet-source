@@ -1,0 +1,302 @@
+
+--- Ping Test 1 Results ---
+PING 10.0.0.2 (10.0.0.2) 56(84) bytes of data.
+64 bytes from 10.0.0.2: icmp_seq=1 ttl=64 time=23.1 ms
+64 bytes from 10.0.0.2: icmp_seq=2 ttl=64 time=4.18 ms
+64 bytes from 10.0.0.2: icmp_seq=3 ttl=64 time=4.06 ms
+64 bytes from 10.0.0.2: icmp_seq=4 ttl=64 time=4.06 ms
+64 bytes from 10.0.0.2: icmp_seq=5 ttl=64 time=6.74 ms
+
+--- 10.0.0.2 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4004ms
+rtt min/avg/max/mdev = 4.061/8.442/23.151/7.425 ms
+
+--- Ping Test 2 Results ---
+PING 10.0.0.2 (10.0.0.2) 56(84) bytes of data.
+64 bytes from 10.0.0.2: icmp_seq=1 ttl=64 time=4.08 ms
+64 bytes from 10.0.0.2: icmp_seq=2 ttl=64 time=4.09 ms
+64 bytes from 10.0.0.2: icmp_seq=3 ttl=64 time=4.22 ms
+64 bytes from 10.0.0.2: icmp_seq=4 ttl=64 time=4.09 ms
+64 bytes from 10.0.0.2: icmp_seq=5 ttl=64 time=4.25 ms
+64 bytes from 10.0.0.2: icmp_seq=6 ttl=64 time=4.27 ms
+64 bytes from 10.0.0.2: icmp_seq=7 ttl=64 time=4.08 ms
+64 bytes from 10.0.0.2: icmp_seq=8 ttl=64 time=4.08 ms
+64 bytes from 10.0.0.2: icmp_seq=9 ttl=64 time=4.09 ms
+64 bytes from 10.0.0.2: icmp_seq=10 ttl=64 time=4.08 ms
+64 bytes from 10.0.0.2: icmp_seq=11 ttl=64 time=4.10 ms
+64 bytes from 10.0.0.2: icmp_seq=12 ttl=64 time=4.16 ms
+64 bytes from 10.0.0.2: icmp_seq=13 ttl=64 time=4.09 ms
+64 bytes from 10.0.0.2: icmp_seq=14 ttl=64 time=4.11 ms
+64 bytes from 10.0.0.2: icmp_seq=15 ttl=64 time=4.08 ms
+64 bytes from 10.0.0.2: icmp_seq=16 ttl=64 time=4.10 ms
+64 bytes from 10.0.0.2: icmp_seq=17 ttl=64 time=5.10 ms
+64 bytes from 10.0.0.2: icmp_seq=18 ttl=64 time=13.9 ms
+64 bytes from 10.0.0.2: icmp_seq=19 ttl=64 time=4.06 ms
+64 bytes from 10.0.0.2: icmp_seq=20 ttl=64 time=4.07 ms
+64 bytes from 10.0.0.2: icmp_seq=21 ttl=64 time=4.07 ms
+64 bytes from 10.0.0.2: icmp_seq=22 ttl=64 time=4.06 ms
+64 bytes from 10.0.0.2: icmp_seq=23 ttl=64 time=4.08 ms
+64 bytes from 10.0.0.2: icmp_seq=24 ttl=64 time=4.04 ms
+
+--- 10.0.0.2 ping statistics ---
+50 packets transmitted, 24 received, 52% packet loss, time 49624ms
+rtt min/avg/max/mdev = 4.047/4.561/13.907/1.959 ms
+
+--- Ping Test 3 Results ---
+PING 10.0.0.4 (10.0.0.4) 56(84) bytes of data.
+From 10.0.0.1 icmp_seq=1 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=2 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=3 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=4 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=5 Destination Host Unreachable
+
+--- 10.0.0.4 ping statistics ---
+5 packets transmitted, 0 received, +5 errors, 100% packet loss, time 4090ms
+pipe 4
+
+--- Ping Test 4 Results ---
+PING 10.0.0.4 (10.0.0.4) 56(84) bytes of data.
+From 10.0.0.1 icmp_seq=1 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=2 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=3 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=5 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=6 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=7 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=8 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=9 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=10 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=11 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=12 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=13 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=14 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=15 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=16 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=17 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=18 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=19 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=20 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=21 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=22 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=23 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=24 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=25 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=26 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=27 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=30 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=31 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=32 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=33 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=34 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=35 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=36 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=37 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=38 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=39 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=40 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=41 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=42 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=43 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=44 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=45 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=46 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=48 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=49 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=50 Destination Host Unreachable
+
+--- 10.0.0.4 ping statistics ---
+50 packets transmitted, 0 received, +46 errors, 100% packet loss, time 50099ms
+pipe 4
+
+--- Ping Test 5 Results ---
+PING 10.0.0.7 (10.0.0.7) 56(84) bytes of data.
+From 10.0.0.1 icmp_seq=1 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=2 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=3 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=4 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=5 Destination Host Unreachable
+
+--- 10.0.0.7 ping statistics ---
+5 packets transmitted, 0 received, +5 errors, 100% packet loss, time 4086ms
+pipe 4
+
+--- Ping Test 6 Results ---
+PING 10.0.0.7 (10.0.0.7) 56(84) bytes of data.
+From 10.0.0.1 icmp_seq=1 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=2 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=3 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=4 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=5 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=6 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=7 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=8 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=9 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=10 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=11 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=12 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=13 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=14 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=15 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=16 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=17 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=18 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=20 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=21 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=23 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=26 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=27 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=28 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=29 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=30 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=31 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=32 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=33 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=34 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=35 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=36 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=37 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=38 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=39 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=40 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=41 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=42 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=43 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=44 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=45 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=46 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=47 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=48 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=49 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=50 Destination Host Unreachable
+
+--- 10.0.0.7 ping statistics ---
+50 packets transmitted, 0 received, +46 errors, 100% packet loss, time 50163ms
+pipe 4
+
+--- Ping Test 7 Results ---
+PING 10.0.0.19 (10.0.0.19) 56(84) bytes of data.
+From 10.0.0.1 icmp_seq=1 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=2 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=3 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=4 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=5 Destination Host Unreachable
+
+--- 10.0.0.19 ping statistics ---
+5 packets transmitted, 0 received, +5 errors, 100% packet loss, time 4086ms
+pipe 4
+
+--- Ping Test 8 Results ---
+PING 10.0.0.19 (10.0.0.19) 56(84) bytes of data.
+From 10.0.0.1 icmp_seq=1 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=2 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=3 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=4 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=5 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=6 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=7 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=8 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=9 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=10 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=11 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=12 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=13 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=14 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=15 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=17 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=18 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=20 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=21 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=22 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=23 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=24 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=25 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=26 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=27 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=28 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=29 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=30 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=31 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=32 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=33 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=35 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=36 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=37 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=38 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=39 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=40 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=41 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=42 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=43 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=44 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=45 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=47 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=48 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=49 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=50 Destination Host Unreachable
+
+--- 10.0.0.19 ping statistics ---
+50 packets transmitted, 0 received, +46 errors, 100% packet loss, time 50140ms
+pipe 4
+
+--- Ping Test 9 Results ---
+PING 10.0.0.37 (10.0.0.37) 56(84) bytes of data.
+From 10.0.0.1 icmp_seq=1 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=2 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=3 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=4 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=5 Destination Host Unreachable
+
+--- 10.0.0.37 ping statistics ---
+5 packets transmitted, 0 received, +5 errors, 100% packet loss, time 4077ms
+pipe 4
+
+--- Ping Test 10 Results ---
+PING 10.0.0.37 (10.0.0.37) 56(84) bytes of data.
+From 10.0.0.1 icmp_seq=1 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=2 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=3 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=4 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=5 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=6 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=7 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=8 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=9 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=11 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=12 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=13 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=14 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=15 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=16 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=17 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=18 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=19 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=20 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=21 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=22 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=23 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=24 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=25 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=26 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=27 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=29 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=30 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=32 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=33 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=34 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=35 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=36 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=37 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=38 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=39 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=40 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=41 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=42 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=43 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=44 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=45 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=46 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=47 Destination Host Unreachable
+From 10.0.0.1 icmp_seq=50 Destination Host Unreachable
+
+--- 10.0.0.37 ping statistics ---
+50 packets transmitted, 0 received, +45 errors, 100% packet loss, time 50163ms
+pipe 4

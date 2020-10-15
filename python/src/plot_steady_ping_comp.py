@@ -46,7 +46,7 @@ args = parser.parse_args()
 loc = args.file1
 data = []
 for i in range(1, 21):
-	data.append(parse_data(loc + "/run" + str(i) + "/ping_test.out", i))
+	data.append(parse_data(loc + "/run" + str(i) + "/ping_test_no_load.out", i))
 plots = []
 xsteady = []
 ysteady = []
@@ -64,7 +64,7 @@ plots.append(go.Scatter(x=xmin, y=ymin, mode = "markers", name = "DCnet Minimum 
 loc = args.file2
 data = []
 for i in range(1, 21):
-	data.append(parse_data(loc + "/run" + str(i) + "/ping_test.out", i))
+	data.append(parse_data(loc + "/run" + str(i) + "/ping_test_no_load.out", i))
 xsteady = []
 ysteady = []
 xmin = []

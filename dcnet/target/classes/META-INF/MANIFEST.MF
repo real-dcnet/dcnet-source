@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1587526835132
-Build-Jdk: 11.0.6
-Built-By: reed226
+Bnd-LastModified: 1602007468200
+Build-Jdk: 11.0.8
+Built-By: bnwachuk
 Bundle-Description: DCnet Application
 Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
 Bundle-ManifestVersion: 2

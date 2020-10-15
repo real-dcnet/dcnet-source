@@ -130,11 +130,11 @@ def runPingTests(net, leaf, pod, fanout, dc, with_load, out_dir):
 			createTraffic(shuffle, host)
 		time.sleep(2)
 		ping_out.write("\n--- Ping Test " + str(2 * i + 1) + " Results ---\n")
-		ping_out.write(host.cmd("ping -c 1 " + net.hosts[destinations[i]].IP()))
+		ping_out.write(host.cmd("ping -c 5 " + net.hosts[destinations[i]].IP()))
 		time.sleep(1)
 		print("Ping Test " + str(2 * i + 2))
 		ping_out.write("\n--- Ping Test " + str(2 * i + 2) + " Results ---\n")
-		ping_out.write(host.cmd("ping -c 20 " + net.hosts[destinations[i]].IP()))
+		ping_out.write(host.cmd("ping -c 50 " + net.hosts[destinations[i]].IP()))
 		time.sleep(4)
 
 def runTCPTests(net, leaf, pod, fanout, dc, with_load, out_dir):
@@ -397,17 +397,19 @@ if __name__ == "__main__":
 		if test:
 			tests_path = os.path.join(os.getcwd(), "test")
 			if not os.path.exists(tests_path):
-				os.mkdirs(tests_path)
+				os.makedirs(tests_path)
 			time.sleep(10)
 			print("*** Running performance tests (no load)")
 			runPingTests(net, leaf, pod, fanout, dc, False, "test")
-			#runTCPTests(net, leaf, pod, fanout, dc, False)
+			#runTCPTests(net, leaf, pod, fanout, dc, False, "test")
 		
-			print("*** Running performance tests (with load)")
-			#runPingTests(net, leaf, pod, fanout, dc, True)
-			runTCPTests(net, leaf, pod, fanout, dc, True, "test")
+			#print("*** Running performance tests (with load)")
+			#runPingTests(net, leaf, pod, fanout, dc, True, "test")
+			#runTCPTests(net, leaf, pod, fanout, dc, True, "test")
 
-		CLI(net)
+                if not test:
+                    CLI(net)
+
 	finally:
 		if net is not None:
 			net.stop()

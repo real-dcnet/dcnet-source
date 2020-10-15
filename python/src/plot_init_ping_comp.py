@@ -45,8 +45,8 @@ parser.add_argument("file2")
 args = parser.parse_args()
 loc = args.file1
 data = []
-for i in range(1, 21):
-	data.append(parse_data(loc + "/run" + str(i) + "/ping_test.out", i))
+for i in range(1, 9):
+	data.append(parse_data(loc + "/run" + str(i) + "/ping_test_no_load.out", i))
 plots = []
 xinit = []
 yinit = []
@@ -58,8 +58,8 @@ plots.append(go.Scatter(x=xinit, y=yinit, mode = "markers", name = "DCnet Initia
 
 loc = args.file2
 data = []
-for i in range(1, 21):
-	data.append(parse_data(loc + "/run" + str(i) + "/ping_test.out", i))
+for i in range(1, 9):
+	data.append(parse_data(loc + "/run" + str(i) + "/ping_test_no_load.out", i))
 xinit = []
 yinit = []
 for result in data:

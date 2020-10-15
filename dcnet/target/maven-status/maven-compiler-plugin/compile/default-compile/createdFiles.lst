@@ -4,5 +4,5 @@ org/onos/dcnet/DCnet$DCnetPacketProcessor.class
 org/onos/dcnet/DCnet.class
 org/onos/dcnet/DCnet$InternalDeviceListener.class
 org/onos/dcnet/DCnet$HostEntry.class
-org/onos/dcnet/DCnet$InternalHostListener.class
 org/onos/dcnet/DCnet$SwitchEntry.class
+org/onos/dcnet/DCnet$InternalHostListener.class
