@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#Performs automated ping tests on the mininet testbed
+#@param dir: the directory for the first 5 throwaway tests
+#@param realdir: The directory where the actual tests to be reported will be stored
+#@param outFile: An output log file to monitor what's going on while you are away from the monitor
+#@param maxtrials: The number of tests to perform for that new instance of onos
+
 SECONDS=0
 discards=1
 dir=$1
@@ -13,21 +19,28 @@ then
 fi
 touch $outFile
 
+if [[ -z $pid ]]
+then
+    echo -e "Error. onos service isn't currently running."
+    echo -e "Exiting."
+    exit 0
+fi
+
 while [[ $discards -le 5 ]]
 do
     echo "-------------------------------------Fake Test $discards-----------------------------------------------------------------"
     echo "-------------------------------------Fake Test $discards-----------------------------------------------------------------" >> $outFile
     cd ..
-    sudo ~/pypy2.7-v7.3.2-linux64/bin/pypy folded_clos.py --dc 3 --leaf 2 2 2 --spine 2 2 2 --pod 3 3 2 --ratio 2 2 1 --fanout 3 3 3 --test true
+    sudo python folded_clos.py --dc 3 --leaf 2 2 2 --spine 2 2 2 --pod 3 3 2 --ratio 2 2 1 --fanout 3 3 3 --test true
     cd test
     packetloss=$(grep -i "packet loss" ping_test_no_load.out | grep -ivwc "0% packet loss")
     DUPS=$(grep -ic "DUP!" ping_test_no_load.out)
     subdir="run${discards}"
-    if [[ $packetloss -le 7 ]]
+    if [[ $packetloss -le 7 ]] && [[ $DUPS -le 100 ]]
     then
         echo "Fake Trial $discards successful"
         if [[ ! -d $dir$subdir ]]
-        then
+        then 
             mkdir -p $dir$subdir
         fi
         mv -vf ping_test_no_load.out $dir$subdir
@@ -48,48 +61,39 @@ do
     else
         echo "Fake Trial $discards not successful."
         echo "Fake Trial $discards not successful." >> $outFile
-        ./cleanup_automation.sh 1 2 &
+        ./cleanup_automation.sh 1 1 &
         exit
     fi
 done
 
-priortrail=0
-trial=1
-dupsnum=0
-while [[ $trial -le $maxtrials ]]
+trials=1
+while [[ $trials -le $maxtrials ]]
 do
-    echo "---------------------------Real Test $trial--------------------------------------------------------------------" 
-    echo "---------------------------Real Test $trial--------------------------------------------------------------------" >> $outFile
+    echo "---------------------------Real Test $trials--------------------------------------------------------------------" 
+    echo "---------------------------Real Test $trials--------------------------------------------------------------------" >> $outFile
     cd ..
-    sudo ~/pypy2.7-v7.3.2-linux64/bin/pypy folded_clos.py --dc 3 --leaf 2 2 2 --spine 2 2 2 --pod 3 3 2 --ratio 2 2 1 --fanout 3 3 3 --test true
+    sudo python folded_clos.py --dc 3 --leaf 2 2 2 --spine 2 2 2 --pod 3 3 2 --ratio 2 2 1 --fanout 3 3 3 --test true
     cd test
     packetloss=$(grep -i "packet loss" ping_test_no_load.out | grep -ivwc "0% packet loss")
     DUPS=$(grep -ic "DUP!" ping_test_no_load.out)
-    realsubdir="run${trial}"
+    realsubdir="run${trials}"
     pingdir=$realdir$realsubdir
     if [[ $packetloss -eq 0 ]] && [[ $DUPS -eq 0 ]]
     then
-        echo "Trial $trial successful"
+        echo "Trial $trials successful"
         if [[ ! -d $pingdir ]]
         then 
             mkdir -p $pingdir
         fi
         mv -vf ping_test_no_load.out $pingdir
-        echo -e "----------------------End of Real Test $trial---------------------------------------------------------------\n"
-        echo -e "----------------------End of Real Test $trial---------------------------------------------------------------\n" >> $outFile
-        trial=$(( $trial+1 ))
+        echo -e "----------------------End of Real Test $trials---------------------------------------------------------------\n"
+        echo -e "----------------------End of Real Test $trials---------------------------------------------------------------\n" >> $outFile
+        trials=$(( $trials+1 ))
         sleep 2
     elif [[ $DUPS -ne 0 ]]
     then
         echo "Duplicate packets found in ${pingdir}"
-        if [[ $priortrail -ne $trial ]]
-        then
-            dupsnum=1
-            priortrail=$trial
-        else
-            dupsnum=$(( $dupsnum+1 ))
-        fi
-        dups="${realdir}dups/run${trial}_${dupsnum}"
+        dups="${realdir}dups/run${trials}"
         if [[ ! -d $dups ]]
         then
             mkdir -p $dups
@@ -102,7 +106,7 @@ do
             echo "Attempt $(( $acceptable+1 )): Retrying Trial $trial to correct for packet error"
             echo "Attempt $(( $acceptable+1 )): Retrying Trial $trial to correct for packet error" >> $outFile
             cd ..
-            sudo ~/pypy2.7-v7.3.2-linux64/bin/pypy folded_clos.py --dc 3 --leaf 2 2 2 --spine 2 2 2 --pod 3 3 2 --ratio 2 2 1 --fanout 3 3 3 --test true
+            sudo python folded_clos.py --dc 3 --leaf 2 2 2 --spine 2 2 2 --pod 3 3 2 --ratio 2 2 1 --fanout 3 3 3 --test true
             cd test
             packetloss=$(grep -i "packet loss" ping_test_no_load.out | grep -ivwc "0% packet loss")
             if [[ $packetloss -eq 0 ]]
@@ -114,7 +118,7 @@ do
                     mkdir -p $pingdir
                 fi
                 mv -vf ping_test_no_load.out $pingdir
-                trial=$(( $trial+1 ))
+                trials=$(( $trials+1 ))
                 echo -e "\n"
                 echo -e "\n" >> $outFile
                 sleep 2
@@ -126,7 +130,7 @@ do
             echo "Trial $trial unsuccessful: Huge Packet loss frequent."
             echo "Trial $trial unsuccessful: Huge Packet loss frequent." >> $outFile
             pid=$(ps aux | grep -i "onos" | grep -iv "grep" | awk '{ print $2 }' | head -n 1)
-            ./cleanup_automation.sh 1 2 &
+            ./cleanup_automation.sh 1 1 &
             exit
         fi
     fi
@@ -147,7 +151,7 @@ do
         echo "File: ${file_outliers[count]}."
         echo "File: ${file_outliers[count]}." >> $outFile
         cd ..
-        sudo ~/pypy2.7-v7.3.2-linux64/bin/pypy folded_clos.py --dc 3 --leaf 2 2 2 --spine 2 2 2 --pod 3 3 2 --ratio 2 2 1 --fanout 3 3 3 --test true
+        sudo python folded_clos.py --dc 3 --leaf 2 2 2 --spine 2 2 2 --pod 3 3 2 --ratio 2 2 1 --fanout 3 3 3 --test true
         cd test
         packetloss=$(grep -i "packet loss" ping_test_no_load.out | grep -ivwc "0% packet loss")
         DUPS=$(grep -ic "DUP!" ping_test_no_load.out)
@@ -172,7 +176,7 @@ do
                 echo "Attempt $(( $acceptable+1 )): Retrying Trial $(( $count+1 )) to correct for packet error"
                 echo "Attempt $(( $acceptable+1 )): Retrying Trial $(( $count+1 )) to correct for packet error" >> $outFile
                 cd ..
-                sudo ~/pypy2.7-v7.3.2-linux64/bin/pypy folded_clos.py --dc 3 --leaf 2 2 2 --spine 2 2 2 --pod 3 3 2 --ratio 2 2 1 --fanout 3 3 3 --test true
+                sudo python folded_clos.py --dc 3 --leaf 2 2 2 --spine 2 2 2 --pod 3 3 2 --ratio 2 2 1 --fanout 3 3 3 --test true
                 cd test
                 packetloss=$(grep -i "packet loss" ping_test_no_load.out | grep -ivwc "0% packet loss")
                 if [[ $packetloss -eq 0 ]]
@@ -192,7 +196,7 @@ do
                 echo "Trial $(( $count+1 )) unsuccessful: Huge Packet loss frequent."
                 echo "Trial $(( $count+1 )) unsuccessful: Huge Packet loss frequent." >> $outFile
                 pid=$(ps aux | grep -i "onos" | grep -iv "grep" | awk '{ print $2 }' | head -n 1)
-                ./cleanup_automation.sh 1 2 &
+                ./cleanup_automation.sh 1 1 &
                 exit
             fi
         fi

@@ -24,7 +24,7 @@ def parse_data(ping_loc, test_num):
 			entry = {"test_id": test_num, "min": float(stats[0]), "avg": float(stats[1]),
 						"max": float(stats[2]), "dev": float(stats[3])}
 			if count/2 < len(hops):
-				entry["hops"] = hops[count/2]
+				entry["hops"] = hops[count>>1]
 			else:
 				entry["hops"] = hops[len(hops)]
 			if count % 2 == 0:
@@ -41,11 +41,13 @@ def parse_data(ping_loc, test_num):
 parser = ArgumentParser("Parse data from ping output files")
 parser.add_argument("file1")
 parser.add_argument("file2")
+parser.add_argument("title")
 
 args = parser.parse_args()
 loc = args.file1
+Title = args.title
 data = []
-for i in range(1, 9):
+for i in range(1, 21):
 	data.append(parse_data(loc + "/run" + str(i) + "/ping_test_no_load.out", i))
 plots = []
 xinit = []
@@ -58,7 +60,7 @@ plots.append(go.Scatter(x=xinit, y=yinit, mode = "markers", name = "DCnet Initia
 
 loc = args.file2
 data = []
-for i in range(1, 9):
+for i in range(1, 21):
 	data.append(parse_data(loc + "/run" + str(i) + "/ping_test_no_load.out", i))
 xinit = []
 yinit = []
@@ -68,7 +70,7 @@ for result in data:
 		yinit.append(point["max"])
 plots.append(go.Scatter(x=xinit, y=yinit, mode = "markers", name = "Reactive Initial Ping"))
 
-layout = go.Layout(title = "Ping Delay vs. Number of Hops",
+layout = go.Layout(title = Title,
 					xaxis = {"title" : "Number of Hops", "ticklen" : 1},
 					yaxis = {"title" : "Delay in Milliseconds", "ticklen" : 0.1})
 

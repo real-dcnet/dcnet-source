@@ -16,13 +16,13 @@ def parse_data(tcp_loc, test_num):
 	data["tcp_receive"] = []
 	tcp = open(tcp_loc, "r")
 	for line in tcp.readlines():
-		fields = filter(None, line.strip().split(" "))
+		fields = list(filter(None, line.strip().split(" ")))
 		if len(fields) == 0:
 			continue
 		if fields[len(fields) - 1] == "sender":
 			entry = {"test_id": test_num, "transferred": float(fields[4]), "bandwidth": float(fields[6])}
 			if count/2 < len(hops):
-				entry["hops"] = hops[count/2]
+				entry["hops"] = hops[count>>1]
 			else:
 				entry["hops"] = hops[len(hops)]
 			data["tcp_send"].append(entry)
@@ -30,7 +30,7 @@ def parse_data(tcp_loc, test_num):
 		elif fields[len(fields) - 1] == "receiver":
 			entry = {"test_id": test_num, "transferred": float(fields[4]), "bandwidth": float(fields[6])}
 			if count/2 < len(hops):
-				entry["hops"] = hops[count/2]
+				entry["hops"] = hops[count>>1]
 			else:
 				entry["hops"] = hops[len(hops)]
 			data["tcp_receive"].append(entry)
@@ -42,9 +42,12 @@ def parse_data(tcp_loc, test_num):
 
 parser = ArgumentParser("Parse data from tcp output files")
 parser.add_argument("file")
+parser.add_argument("title")
+
 
 args = parser.parse_args()
 loc = args.file
+Title = args.title
 data = []
 for i in range(1, 21):
 	data.append(parse_data(loc + "/run" + str(i) + "/tcp_test_no_load.out", i))
@@ -62,7 +65,7 @@ for result in data:
 plots = []
 plots.append(go.Scatter(x=xsender, y=ysender, mode = "markers", name = "Sender Bandwidth"))
 plots.append(go.Scatter(x=xreceiver, y=yreceiver, mode = "markers", name = "Receiver Bandwidth"))
-layout = go.Layout(title = "TCP Bandwidth vs. Number of Hops",
+layout = go.Layout(title = Title,
 					xaxis = {"title" : "Number of Hops", "ticklen" : 1},
 					yaxis = {"title" : "Bandwidth in MBps", "ticklen" : 0.1})
 pio.write_html(go.Figure(data = plots, layout = layout),

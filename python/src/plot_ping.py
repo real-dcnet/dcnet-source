@@ -24,7 +24,7 @@ def parse_data(ping_loc, test_num):
 			entry = {"test_id": test_num, "min": float(stats[0]), "avg": float(stats[1]),
 						"max": float(stats[2]), "dev": float(stats[3])}
 			if count/2 < len(hops):
-				entry["hops"] = hops[count/2]
+				entry["hops"] = hops[count>>1]
 			else:
 				entry["hops"] = hops[len(hops)]
 			if count % 2 == 0:
@@ -40,9 +40,11 @@ def parse_data(ping_loc, test_num):
 
 parser = ArgumentParser("Parse data from ping output files")
 parser.add_argument("file")
+parser.add_argument("title")
 
 args = parser.parse_args()
 loc = args.file
+Title = args.title
 data = []
 for i in range(1, 21):
 	data.append(parse_data(loc + "/run" + str(i) + "/ping_test_no_load.out", i))
@@ -65,7 +67,7 @@ plots = []
 plots.append(go.Scatter(x=xinit, y=yinit, mode = "markers", name = "Initial Ping"))
 plots.append(go.Scatter(x=xsteady, y=ysteady, mode = "markers", name = "Average Ping"))
 plots.append(go.Scatter(x=xmin, y=ymin, mode = "markers", name = "Minimum Ping"))
-layout = go.Layout(title = "Ping Delay vs. Number of Hops",
+layout = go.Layout(title = Title,
 					xaxis = {"title" : "Number of Hops", "ticklen" : 1},
 					yaxis = {"title" : "Delay in Milliseconds", "ticklen" : 0.1})
 pio.write_html(go.Figure(data = plots, layout = layout),

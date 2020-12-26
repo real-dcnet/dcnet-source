@@ -10,7 +10,7 @@ pid=$(ps aux | grep -i "onos" | grep -i "/usr/bin/java" | grep -iv "grep" | awk 
 echo "Executing Automation Cleanup Process"
 if [[ ! -z $pid ]]
 then
-    echo "killing onos controller"
+    echo "Killing Onos Controller"
     sudo kill -9 $pid
 fi
 if [[ ! -z $automate_pid ]]
@@ -25,7 +25,7 @@ then
     sudo mn -c
 fi
 
-if [[ err -eq 0 ]] && [[ -d ~/onos ]] && [[ -e ~/onos-2.1.0.tar.gz ]] && [[ $(gzip -q -t ~/onos-2.1.0.tar.gz) -eq 0 ]]
+if [[ err -eq 0 ]] && [[ -e onos-2.1.0.tar.gz ]] && [[ $(gzip -qt ~/onos-2.1.0.tar.gz) -eq 0 ]] && [[ -d ~/onos ]]
 then
     cd ~
     rm -rf onos
