@@ -48,7 +48,7 @@ To start the automation process go to the test directory and run the command:
 cd test
 ./automate_ping_tests.sh <discard directory> <test data directory> <logfile> <max test trials>
 ```
-The <discard directory> is the directory where you want to place ping test data (i.e. dcnet or reactive forwarding) that would be discarded. By default the automate_ping_tests.sh will discard the first 5 ping tests it successfully runs. 
+The ```<discard directory>``` is the directory where you want to place ping test data (i.e. dcnet or reactive forwarding) that would be discarded. By default the automate_ping_tests.sh will discard the first 5 ping tests it successfully runs. 
 
 The <test data directory> is the directory where you want to put ping test data (i.e. dcnet or reactive forwarding) that will be used for plotting. 
 
