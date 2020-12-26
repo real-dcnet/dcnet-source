@@ -6,9 +6,10 @@ The directories dcnet-basic and reactive-basic contains test data from the tcp t
 
 ## Dependencies
 The following commmands is needed to run the check_outliers.py script
+```
 sudo apt install python3 python3-pip 
 pip3 install scipy
-
+```
 
 ## onos cli
 ```
@@ -25,12 +26,12 @@ app activate dcnet
 ```
 
 ### Helpful Commands
-apps -a -s to list currently running applications
-apps -s to list all installed applications
-help onos
-flows
-links
-hosts
+apps -a -s to list currently running applications  
+apps -s to list all installed applications  
+help onos  
+flows  
+links  
+hosts  
 
 Information about these commands can be found https://wiki.onosproject.org/display/ONOS/Appendix+A+%3A+CLI+commands
 
