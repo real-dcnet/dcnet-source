@@ -11,7 +11,7 @@ sudo apt install python3 python3-pip
 pip3 install scipy
 ```
 
-## onos cli
+## ONOS CLI
 ```
 ssh -p 8101  karaf@localhost
 password: karaf
@@ -25,7 +25,7 @@ app activate fwd
 app activate dcnet 
 ```
 
-### Helpful Commands
+### Helpful ONOS CLI Commands
 apps -a -s to list currently running applications  
 apps -s to list all installed applications  
 help onos  
@@ -48,17 +48,17 @@ To start the automation process go to the test directory and run the command:
 cd test
 ./automate_ping_tests.sh <discard directory> <test data directory> <logfile> <max test trials>
 ```
-The <discard directory> is the directory where you want to place ping test data (i.e. dcnet or reactive forwarding) that would be discarded. By default the automate_ping_tests.sh will discard the first 5 ping tests it successfully runs. 
+The ```<discard directory>``` is the directory where you want to place ping test data (i.e. dcnet or reactive forwarding) that would be discarded. By default the automate_ping_tests.sh will discard the first 5 ping tests it successfully runs. 
 
-The <test data directory> is the directory where you want to put ping test data (i.e. dcnet or reactive forwarding) that will be used for plotting. 
+The ```<test data directory>``` is the directory where you want to put ping test data (i.e. dcnet or reactive forwarding) that will be used for plotting. 
 
-The <logfile> outputs information about the automate script performed. For example, whether it found duplicate packets or detected packet loss. Or attempting to correct for these issues by rerunning the ping tests. 
+The ```<logfile>``` outputs information about the automate script performed. For example, whether it found duplicate packets or detected packet loss. Or attempting to correct for these issues by rerunning the ping tests. 
 
-The <max test trials> is number of trials that should be run for ping test data. 
+The ```<max test trials>``` is number of trials that should be run for ping test data. 
 
 The automate_ping_tests.sh returns the time taken to complete the script.
 
-The automate_ping_tests.sh script uses the check_outliers.py script to find files that contain outliers in <test data directory>. Once outliers are detected, the automate_ping_tests.sh will rerun the tests that contained the outliers until all outliers are eliminated. 
+The automate_ping_tests.sh script uses the check_outliers.py script to find files that contain outliers in ```<test data directory>```. Once outliers are detected, the automate_ping_tests.sh will rerun the tests that contained the outliers until all outliers are eliminated. 
 
 # Plotting
 
