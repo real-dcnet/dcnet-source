@@ -32,7 +32,7 @@ then
     tar -xpzf onos-2.1.0.tar.gz
     mv onos-2.1.0 onos
     cd - 
-    ssh-keygen -f "$HOME/.ssh/known_hosts" -R "[localhost]:8101"
+    # ssh-keygen -f "$HOME/.ssh/known_hosts" -R "[localhost]:8101"
 fi
 
 echo "Done with cleanup"

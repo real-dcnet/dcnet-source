@@ -19,6 +19,8 @@ then
 fi
 touch $outFile
 
+pid=$(ps aux | grep -i "onos" | grep -i "/usr/bin/java" | grep -iv "grep" | awk '{ print $2 }' | head -n 1)
+
 if [[ -z $pid ]]
 then
     echo -e "Error. onos service isn't currently running."
