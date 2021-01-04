@@ -25,8 +25,9 @@ then
     sudo mn -c
 fi
 
-if [[ err -eq 0 ]] && [[ -e onos-2.1.0.tar.gz ]] && [[ $(gzip -qt ~/onos-2.1.0.tar.gz) -eq 0 ]] && [[ -d ~/onos ]]
+if [[ err -eq 0 ]] && [[ -e ~/onos-2.1.0.tar.gz ]]  && [[ $(gzip -qt ~/onos-2.1.0.tar.gz) -eq 0 ]] && [[ -d ~/onos ]]
 then
+    echo "removing onos directory"
     cd ~
     rm -rf onos
     tar -xpzf onos-2.1.0.tar.gz

@@ -62,14 +62,22 @@ The automate_ping_tests.sh returns the time taken to complete the script.
 
 The automate_ping_tests.sh script uses the check_outliers.py script to find files that contain outliers in ```<test data directory>```. Once outliers are detected, the automate_ping_tests.sh will rerun the tests that contained the outliers until all outliers are eliminated. 
 
-To run the cleanup_automation.sh got to the test directory and run the command:
+To run the cleanup_automation.sh go to the test directory and run the command:
 ```
 cd test
 ./cleanup_automation.sh <sec> <err>
 ```
 The ```<sec>``` is the amount of seconds that cleanup_automation.sh script should wait before executing. The value is set to 1 when used by the autmoate_ping_tests.sh script but can be set to 0 when run by the end user. 
 
-The ```<err>``` is a binary value of 0 or nonzero and is used to automate the process of deleting onos directory and then extracting it from the tarball. If the value is 0, onos directory will be deleted and then extracted from the onos.tar.gz file. This assumes that the onos directory is named onos and is directory in the the user's home directory. 
+The ```<err>``` is a binary value of 0 or nonzero and is used to automate the process of deleting onos directory and then extracting it from the tarball. If the value is 0, onos directory will be deleted and then extracted from the onos.tar.gz file. This assumes that the onos directory is named onos and is directory in the the user's home directory. The parameter is used to reinstall onos if problems persist while using onos.
+
+To run the check_outliers.py go to the test directory and run the command:
+```
+cd test
+python3 check_outliers.py <test data directory> <max test trials>
+```
+The ```<test data directory>``` is the directory where your ping test data (i.e. dcnet or reactive forwarding) is located. 
+The ```<max test trials>``` is number of trials that you want to check in ```<test data directory>```. 
 
 # Plotting
 

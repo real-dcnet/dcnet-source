@@ -209,11 +209,12 @@ do
 
 done
 
-# pid=$(ps aux | grep -i "onos" | grep -iv "grep" | awk '{ print $2 }' | head -n 1)
-# if [[ ! -z $pid ]]
-# then
-#     sudo kill -9 $pid
-# fi
+pid=$(ps aux | grep -i "onos" | grep -i "/usr/bin/java" | grep -iv "grep" | awk '{ print $2 }' | head -n 1)
+if [[ ! -z $pid ]]
+then
+    echo "Killing Onos Controller"
+    sudo kill -9 $pid
+fi
 
 echo "Automation successful."
 echo "Automation successful." >> $outFile

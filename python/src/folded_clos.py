@@ -3,7 +3,6 @@ from mininet.topo import Topo
 from mininet.cli import CLI
 from mininet.log import setLogLevel
 from mininet.node import RemoteController, Node, Host, OVSKernelSwitch
-from mininet.link import TCLink
 
 from mininet.link import TCLink
 from argparse import ArgumentParser
@@ -407,8 +406,8 @@ if __name__ == "__main__":
 			#runPingTests(net, leaf, pod, fanout, dc, True, "test")
 			#runTCPTests(net, leaf, pod, fanout, dc, True, "test")
 
-                if not test:
-                    CLI(net)
+		elif not test:
+			CLI(net)
 
 	finally:
 		if net is not None:
