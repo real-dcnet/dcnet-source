@@ -26,12 +26,12 @@ app activate dcnet
 ```
 
 ### Helpful ONOS CLI Commands
-apps -a -s to list currently running applications  
-apps -s to list all installed applications  
-help onos  
-flows  
-links  
-hosts  
+`apps -a -s` to list currently running applications  
+`apps -s` to list all installed applications  
+`help onos` 
+`flows`  
+`links`  
+`hosts`
 
 Information about these commands can be found https://wiki.onosproject.org/display/ONOS/Appendix+A+%3A+CLI+commands
 
