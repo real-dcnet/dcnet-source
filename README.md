@@ -51,13 +51,19 @@ cd onos-2.1.0/bin
 ./onos-service
 ```
 
-This starts the service that listens for a connection from Mininet. Then, access the web gui through http://localhost:8181/onos/ui, and use credentials:
+This starts the service that listens for a connection from Mininet. There may be warnings or errors displayed, but as long as the program does not stop and return to the command line, then the service is running. Then, access the web gui through http://localhost:8181/onos/ui, and use credentials:
 ```
 Username: onos
 Password: rocks
 ```
 
 Once logged in to the gui, enable OpenFlow and reactive forwarding on the applications tab.
+
+Alternatively, from a separate terminal type
+```
+ssh -p 8101  karaf@localhost
+```
+to access ONOS with password karaf. You should see the ONOS command line.
 
 ## Installing DCnet Application
 To start the DCnet application for ONOS, change directory to dcnet-source/dcnet, and build the app using:
@@ -76,6 +82,8 @@ Which installs the DCnet application into the ONOS controller and activates it. 
 ```
 
 Once installed, it might be necessary to restart the ONOS controller so that it can read the configuration files set up by Mininet and add the switches from Mininet. Use ctrl-C on the terminal running onos-service and enter the command again to restart ONOS. After this, hosts should be able to ping each other on Mininet, and after the first ping packet is transmitted between hosts, the necessary translation rules will be installed by DCnet to make further pinging much quicker.
+
+For testing and connecting to mininet, see the README under dcnet-source/python/src.
 
 ## Installing DCarp Application (Optional)
 For some topologies, default implementations of ARP may not function correctly, in which case DCarp can be used to handle ARP requests instead. Build and install this application by changing the directory to dcnet-source/dcarp and following the same steps as with the DCnet Application.
