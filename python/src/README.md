@@ -9,6 +9,7 @@ The following commmands is needed to run the check_outliers.py script
 ```
 sudo apt install python3 python3-pip 
 pip3 install scipy
+pip install chart_studio
 ```
 
 ## ONOS CLI
