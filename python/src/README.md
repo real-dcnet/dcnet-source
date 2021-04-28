@@ -46,7 +46,7 @@ check_outliers.py is to detect outliers that are present in the ping tests resul
 cleanup_automation.sh terminates all extant processes relating to ONOS and mininet. This script is primarily used by the automate_ping_tests.sh script if it detects problems with onos, however can be used by the user to kill the onos service, mininet processes and/or autmoate_ping_tests.sh process. 
 
 ### Running the automation scripts
-To start the automation process go to the test directory and run the command:
+To start the ping test automation process, go to the test directory and run the command:
 ```
 cd test
 ./automate_ping_tests.sh <discard directory> <test data directory> <logfile> <max test trials>
@@ -62,6 +62,12 @@ The ```<max test trials>``` is number of trials that should be run for ping test
 The automate_ping_tests.sh returns the time taken to complete the script.
 
 The automate_ping_tests.sh script uses the check_outliers.py script to find files that contain outliers in ```<test data directory>```. Once outliers are detected, the automate_ping_tests.sh will rerun the tests that contained the outliers until all outliers are eliminated. 
+
+To start the tcp test automation process, go to the test directory and run the command:
+```
+./automate_tcp_tests.sh <test data directory> <logfile> <max test trials>
+```
+The command inputs follow the same convention as those for the ping test automation.
 
 To run the cleanup_automation.sh go to the test directory and run the command:
 ```
