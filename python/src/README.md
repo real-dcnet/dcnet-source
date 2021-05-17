@@ -65,9 +65,9 @@ The automate_ping_tests.sh script uses the check_outliers.py script to find file
 
 To start the tcp test automation process, go to the test directory and run the command:
 ```
-./automate_tcp_tests.sh <test data directory> <logfile> <max test trials>
+./automate_tcp_tests.sh <test data directory> <logfile> <max test trials> <with traffic>
 ```
-The command inputs follow the same convention as those for the ping test automation.
+The command inputs follow the same convention as those for the ping test automation. The with traffic parameter takes true or false representing if the tcp test should be run with other traffic throughout the system.
 
 To run the cleanup_automation.sh go to the test directory and run the command:
 ```
