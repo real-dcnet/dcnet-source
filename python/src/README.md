@@ -97,7 +97,7 @@ python2 plot_ping.py <ping data test directory> <graph title>
 The plot_tcp.py plots the tcp tests results.
 To run it, navigate to the src directory and run the command 
 ```
-python2 plot_tcp.py <tcp data test directory> <graph title>
+python2 plot_tcp.py <tcp data test directory> <graph title> <num trials>
 ```
 
 The plot_init_ping_comp.py plots the comparison between the dcnet tests results and reactive-forwarding tests results for initial ping
