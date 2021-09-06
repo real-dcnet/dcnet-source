@@ -69,6 +69,11 @@ To start the tcp test automation process, go to the test directory and run the c
 ```
 The command inputs follow the same convention as those for the ping test automation. The with traffic parameter takes true or false representing if the tcp test should be run with other traffic throughout the system.
 
+```
+./varying_tcp_tests.sh <test data directory> <logfile> <max test trials> <with traffic> <number of datacenters>
+```
+The command follows the same convention as those above. The number of datacenters represents the max number of datacenters to test scalability. The script will test with all numbers from 1 to <number of datacenters>.
+
 To run the cleanup_automation.sh go to the test directory and run the command:
 ```
 cd test
