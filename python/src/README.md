@@ -9,6 +9,7 @@ The following commmands is needed to run the check_outliers.py script
 ```
 sudo apt install python3 python3-pip 
 pip3 install scipy
+pip install chart_studio
 ```
 
 ## ONOS CLI
@@ -45,7 +46,7 @@ check_outliers.py is to detect outliers that are present in the ping tests resul
 cleanup_automation.sh terminates all extant processes relating to ONOS and mininet. This script is primarily used by the automate_ping_tests.sh script if it detects problems with onos, however can be used by the user to kill the onos service, mininet processes and/or autmoate_ping_tests.sh process. 
 
 ### Running the automation scripts
-To start the automation process go to the test directory and run the command:
+To start the ping test automation process, go to the test directory and run the command:
 ```
 cd test
 ./automate_ping_tests.sh <discard directory> <test data directory> <logfile> <max test trials>
@@ -61,6 +62,17 @@ The ```<max test trials>``` is number of trials that should be run for ping test
 The automate_ping_tests.sh returns the time taken to complete the script.
 
 The automate_ping_tests.sh script uses the check_outliers.py script to find files that contain outliers in ```<test data directory>```. Once outliers are detected, the automate_ping_tests.sh will rerun the tests that contained the outliers until all outliers are eliminated. 
+
+To start the tcp test automation process, go to the test directory and run the command:
+```
+./automate_tcp_tests.sh <test data directory> <logfile> <max test trials> <with traffic>
+```
+The command inputs follow the same convention as those for the ping test automation. The with traffic parameter takes true or false representing if the tcp test should be run with other traffic throughout the system.
+
+```
+./varying_tcp_tests.sh <test data directory> <logfile> <max test trials> <with traffic> <number of datacenters>
+```
+The command follows the same convention as those above. The number of datacenters represents the max number of datacenters to test scalability. The script will test with all numbers from 1 to number of datacenters.
 
 To run the cleanup_automation.sh go to the test directory and run the command:
 ```
@@ -90,7 +102,7 @@ python2 plot_ping.py <ping data test directory> <graph title>
 The plot_tcp.py plots the tcp tests results.
 To run it, navigate to the src directory and run the command 
 ```
-python2 plot_tcp.py <tcp data test directory> <graph title>
+python2 plot_tcp.py <tcp data test directory> <graph title> <num trials>
 ```
 
 The plot_init_ping_comp.py plots the comparison between the dcnet tests results and reactive-forwarding tests results for initial ping
