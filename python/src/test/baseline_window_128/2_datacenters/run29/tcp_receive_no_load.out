@@ -1,0 +1,117 @@
+iperf 3.10.1
+Linux cs490clc1.cs.purdue.edu 4.15.0-118-generic #119-Ubuntu SMP Tue Sep 8 12:30:01 UTC 2020 x86_64
+-----------------------------------------------------------
+Server listening on 5250 (test #1)
+-----------------------------------------------------------
+Time: Wed, 20 Oct 2021 03:32:33 GMT
+Accepted connection from 10.0.0.1, port 50602
+      Cookie: coyqnrlj3n4rvuki2cz74a2x7wfo5dant7wx
+      TCP MSS: 9216
+[  6] local 10.0.0.2 port 5250 connected to 10.0.0.1 port 50604
+Starting Test: protocol: TCP, 1 streams, 131072 byte blocks, omitting 0 seconds, 10 second test, tos 0
+[ ID] Interval           Transfer     Bitrate
+[  6]   0.00-1.00   sec  1.15 MBytes  9.61 Mbits/sec                  
+[  6]   1.00-2.00   sec  1.14 MBytes  9.57 Mbits/sec                  
+[  6]   2.00-3.00   sec  1.14 MBytes  9.52 Mbits/sec                  
+[  6]   3.00-4.00   sec  1.14 MBytes  9.57 Mbits/sec                  
+[  6]   4.00-5.00   sec  1.14 MBytes  9.57 Mbits/sec                  
+[  6]   5.00-6.00   sec  1.14 MBytes  9.57 Mbits/sec                  
+[  6]   6.00-7.00   sec  1.14 MBytes  9.59 Mbits/sec                  
+[  6]   7.00-8.00   sec  1.14 MBytes  9.56 Mbits/sec                  
+[  6]   8.00-9.00   sec  1.14 MBytes  9.56 Mbits/sec                  
+[  6]   9.00-10.00  sec  1.14 MBytes  9.58 Mbits/sec                  
+[  6]  10.00-10.02  sec  14.1 KBytes  6.56 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+Test Complete. Summary Results:
+[ ID] Interval           Transfer     Bitrate
+[  6] (sender statistics not available)
+[  6]   0.00-10.02  sec  11.4 MBytes  9.56 Mbits/sec                  receiver
+rcv_tcp_congestion cubic
+iperf 3.10.1
+Linux cs490clc1.cs.purdue.edu 4.15.0-118-generic #119-Ubuntu SMP Tue Sep 8 12:30:01 UTC 2020 x86_64
+-----------------------------------------------------------
+Server listening on 5250 (test #1)
+-----------------------------------------------------------
+Time: Wed, 20 Oct 2021 03:32:48 GMT
+Accepted connection from 10.0.0.1, port 34076
+      Cookie: zmtyosflcwuedz5mye4ves6g2yddjtpy4kll
+      TCP MSS: 9216
+[  6] local 10.0.0.4 port 5250 connected to 10.0.0.1 port 34078
+Starting Test: protocol: TCP, 1 streams, 131072 byte blocks, omitting 0 seconds, 10 second test, tos 0
+[ ID] Interval           Transfer     Bitrate
+[  6]   0.00-1.00   sec  1.14 MBytes  9.60 Mbits/sec                  
+[  6]   1.00-2.00   sec  1.14 MBytes  9.58 Mbits/sec                  
+[  6]   2.00-3.00   sec  1.14 MBytes  9.52 Mbits/sec                  
+[  6]   3.00-4.00   sec  1.14 MBytes  9.57 Mbits/sec                  
+[  6]   4.00-5.00   sec  1.14 MBytes  9.57 Mbits/sec                  
+[  6]   5.00-6.00   sec  1.14 MBytes  9.57 Mbits/sec                  
+[  6]   6.00-7.00   sec  1.14 MBytes  9.55 Mbits/sec                  
+[  6]   7.00-8.00   sec  1.14 MBytes  9.60 Mbits/sec                  
+[  6]   8.00-9.00   sec  1.14 MBytes  9.56 Mbits/sec                  
+[  6]   9.00-10.00  sec  1.14 MBytes  9.58 Mbits/sec                  
+[  6]  10.00-10.02  sec  14.1 KBytes  6.65 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+Test Complete. Summary Results:
+[ ID] Interval           Transfer     Bitrate
+[  6] (sender statistics not available)
+[  6]   0.00-10.02  sec  11.4 MBytes  9.56 Mbits/sec                  receiver
+rcv_tcp_congestion cubic
+iperf 3.10.1
+Linux cs490clc1.cs.purdue.edu 4.15.0-118-generic #119-Ubuntu SMP Tue Sep 8 12:30:01 UTC 2020 x86_64
+-----------------------------------------------------------
+Server listening on 5250 (test #1)
+-----------------------------------------------------------
+Time: Wed, 20 Oct 2021 03:33:03 GMT
+Accepted connection from 10.0.0.1, port 37920
+      Cookie: lphbf3darw6ztmsa7dfp4tk6legn4s6amezl
+      TCP MSS: 9216
+[  6] local 10.0.0.7 port 5250 connected to 10.0.0.1 port 37922
+Starting Test: protocol: TCP, 1 streams, 131072 byte blocks, omitting 0 seconds, 10 second test, tos 0
+[ ID] Interval           Transfer     Bitrate
+[  6]   0.00-1.00   sec  1.15 MBytes  9.61 Mbits/sec                  
+[  6]   1.00-2.00   sec  1.14 MBytes  9.57 Mbits/sec                  
+[  6]   2.00-3.00   sec  1.14 MBytes  9.53 Mbits/sec                  
+[  6]   3.00-4.00   sec  1.14 MBytes  9.57 Mbits/sec                  
+[  6]   4.00-5.00   sec  1.14 MBytes  9.58 Mbits/sec                  
+[  6]   5.00-6.00   sec  1.14 MBytes  9.55 Mbits/sec                  
+[  6]   6.00-7.00   sec  1.14 MBytes  9.57 Mbits/sec                  
+[  6]   7.00-8.00   sec  1.14 MBytes  9.58 Mbits/sec                  
+[  6]   8.00-9.00   sec  1.14 MBytes  9.57 Mbits/sec                  
+[  6]   9.00-10.00  sec  1.14 MBytes  9.57 Mbits/sec                  
+[  6]  10.00-10.02  sec  14.1 KBytes  6.64 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+Test Complete. Summary Results:
+[ ID] Interval           Transfer     Bitrate
+[  6] (sender statistics not available)
+[  6]   0.00-10.02  sec  11.4 MBytes  9.56 Mbits/sec                  receiver
+rcv_tcp_congestion cubic
+iperf 3.10.1
+Linux cs490clc1.cs.purdue.edu 4.15.0-118-generic #119-Ubuntu SMP Tue Sep 8 12:30:01 UTC 2020 x86_64
+-----------------------------------------------------------
+Server listening on 5250 (test #1)
+-----------------------------------------------------------
+Time: Wed, 20 Oct 2021 03:33:18 GMT
+Accepted connection from 10.0.0.1, port 54166
+      Cookie: 3srtb5gjdamywocqyy75sqlgxhrpefylxhna
+      TCP MSS: 9216
+[  6] local 10.0.0.19 port 5250 connected to 10.0.0.1 port 54168
+Starting Test: protocol: TCP, 1 streams, 131072 byte blocks, omitting 0 seconds, 10 second test, tos 0
+[ ID] Interval           Transfer     Bitrate
+[  6]   0.00-1.00   sec   801 KBytes  6.56 Mbits/sec                  
+[  6]   1.00-2.00   sec  1.14 MBytes  9.56 Mbits/sec                  
+[  6]   2.00-3.00   sec  1.14 MBytes  9.56 Mbits/sec                  
+[  6]   3.00-4.00   sec  1.14 MBytes  9.55 Mbits/sec                  
+[  6]   4.00-5.00   sec  1.14 MBytes  9.58 Mbits/sec                  
+[  6]   5.00-6.00   sec  1.14 MBytes  9.56 Mbits/sec                  
+[  6]   6.00-7.00   sec  1.14 MBytes  9.58 Mbits/sec                  
+[  6]   7.00-8.00   sec  1.14 MBytes  9.56 Mbits/sec                  
+[  6]   8.00-9.00   sec  1.14 MBytes  9.55 Mbits/sec                  
+[  6]   9.00-10.00  sec  1.14 MBytes  9.58 Mbits/sec                  
+[  6]  10.00-10.11  sec   126 KBytes  9.39 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+Test Complete. Summary Results:
+[ ID] Interval           Transfer     Bitrate
+[  6] (sender statistics not available)
+[  6]   0.00-10.11  sec  11.2 MBytes  9.26 Mbits/sec                  receiver
+rcv_tcp_congestion cubic
+iperf3: interrupt - the server has terminated

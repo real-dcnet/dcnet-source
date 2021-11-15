@@ -1,0 +1,128 @@
+
+--- TCP Test 0: h1 sending to h2 ---
+iperf 3.9
+Linux cs490clc1.cs.purdue.edu 4.15.0-118-generic #119-Ubuntu SMP Tue Sep 8 12:30:01 UTC 2020 x86_64
+Control connection MSS 1448
+Time: Sat, 02 Oct 2021 16:50:52 GMT
+Connecting to host 10.0.0.2, port 5250
+      Cookie: mzxy2wso2q7zlvsaemtoljpx5rrcdfrfv4lz
+      TCP MSS: 9216
+[  5] local 10.0.0.1 port 38318 connected to 10.0.0.2 port 5250
+[  7] local 10.0.0.1 port 38320 connected to 10.0.0.2 port 5250
+Starting Test: protocol: TCP, 1 streams, 131072 byte blocks, omitting 0 seconds, 1000 blocks to send, tos 0
+[ ID][Role] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5][TX-C]   0.00-1.00   sec  90.2 MBytes   757 Mbits/sec    0   1.03 MBytes       
+[  7][RX-C]   0.00-1.00   sec  94.8 MBytes   795 Mbits/sec                  
+[  5][TX-C]   1.00-1.08   sec  7.97 MBytes   829 Mbits/sec    0   1.03 MBytes       
+[  7][RX-C]   1.00-1.08   sec  7.54 MBytes   784 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+Test Complete. Summary Results:
+[ ID][Role] Interval           Transfer     Bitrate         Retr
+[  5][TX-C]   0.00-1.08   sec  98.2 MBytes   762 Mbits/sec    0             sender
+[  5][TX-C]   0.00-1.12   sec  97.2 MBytes   728 Mbits/sec                  receiver
+CPU Utilization: local/sender 8.9% (0.5%u/8.4%s), remote/receiver 5.7% (0.1%u/5.6%s)
+CPU Utilization: local/receiver 8.9% (0.5%u/8.4%s), remote/sender 5.7% (0.1%u/5.6%s)
+snd_tcp_congestion cubic
+rcv_tcp_congestion cubic
+[  7][RX-C]   0.00-1.08   sec   104 MBytes   809 Mbits/sec    0             sender
+[  7][RX-C]   0.00-1.12   sec   102 MBytes   767 Mbits/sec                  receiver
+snd_tcp_congestion cubic
+rcv_tcp_congestion cubic
+
+iperf Done.
+
+--- TCP Test 1: h1 sending to h4 ---
+iperf 3.9
+Linux cs490clc1.cs.purdue.edu 4.15.0-118-generic #119-Ubuntu SMP Tue Sep 8 12:30:01 UTC 2020 x86_64
+Control connection MSS 1448
+Time: Sat, 02 Oct 2021 16:50:58 GMT
+Connecting to host 10.0.0.4, port 5250
+      Cookie: ilk63rmqb3etq7rq2u64ukerq7mcjvhjg4gu
+      TCP MSS: 9216
+[  5] local 10.0.0.1 port 50026 connected to 10.0.0.4 port 5250
+[  7] local 10.0.0.1 port 50028 connected to 10.0.0.4 port 5250
+Starting Test: protocol: TCP, 1 streams, 131072 byte blocks, omitting 0 seconds, 1000 blocks to send, tos 0
+[ ID][Role] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5][TX-C]   0.00-1.00   sec  75.1 MBytes   630 Mbits/sec    0   1.73 MBytes       
+[  7][RX-C]   0.00-1.00   sec  77.3 MBytes   648 Mbits/sec                  
+[  5][TX-C]   1.00-1.30   sec  23.9 MBytes   678 Mbits/sec    0   1.73 MBytes       
+[  7][RX-C]   1.00-1.30   sec  23.2 MBytes   659 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+Test Complete. Summary Results:
+[ ID][Role] Interval           Transfer     Bitrate         Retr
+[  5][TX-C]   0.00-1.30   sec  99.0 MBytes   641 Mbits/sec    0             sender
+[  5][TX-C]   0.00-1.33   sec  98.0 MBytes   619 Mbits/sec                  receiver
+CPU Utilization: local/sender 7.9% (0.6%u/7.3%s), remote/receiver 5.5% (0.1%u/5.4%s)
+CPU Utilization: local/receiver 7.9% (0.6%u/7.3%s), remote/sender 5.5% (0.1%u/5.4%s)
+snd_tcp_congestion cubic
+rcv_tcp_congestion cubic
+[  7][RX-C]   0.00-1.30   sec   102 MBytes   661 Mbits/sec    0             sender
+[  7][RX-C]   0.00-1.33   sec   101 MBytes   635 Mbits/sec                  receiver
+snd_tcp_congestion cubic
+rcv_tcp_congestion cubic
+
+iperf Done.
+
+--- TCP Test 2: h1 sending to h7 ---
+iperf 3.9
+Linux cs490clc1.cs.purdue.edu 4.15.0-118-generic #119-Ubuntu SMP Tue Sep 8 12:30:01 UTC 2020 x86_64
+Control connection MSS 1448
+Time: Sat, 02 Oct 2021 16:51:05 GMT
+Connecting to host 10.0.0.7, port 5250
+      Cookie: rsb3j3pogkeiives6mgfzzuxcejrkbmbvoaa
+      TCP MSS: 9216
+[  5] local 10.0.0.1 port 53872 connected to 10.0.0.7 port 5250
+[  7] local 10.0.0.1 port 53874 connected to 10.0.0.7 port 5250
+Starting Test: protocol: TCP, 1 streams, 131072 byte blocks, omitting 0 seconds, 1000 blocks to send, tos 0
+[ ID][Role] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5][TX-C]   0.00-1.00   sec  64.0 MBytes   537 Mbits/sec    0   1.70 MBytes       
+[  7][RX-C]   0.00-1.00   sec  64.0 MBytes   537 Mbits/sec                  
+[  5][TX-C]   1.00-1.29   sec  20.0 MBytes   582 Mbits/sec    0   1.70 MBytes       
+[  7][RX-C]   1.00-1.29   sec  19.6 MBytes   572 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+Test Complete. Summary Results:
+[ ID][Role] Interval           Transfer     Bitrate         Retr
+[  5][TX-C]   0.00-1.29   sec  84.0 MBytes   547 Mbits/sec    0             sender
+[  5][TX-C]   0.00-1.32   sec  83.0 MBytes   529 Mbits/sec                  receiver
+CPU Utilization: local/sender 6.0% (0.3%u/5.7%s), remote/receiver 4.3% (0.2%u/4.1%s)
+CPU Utilization: local/receiver 6.0% (0.3%u/5.7%s), remote/sender 4.3% (0.2%u/4.1%s)
+snd_tcp_congestion cubic
+rcv_tcp_congestion cubic
+[  7][RX-C]   0.00-1.29   sec  85.0 MBytes   553 Mbits/sec    0             sender
+[  7][RX-C]   0.00-1.32   sec  83.6 MBytes   533 Mbits/sec                  receiver
+snd_tcp_congestion cubic
+rcv_tcp_congestion cubic
+
+iperf Done.
+
+--- TCP Test 3: h1 sending to h19 ---
+iperf 3.9
+Linux cs490clc1.cs.purdue.edu 4.15.0-118-generic #119-Ubuntu SMP Tue Sep 8 12:30:01 UTC 2020 x86_64
+Control connection MSS 1448
+Time: Sat, 02 Oct 2021 16:51:11 GMT
+Connecting to host 10.0.0.19, port 5250
+      Cookie: yagpvxmaeacpu7wwmw5u5w2ln2f6wgxus6dp
+      TCP MSS: 9216
+[  5] local 10.0.0.1 port 41888 connected to 10.0.0.19 port 5250
+[  7] local 10.0.0.1 port 41890 connected to 10.0.0.19 port 5250
+Starting Test: protocol: TCP, 1 streams, 131072 byte blocks, omitting 0 seconds, 1000 blocks to send, tos 0
+[ ID][Role] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5][TX-C]   0.00-1.00   sec  50.1 MBytes   420 Mbits/sec    0   2.04 MBytes       
+[  7][RX-C]   0.00-1.00   sec  49.4 MBytes   414 Mbits/sec                  
+[  5][TX-C]   1.00-1.34   sec  19.1 MBytes   470 Mbits/sec    0   2.04 MBytes       
+[  7][RX-C]   1.00-1.34   sec  18.6 MBytes   456 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+Test Complete. Summary Results:
+[ ID][Role] Interval           Transfer     Bitrate         Retr
+[  5][TX-C]   0.00-1.34   sec  69.3 MBytes   433 Mbits/sec    0             sender
+[  5][TX-C]   0.00-1.36   sec  68.3 MBytes   421 Mbits/sec                  receiver
+CPU Utilization: local/sender 4.8% (0.2%u/4.6%s), remote/receiver 3.5% (0.0%u/3.5%s)
+CPU Utilization: local/receiver 4.8% (0.2%u/4.6%s), remote/sender 3.5% (0.0%u/3.5%s)
+snd_tcp_congestion cubic
+rcv_tcp_congestion cubic
+[  7][RX-C]   0.00-1.34   sec  69.9 MBytes   437 Mbits/sec    0             sender
+[  7][RX-C]   0.00-1.36   sec  68.0 MBytes   419 Mbits/sec                  receiver
+snd_tcp_congestion cubic
+rcv_tcp_congestion cubic
+
+iperf Done.

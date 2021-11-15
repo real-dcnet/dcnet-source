@@ -1,0 +1,30 @@
+iperf 3.10.1
+Linux cs490clc1.cs.purdue.edu 4.15.0-118-generic #119-Ubuntu SMP Tue Sep 8 12:30:01 UTC 2020 x86_64
+-----------------------------------------------------------
+Server listening on 5250 (test #1)
+-----------------------------------------------------------
+Time: Mon, 15 Nov 2021 18:31:49 GMT
+Accepted connection from 10.0.0.1, port 58388
+      Cookie: 3mvdqzswl4kkbpj27gfbd35k37qqetqgxruy
+      TCP MSS: 9216
+[  6] local 10.0.0.19 port 5250 connected to 10.0.0.1 port 58394
+Starting Test: protocol: TCP, 1 streams, 131072 byte blocks, omitting 0 seconds, 10 second test, tos 0
+[ ID] Interval           Transfer     Bitrate
+[  6]   0.00-1.00   sec  3.52 MBytes  29.5 Mbits/sec                  
+[  6]   1.00-2.00   sec  45.2 MBytes   379 Mbits/sec                  
+[  6]   2.00-3.00   sec  57.3 MBytes   481 Mbits/sec                  
+[  6]   3.00-4.00   sec  59.0 MBytes   495 Mbits/sec                  
+[  6]   4.00-5.00   sec  58.7 MBytes   493 Mbits/sec                  
+[  6]   5.00-6.00   sec  58.8 MBytes   493 Mbits/sec                  
+[  6]   6.00-7.00   sec  59.0 MBytes   495 Mbits/sec                  
+[  6]   7.00-8.00   sec  59.2 MBytes   496 Mbits/sec                  
+[  6]   8.00-9.00   sec  58.9 MBytes   494 Mbits/sec                  
+[  6]   9.00-10.00  sec  59.4 MBytes   498 Mbits/sec                  
+[  6]  10.00-10.15  sec  8.95 MBytes   502 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+Test Complete. Summary Results:
+[ ID] Interval           Transfer     Bitrate
+[  6] (sender statistics not available)
+[  6]   0.00-10.15  sec   528 MBytes   436 Mbits/sec                  receiver
+rcv_tcp_congestion cubic
+iperf3: interrupt - the server has terminated

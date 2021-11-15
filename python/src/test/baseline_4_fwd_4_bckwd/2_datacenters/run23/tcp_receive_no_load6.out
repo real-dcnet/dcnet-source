@@ -1,0 +1,56 @@
+iperf 3.10.1
+Linux cs490clc1.cs.purdue.edu 4.15.0-118-generic #119-Ubuntu SMP Tue Sep 8 12:30:01 UTC 2020 x86_64
+-----------------------------------------------------------
+Server listening on 5250 (test #1)
+-----------------------------------------------------------
+Time: Sat, 13 Nov 2021 18:39:54 GMT
+Accepted connection from 10.0.0.27, port 52974
+      Cookie: bmpinuezvt54egweo67fxrefqw2io4ptpnf3
+      TCP MSS: 9216
+[  6] local 10.0.0.6 port 5250 connected to 10.0.0.27 port 52994
+Starting Test: protocol: TCP, 1 streams, 131072 byte blocks, omitting 0 seconds, 10 second test, tos 0
+[ ID] Interval           Transfer     Bitrate
+[  6]   0.00-1.00   sec   458 KBytes  3.75 Mbits/sec                  
+[  6]   1.00-2.00   sec   559 KBytes  4.58 Mbits/sec                  
+[  6]   2.00-3.00   sec   711 KBytes  5.83 Mbits/sec                  
+[  6]   3.00-4.00   sec  1.09 MBytes  9.15 Mbits/sec                  
+[  6]   4.00-5.00   sec  1.46 MBytes  12.3 Mbits/sec                  
+[  6]   5.00-6.00   sec  1.96 MBytes  16.4 Mbits/sec                  
+[  6]   6.00-7.00   sec  3.64 MBytes  30.5 Mbits/sec                  
+[  6]   7.00-8.00   sec  4.61 MBytes  38.7 Mbits/sec                  
+[  6]   8.00-9.00   sec  6.48 MBytes  54.3 Mbits/sec                  
+[  6]   9.00-10.00  sec  8.69 MBytes  72.9 Mbits/sec                  
+[  6]  10.00-11.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  11.00-12.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  12.00-13.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  13.00-14.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  14.00-15.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  15.00-16.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  16.00-17.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  17.00-18.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  18.00-19.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  19.00-20.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  20.00-21.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  21.00-22.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  22.00-23.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  23.00-24.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  24.00-25.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  25.00-26.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  26.00-27.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  27.00-28.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  28.00-29.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  29.00-30.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  30.00-31.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  31.00-32.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  32.00-33.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  33.00-34.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  34.00-35.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  35.00-36.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  6]  36.00-36.37  sec  0.00 Bytes  0.00 bits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+Test Complete. Summary Results:
+[ ID] Interval           Transfer     Bitrate
+[  6] (sender statistics not available)
+[  6]   0.00-36.37  sec  29.6 MBytes  6.83 Mbits/sec                  receiver
+rcv_tcp_congestion cubic
+iperf3: interrupt - the server has terminated

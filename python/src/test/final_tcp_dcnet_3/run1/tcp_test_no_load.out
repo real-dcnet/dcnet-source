@@ -1,0 +1,65 @@
+
+--- TCP Test 0: h1 sending to h2 ---
+Connecting to host 10.0.0.2, port 5250
+[  4] local 10.0.0.1 port 44416 connected to 10.0.0.2 port 5250
+[ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+[  4]   0.00-5.00   sec  6.00 MBytes  10.1 Mbits/sec    0    209 KBytes       
+[  4]   5.00-10.00  sec  5.71 MBytes  9.59 Mbits/sec    0    209 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth       Retr
+[  4]   0.00-10.00  sec  11.7 MBytes  9.83 Mbits/sec    0             sender
+[  4]   0.00-10.00  sec  11.6 MBytes  9.72 Mbits/sec                  receiver
+
+iperf Done.
+
+--- TCP Test 1: h1 sending to h4 ---
+Connecting to host 10.0.0.4, port 5250
+[  4] local 10.0.0.1 port 39514 connected to 10.0.0.4 port 5250
+[ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+[  4]   0.00-5.00   sec  6.01 MBytes  10.1 Mbits/sec    0    209 KBytes       
+[  4]   5.00-10.00  sec  5.70 MBytes  9.56 Mbits/sec    0    209 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth       Retr
+[  4]   0.00-10.00  sec  11.7 MBytes  9.82 Mbits/sec    0             sender
+[  4]   0.00-10.00  sec  11.6 MBytes  9.72 Mbits/sec                  receiver
+
+iperf Done.
+
+--- TCP Test 2: h1 sending to h7 ---
+Connecting to host 10.0.0.7, port 5250
+[  4] local 10.0.0.1 port 48384 connected to 10.0.0.7 port 5250
+[ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+[  4]   0.00-5.00   sec  5.99 MBytes  10.1 Mbits/sec    0    209 KBytes       
+[  4]   5.00-10.00  sec  5.71 MBytes  9.58 Mbits/sec    0    209 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth       Retr
+[  4]   0.00-10.00  sec  11.7 MBytes  9.82 Mbits/sec    0             sender
+[  4]   0.00-10.00  sec  11.6 MBytes  9.72 Mbits/sec                  receiver
+
+iperf Done.
+
+--- TCP Test 3: h1 sending to h19 ---
+Connecting to host 10.0.0.19, port 5250
+[  4] local 10.0.0.1 port 45338 connected to 10.0.0.19 port 5250
+[ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+[  4]   0.00-5.00   sec  5.99 MBytes  10.1 Mbits/sec    0    206 KBytes       
+[  4]   5.00-10.00  sec  5.70 MBytes  9.56 Mbits/sec    0    206 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth       Retr
+[  4]   0.00-10.00  sec  11.7 MBytes  9.81 Mbits/sec    0             sender
+[  4]   0.00-10.00  sec  11.6 MBytes  9.71 Mbits/sec                  receiver
+
+iperf Done.
+
+--- TCP Test 4: h1 sending to h37 ---
+Connecting to host 10.0.0.37, port 5250
+[  4] local 10.0.0.1 port 52370 connected to 10.0.0.37 port 5250
+[ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+[  4]   0.00-5.00   sec  5.99 MBytes  10.0 Mbits/sec    0    206 KBytes       
+[  4]   5.00-10.00  sec  5.70 MBytes  9.56 Mbits/sec    0    206 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth       Retr
+[  4]   0.00-10.00  sec  11.7 MBytes  9.80 Mbits/sec    0             sender
+[  4]   0.00-10.00  sec  11.6 MBytes  9.70 Mbits/sec                  receiver
+
+iperf Done.

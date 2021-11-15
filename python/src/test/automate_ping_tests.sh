@@ -33,11 +33,11 @@ do
     echo "-------------------------------------Fake Test $discards-----------------------------------------------------------------"
     echo "-------------------------------------Fake Test $discards-----------------------------------------------------------------" >> $outFile
     cd ..
-    sudo python folded_clos.py --dc 3 --leaf 2 2 2 --spine 2 2 2 --pod 3 3 2 --ratio 2 2 1 --fanout 3 3 3 --test true
+    sudo python folded_clos.py --dc 3 --leaf 2 2 2 --spine 2 2 2 --pod 3 3 2 --ratio 2 2 1 --fanout 3 3 3 --test true --run_ping true
     cd test
     packetloss=$(grep -i "packet loss" ping_test_no_load.out | grep -ivwc "0% packet loss")
     DUPS=$(grep -ic "DUP!" ping_test_no_load.out)
-    subdir="run${discards}"
+    subdir="/run${discards}"
     if [[ $packetloss -le 7 ]] && [[ $DUPS -le 100 ]]
     then
         echo "Fake Trial $discards successful"
@@ -74,11 +74,11 @@ do
     echo "---------------------------Real Test $trials--------------------------------------------------------------------" 
     echo "---------------------------Real Test $trials--------------------------------------------------------------------" >> $outFile
     cd ..
-    sudo python folded_clos.py --dc 3 --leaf 2 2 2 --spine 2 2 2 --pod 3 3 2 --ratio 2 2 1 --fanout 3 3 3 --test true
+    sudo python folded_clos.py --dc 3 --leaf 2 2 2 --spine 2 2 2 --pod 3 3 2 --ratio 2 2 1 --fanout 3 3 3 --test true --run_ping true
     cd test
     packetloss=$(grep -i "packet loss" ping_test_no_load.out | grep -ivwc "0% packet loss")
     DUPS=$(grep -ic "DUP!" ping_test_no_load.out)
-    realsubdir="run${trials}"
+    realsubdir="/run${trials}"
     pingdir=$realdir$realsubdir
     if [[ $packetloss -eq 0 ]] && [[ $DUPS -eq 0 ]]
     then
@@ -108,7 +108,7 @@ do
             echo "Attempt $(( $acceptable+1 )): Retrying Trial $trial to correct for packet error"
             echo "Attempt $(( $acceptable+1 )): Retrying Trial $trial to correct for packet error" >> $outFile
             cd ..
-            sudo python folded_clos.py --dc 3 --leaf 2 2 2 --spine 2 2 2 --pod 3 3 2 --ratio 2 2 1 --fanout 3 3 3 --test true
+            sudo python folded_clos.py --dc 3 --leaf 2 2 2 --spine 2 2 2 --pod 3 3 2 --ratio 2 2 1 --fanout 3 3 3 --test true --run_ping true
             cd test
             packetloss=$(grep -i "packet loss" ping_test_no_load.out | grep -ivwc "0% packet loss")
             if [[ $packetloss -eq 0 ]]
@@ -153,7 +153,7 @@ do
         echo "File: ${file_outliers[count]}."
         echo "File: ${file_outliers[count]}." >> $outFile
         cd ..
-        sudo python folded_clos.py --dc 3 --leaf 2 2 2 --spine 2 2 2 --pod 3 3 2 --ratio 2 2 1 --fanout 3 3 3 --test true
+        sudo python folded_clos.py --dc 3 --leaf 2 2 2 --spine 2 2 2 --pod 3 3 2 --ratio 2 2 1 --fanout 3 3 3 --test true --run_ping true
         cd test
         packetloss=$(grep -i "packet loss" ping_test_no_load.out | grep -ivwc "0% packet loss")
         DUPS=$(grep -ic "DUP!" ping_test_no_load.out)
@@ -178,7 +178,7 @@ do
                 echo "Attempt $(( $acceptable+1 )): Retrying Trial $(( $count+1 )) to correct for packet error"
                 echo "Attempt $(( $acceptable+1 )): Retrying Trial $(( $count+1 )) to correct for packet error" >> $outFile
                 cd ..
-                sudo python folded_clos.py --dc 3 --leaf 2 2 2 --spine 2 2 2 --pod 3 3 2 --ratio 2 2 1 --fanout 3 3 3 --test true
+		sudo python folded_clos.py --dc 3 --leaf 2 2 2 --spine 2 2 2 --pod 3 3 2 --ratio 2 2 1 --fanout 3 3 3 --test true --run_ping true
                 cd test
                 packetloss=$(grep -i "packet loss" ping_test_no_load.out | grep -ivwc "0% packet loss")
                 if [[ $packetloss -eq 0 ]]

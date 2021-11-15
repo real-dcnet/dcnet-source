@@ -1,0 +1,21 @@
+
+--- TCP Test 0: h1 sending to h2 ---
+Connecting to host 10.0.0.2, port 5250
+[  4] local 10.0.0.1 port 39658 connected to 10.0.0.2 port 5250
+[ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+[  4]   0.00-1.00   sec  1.23 MBytes  10.3 Mbits/sec    0    198 KBytes       
+[  4]   1.00-2.00   sec   982 KBytes  8.05 Mbits/sec    6    205 KBytes       
+[  4]   2.00-3.00   sec  1005 KBytes  8.24 Mbits/sec    3    205 KBytes       
+[  4]   3.00-4.00   sec   927 KBytes  7.59 Mbits/sec    1    205 KBytes       
+[  4]   4.00-5.00   sec   956 KBytes  7.83 Mbits/sec    8    205 KBytes       
+[  4]   5.00-6.00   sec  1.04 MBytes  8.75 Mbits/sec    5    205 KBytes       
+[  4]   6.00-7.00   sec   865 KBytes  7.09 Mbits/sec   46    205 KBytes       
+[  4]   7.00-8.00   sec   848 KBytes  6.95 Mbits/sec   15    205 KBytes       
+[  4]   8.00-9.00   sec  99.0 KBytes   810 Kbits/sec    2   1.41 KBytes       
+[  4]   9.00-10.00  sec  0.00 Bytes  0.00 bits/sec    1   1.41 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth       Retr
+[  4]   0.00-10.00  sec  7.82 MBytes  6.56 Mbits/sec   87             sender
+[  4]   0.00-10.00  sec  7.70 MBytes  6.46 Mbits/sec                  receiver
+
+iperf Done.

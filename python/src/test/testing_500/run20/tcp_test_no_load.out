@@ -1,0 +1,33 @@
+
+--- TCP Test 0: h1 sending to h2 ---
+Connecting to host 10.0.0.2, port 5250
+[  4] local 10.0.0.1 port 45282 connected to 10.0.0.2 port 5250
+[ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+[  4]   0.00-1.00   sec  31.4 MBytes   263 Mbits/sec  212    171 KBytes       
+[  4]   1.00-2.00   sec  26.5 MBytes   222 Mbits/sec  104    123 KBytes       
+[  4]   2.00-3.00   sec  24.9 MBytes   209 Mbits/sec   62    177 KBytes       
+[  4]   3.00-4.00   sec  50.7 MBytes   425 Mbits/sec    0    331 KBytes       
+[  4]   4.00-5.00   sec  56.4 MBytes   473 Mbits/sec    0    444 KBytes       
+[  4]   5.00-6.00   sec  56.3 MBytes   472 Mbits/sec    0    533 KBytes       
+[  4]   6.00-7.00   sec  56.8 MBytes   476 Mbits/sec    0    609 KBytes       
+[  4]   7.00-8.00   sec  56.9 MBytes   477 Mbits/sec    0    677 KBytes       
+[  4]   8.00-9.00   sec  17.3 MBytes   145 Mbits/sec    2    933 KBytes       
+[  4]   9.00-10.00  sec  39.8 MBytes   334 Mbits/sec   85    933 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth       Retr
+[  4]   0.00-10.00  sec   417 MBytes   350 Mbits/sec  465             sender
+[  4]   0.00-10.00  sec   416 MBytes   349 Mbits/sec                  receiver
+
+iperf Done.
+
+--- TCP Test 1: h1 sending to h4 ---
+iperf3: error - unable to connect to server: No route to host
+
+--- TCP Test 2: h1 sending to h7 ---
+iperf3: error - unable to connect to server: No route to host
+
+--- TCP Test 3: h1 sending to h19 ---
+iperf3: error - unable to connect to server: No route to host
+
+--- TCP Test 4: h1 sending to h37 ---
+iperf3: error - unable to connect to server: No route to host

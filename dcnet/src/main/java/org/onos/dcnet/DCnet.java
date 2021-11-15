@@ -24,6 +24,7 @@ import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Deactivate;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
+import org.apache.commons.lang3.ArrayUtils;
 import org.onlab.packet.*;
 import org.onlab.util.KryoNamespace;
 import org.onosproject.core.ApplicationId;
@@ -38,6 +39,7 @@ import org.onosproject.net.device.DeviceService;
 import org.onosproject.net.flow.DefaultFlowRule;
 import org.onosproject.net.flow.DefaultTrafficSelector;
 import org.onosproject.net.flow.DefaultTrafficTreatment;
+import org.onosproject.net.flow.FlowEntry;
 import org.onosproject.net.flow.FlowRule;
 import org.onosproject.net.flow.FlowRuleService;
 import org.onosproject.net.flow.TrafficSelector;
@@ -376,6 +378,14 @@ public class DCnet {
                             .createSelectGroupBucket(treatment.build()));
                 }
             }
+	    
+	    /* Setup host database by reading fields in host config JSON */
+	    log.info("aBout TO SET UP HOSTS\n\n\n");
+	    JsonObject hostConfig = Json.parse(new BufferedReader(
+			new FileReader(configLoc + "host_config.json"))
+	    ).asObject();
+	    addHostConfigs(hostConfig.get("hosts").asArray());
+	    log.info ("ADDED HOSTS and DONE\n\n\n");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -417,15 +427,490 @@ public class DCnet {
         }
     }
 
+    /**
+     * Parses the JSONs describing each host
+     * @param configs	Array of JSONs that hold config information
+     */
+    private void addHostConfigs(final JsonArray configs) {
+        
+	// Try deleting all flow rules for the switch first
+	/*Iterable<FlowEntry> flowEntries = flowRuleService.getFlowEntries(DeviceId.deviceId("1a"));
+	for (FlowEntry entry : flowEntries) {
+        	log.info("REMOVED A FLOW!\n"); 
+		flowRuleService.removeFlowRules(entry);	
+	}
+	flowRuleService.removeFlowRulesById(appId);
+	*/
+
+	log.info("ENTERInG ADD HOST CONFIGS\n\n\n\n");
+	/*log.info("hostdb size: " + hostDB.size()); 
+	String id = Integer.toString(currentLeaf) + "a";
+        String id2 = "of:00000000000000" + Integer.toString(currentLeaf) + "a";
+
+                Device device = deviceService.getDevice(DeviceId.deviceId(id2));
+                for (Device d : deviceService.getAvailableDevices()) {
+                        log.info(d.id().toString());
+                        if (d.id().toString() == id2) {
+                                device = d;
+                                log.info("FOUDN YOU\n\n");
+                                break;
+                        }
+                }
+	*/
+
+	int currentLeaf = 0;
+	int currentHost = 0;
+	while (currentLeaf < 16) {
+		// Install flows in each leaf switch
+                currentLeaf++;
+                String hexString = Integer.toHexString(currentLeaf);
+                String id = hexString + "a";
+                String id2 = "";
+		if (currentLeaf >= 16) {
+                	id2 = "of:0000000000000" + hexString + "a";
+                } else {
+                        id2 = "of:00000000000000" + hexString + "a";
+                }
+
+               Device device = deviceService.getDevice(DeviceId.deviceId(id2));
+		final SwitchEntry entry = switchDB.get(id);
+	// Install a flow for each host into the leaf
+	// If the host is connected to the leaf then install directly flows
+	// Otherwise, install flows to groups
+	for (JsonValue obj : configs) {
+		JsonObject config = obj.asObject();
+		String hostId = config.get("idmac").asString() + "/None";
+		HostEntry host = new HostEntry(
+			hostId,
+			strToMac(config.get("rmac").asString()),
+			strToMac(config.get("idmac").asString()));
+		//log.info("UNOFFICIALLY CREATING HOST OF " + hostId + " "
+		//		+ strToMac(config.get("rmac").asString()) + " "
+		//		+ strToMac(config.get("idmac").asString()));
+		//IpAddress addr = new IpAddress(IpAddress.Version.INET, config.get("ip").asString().getBytes());
+		//Integer test = config.get("ip").asString().getBytes();
+		if (hostDB.get(Ip4Address.valueOf(config.get("ip").asString()).toInt()) == null) {
+			// Put host into database if not already there
+			//log.info("Put into databse!");
+			hostDB.put(Ip4Address.valueOf(config.get("ip").asString()).toInt(), host);
+		}
+
+        	int ipDst = Ip4Address.valueOf(config.get("ip").asString()).toInt();
+         	// int ipSrc = Ip4Address.valueOf("10.0.0.2").toInt();
+         	// String test1 = "dc:dc:dc:00:00:02";
+         	String idMac = config.get("idmac").asString();
+		String[] macAddressParts = idMac.split(":");
+
+        	// convert hex string to byte values
+        	Byte[] macAddressBytes = new Byte[6];
+        	for(int i=0; i<6; i++){
+                	Integer hex = Integer.parseInt(macAddressParts[i], 16);
+                	macAddressBytes[i] = hex.byteValue();
+        	}
+
+         	MacAddress idMacDst = new MacAddress(ArrayUtils.toPrimitive(macAddressBytes));
+         	// MacAddress idMacSrc = new MacAddress(ArrayUtils.toPrimitive(macAddressBytes2));
+         	// TODO: Make sure it's actually there!
+		HostEntry hostDst = hostDB.get(ipDst);
+         	// HostEntry hostSrc = hostDB.get(ipSrc);
+
+                // Match based on IP Address
+                TrafficSelector.Builder selectorDst = DefaultTrafficSelector
+                	.builder()
+                	.matchEthType(Ethernet.TYPE_IPV4)
+                	.matchIPDst(IpPrefix.valueOf(ipDst, 32));
+
+		/* Obtain location information from RMAC address if it exists */
+        byte[] bytesDst = hostDst.getRmac();
+        int dcDst = (((int) bytesDst[0]) << 4) + (bytesDst[1] >> 4);
+        int podDst = ((bytesDst[1] & 0xF) << 8) + bytesDst[2];
+        int leafDst = (((int) bytesDst[3]) << 4) + (bytesDst[4] >> 4);
+
+        if (dcDst == entry.getDc() && podDst == entry.getPod() && leafDst == entry.getLeaf()) {
+            /* If recipient is directly connected to leaf, translate ethernet
+            destination back to recipients's and forward to it */
+                log.info("DIRECTLY CONNECTED TO LEAF\n");
+            int port = ((bytesDst[4] & 0xF) << 8) + bytesDst[5] + lfRadixUp.get(entry.getDc()) + 1;
+            MacAddress hostDstMac = new MacAddress(hostDst.getIdmac());
+            TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                    .builder()
+                    .setEthDst(hostDstMac)
+                    .setOutput(PortNumber.portNumber(port));
+            FlowRule flowRule = DefaultFlowRule.builder()
+                    .fromApp(appId)
+                    .makePermanent()
+                    .withSelector(selectorDst.build())
+                    .withTreatment(treatment.build())
+                    .forDevice(device.id())
+                    .withPriority(BASE_PRIO + 1000)
+                    .build();
+            flowRuleService.applyFlowRules(flowRule);
+            installedFlows.add(flowRule);
+
+        } else {
+	       	/* If recipient is connected elsewhere, translate ethernet
+                destination to RMAC and forward to spines */
+                log.info("NOT DIRECTLY CONNECTED. CONNECTED ELSEWHERE\n");
+            GroupDescription groupDescription = null;
+            for (GroupDescription g : groupService.getGroups(device.id())) {
+                groupDescription = g;
+            }
+            GroupKey key = new DefaultGroupKey(appKryo
+                    .serialize(Objects.hash(device)));
+            if (groupDescription == null) {
+                groupDescription = new DefaultGroupDescription(
+                        device.id(),
+                        GroupDescription.Type.SELECT,
+                        new GroupBuckets(leafBuckets.get(entry.getDc())),
+                        key,
+                        groupCount++,
+                        appId);
+                groupService.addGroup(groupDescription);
+            }
+            MacAddress hostDstMac = new MacAddress(hostDst.getRmac());
+            TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                    .builder()
+                    .setEthDst(hostDstMac);
+            if (ecmpEnabled) {
+                treatment.group(new GroupId(groupDescription.givenGroupId()));
+            }
+            else {
+                treatment.setOutput(PortNumber.portNumber((int) (1 + Math.random() * lfRadixUp.get(entry.getDc()))));
+            }
+            FlowRule flowRule = DefaultFlowRule.builder()
+                    .fromApp(appId)
+                    .makePermanent()
+                    .withSelector(selectorDst.build())
+                    .withTreatment(treatment.build())
+                    .forDevice(device.id())
+                    .withPriority(BASE_PRIO + 500)
+                    .build();
+            flowRuleService.applyFlowRules(flowRule);
+		    installedFlows.add(flowRule);
+
+		}
+
+
+		/*currentHost++;
+		// If we've done the 16th leaf then there are no more
+		// TODO: REMOVe THE CURRENT LEAF RESTRICTION
+		if (currentHost % 3 == 0 && currentLeaf < 16) {
+			// Move to the next leaf
+			currentLeaf++;
+			String hexString = Integer.toHexString(currentLeaf);
+			id = hexString + "a";
+			log.info("CREATED STRING OF" + id);
+			if (currentLeaf >= 16) {
+				id2 = "of:0000000000000" + hexString + "a";
+			} else {
+				id2 = "of:00000000000000" + hexString + "a";
+			}
+
+                	device = deviceService.getDevice(DeviceId.deviceId(id2));
+               	 	for (Device d : deviceService.getAvailableDevices()) {
+                        	log.info(d.id().toString());
+                        	if (d.id().toString() == id2) {
+                                	device = d;
+                                	log.info("FOUDN YOU\n\n");
+                                	break;
+                        	}
+                	}
+		}*/
+	 }
+	}
+	 // ok so we just configured these hosts. Now we need to set up flow rules between all of them in their parent switches
+	 // To figure out their parent switch might be tough. We might have to get stuff from the link json?? There's gotta be
+	 // some way to look this up
+	 
+	//final PacketContext context;
+	//final Ethernet eth;	 // 
+	
+	/*String id = "1a";
+	String id2 = "of:000000000000001a";
+	Device device = deviceService.getDevice(DeviceId.deviceId(id2));
+	for (Device d : deviceService.getAvailableDevices()) {
+            log.info(d.id().toString());
+		if (d.id().toString() == id2) {
+		    device = d;
+		    log.info("FOUDN YOU\n\n");
+		    break;
+	    }
+        }
+	//final Device device = deviceService.getDevice(DeviceId.deviceId(id2)); // should get first switch whatever that is
+	//final Device device;	 // this is the switch's device entry?
+	final SwitchEntry entry = switchDB.get(id); // this is the switch that the src is connected to?
+	log.info("TESTSSSSSS: " + device.id() + "\n\n\n"); 
+	int ipDst = Ip4Address.valueOf("10.0.0.1").toInt();
+	 int ipSrc = Ip4Address.valueOf("10.0.0.2").toInt();
+	 String test1 = "dc:dc:dc:00:00:02";
+	 String[] macAddressParts = test1.split(":");
+
+	// convert hex string to byte values
+	Byte[] macAddressBytes = new Byte[6];
+	for(int i=0; i<6; i++){
+    		Integer hex = Integer.parseInt(macAddressParts[i], 16);
+    		macAddressBytes[i] = hex.byteValue();
+	}
+
+	// We have a fanout of 3 so does that mean that we have 3 hosts per switch?
+	 String test2 = "dc:dc:dc:00:00:01";
+	 macAddressParts = test2.split(":");
+	 Byte[] macAddressBytes2 = new Byte[6];
+	 for(int i=0; i<6; i++){
+                Integer hex = Integer.parseInt(macAddressParts[i], 16);
+                macAddressBytes2[i] = hex.byteValue();
+        }
+	 MacAddress idMacDst = new MacAddress(ArrayUtils.toPrimitive(macAddressBytes));
+	 MacAddress idMacSrc = new MacAddress(ArrayUtils.toPrimitive(macAddressBytes2));
+	 HostEntry hostDst = hostDB.get(ipDst);
+	 HostEntry hostSrc = hostDB.get(ipSrc);
+
+		// Match based on IP Address
+		TrafficSelector.Builder selectorDst = DefaultTrafficSelector
+                .builder()
+                .matchEthType(Ethernet.TYPE_IPV4)
+                .matchIPDst(IpPrefix.valueOf(ipDst, 32));
+        TrafficSelector.Builder selectorSrc = DefaultTrafficSelector
+                .builder()
+                .matchEthType(Ethernet.TYPE_IPV4)
+                .matchIPDst(IpPrefix.valueOf(ipSrc, 32));
+	/* Match based on MAC address... this should be changed to use RMAC? 
+	TrafficSelector.Builder selectorDst = DefaultTrafficSelector
+                .builder()
+		.matchEthDst(idMacDst)
+                .matchEthType(Ethernet.TYPE_IPV4);
+        TrafficSelector.Builder selectorSrc = DefaultTrafficSelector
+                .builder()
+                .matchEthType(Ethernet.TYPE_IPV4)
+                .matchEthDst(idMacSrc);
+	*/
+		
+
+        /* Obtain location information from RMAC address if it exists */
+        /*----------------byte[] bytesDst = hostDst.getRmac();
+        int dcDst = (((int) bytesDst[0]) << 4) + (bytesDst[1] >> 4);
+        int podDst = ((bytesDst[1] & 0xF) << 8) + bytesDst[2];
+        int leafDst = (((int) bytesDst[3]) << 4) + (bytesDst[4] >> 4);
+
+        if (dcDst == entry.getDc() && podDst == entry.getPod() && leafDst == entry.getLeaf()) {
+            /* If recipient is directly connected to leaf, translate ethernet
+            destination back to recipients's and forward to it */
+		/*-------log.info("DIRECTLY CONNECTED TO LEAF\n");
+            int port = ((bytesDst[4] & 0xF) << 8) + bytesDst[5] + lfRadixUp.get(entry.getDc()) + 1;
+            MacAddress hostDstMac = new MacAddress(hostDst.getIdmac());
+            TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                    .builder()
+                    .setEthDst(hostDstMac)
+                    .setOutput(PortNumber.portNumber(port));
+            FlowRule flowRule = DefaultFlowRule.builder()
+                    .fromApp(appId)
+                    .makePermanent()
+                    .withSelector(selectorDst.build())
+                    .withTreatment(treatment.build())
+                    .forDevice(device.id())
+                    .withPriority(BASE_PRIO + 1000)
+                    .build();
+            flowRuleService.applyFlowRules(flowRule);
+            installedFlows.add(flowRule);
+
+        } else {
+            /* If recipient is connected elsewhere, translate ethernet
+                destination to RMAC and forward to spines */
+		/*------------log.info("NOT DIRECTLY CONNECTED. CONNECTED ELSEWHERE\n");
+            GroupDescription groupDescription = null;
+            for (GroupDescription g : groupService.getGroups(device.id())) {
+                groupDescription = g;
+            }
+            GroupKey key = new DefaultGroupKey(appKryo
+                    .serialize(Objects.hash(device)));
+            if (groupDescription == null) {
+                groupDescription = new DefaultGroupDescription(
+                        device.id(),
+                        GroupDescription.Type.SELECT,
+                        new GroupBuckets(leafBuckets.get(entry.getDc())),
+                        key,
+                        groupCount++,
+                        appId);
+                groupService.addGroup(groupDescription);
+            }
+            MacAddress hostDstMac = new MacAddress(hostDst.getRmac());
+            TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                    .builder()
+                    .setEthDst(hostDstMac);
+            if (ecmpEnabled) {
+                treatment.group(new GroupId(groupDescription.givenGroupId()));
+            }
+            else {
+                treatment.setOutput(PortNumber.portNumber((int) (1 + Math.random() * lfRadixUp.get(entry.getDc()))));
+            }
+            FlowRule flowRule = DefaultFlowRule.builder()
+                    .fromApp(appId)
+                    .makePermanent()
+                    .withSelector(selectorDst.build())
+                    .withTreatment(treatment.build())
+                    .forDevice(device.id())
+                    .withPriority(BASE_PRIO + 500)
+                    .build();
+            flowRuleService.applyFlowRules(flowRule);
+            installedFlows.add(flowRule);
+
+	}
+
+        /* Handle translation for reverse traffic, towards source host*/
+        /* Obtain location information from RMAC address if it exists */
+        /* -------
+	byte[] bytesSrc = hostSrc.getRmac();
+        int dcSrc = (((int) bytesSrc[0]) << 4) + (bytesSrc[1] >> 4);
+        int podSrc = ((bytesSrc[1] & 0xF) << 8) + bytesSrc[2];
+        int leafSrc = (((int) bytesSrc[3]) << 4) + (bytesSrc[4] >> 4);
+
+        if (dcSrc == entry.getDc()
+                && podSrc == entry.getPod() && leafSrc == entry.getLeaf()) {
+            /* If sender is directly connected to leaf, translate ethernet
+            destination back to recipients's and forward to it */
+            /* ------
+		int port = ((bytesSrc[4] & 0xF) << 8) + bytesSrc[5] + lfRadixUp.get(entry.getDc()) + 1;
+            MacAddress hostSrcMac = new MacAddress(hostSrc.getIdmac());
+            TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                    .builder()
+                    .setEthDst(hostSrcMac)
+                    .setOutput(PortNumber.portNumber(port));
+            FlowRule flowRule = DefaultFlowRule.builder()
+                    .fromApp(appId)
+                    .makePermanent()
+                    .withSelector(selectorSrc.build())
+                    .withTreatment(treatment.build())
+                    .forDevice(device.id())
+                    .withPriority(BASE_PRIO + 1000)
+                    .build();
+            flowRuleService.applyFlowRules(flowRule);
+            installedFlows.add(flowRule);
+        } else {
+            /* If sender is connected to another leaf, translate ethernet
+                destination to RMAC and forward to spines */
+           /*-----------
+       		GroupDescription groupDescription = null;
+            for (GroupDescription g : groupService.getGroups(device.id())) {
+                groupDescription = g;
+            }
+            GroupKey key = new DefaultGroupKey(appKryo
+                    .serialize(Objects.hash(device)));
+            if (groupDescription == null) {
+                groupDescription = new DefaultGroupDescription(
+                        device.id(),
+                        GroupDescription.Type.SELECT,
+                        new GroupBuckets(leafBuckets.get(entry.getDc())),
+                        key,
+                        groupCount++,
+                        appId);
+                groupService.addGroup(groupDescription);
+            }
+            MacAddress hostSrcMac = new MacAddress(hostSrc.getRmac());
+            TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                    .builder()
+                    .setEthDst(hostSrcMac);
+            if (ecmpEnabled) {
+                treatment.group(new GroupId(groupDescription.givenGroupId()));
+            }
+            else {
+                treatment.setOutput(PortNumber.portNumber((int) (1 + Math.random() * lfRadixUp.get(entry.getDc()))));
+            }
+            FlowRule flowRule = DefaultFlowRule.builder()
+                    .fromApp(appId)
+                    .makePermanent()
+                    .withSelector(selectorSrc.build())
+                    .withTreatment(treatment.build())
+                    .forDevice(device.id())
+                    .withPriority(BASE_PRIO + 500)
+                    .build();
+            flowRuleService.applyFlowRules(flowRule);
+            installedFlows.add(flowRule);
+        }
+       	/*flowEntries = flowRuleService.getFlowEntries(DeviceId.deviceId(id2));
+       	for (FlowEntry entry2 : flowEntries) {
+                log.info("REMOVED A FLOW!\n");
+                flowRuleService.removeFlowRules(entry2);
+        }*/
+	
+
+	// ADD FLOWS LEAF
+	// This is the IN_PORT to output. Instead of controller, I want to test making it the other host
+	//String id = device.chassisId().toString();
+        //SwitchEntry entry = switchDB.get(id);
+        
+	/*
+	int dc = entry.getDc();
+
+	// Add flows for packet into port
+        for (int h = 1; h <= lfRadixDown.get(dc) + lfRadixUp.get(dc); h++) {
+            TrafficSelector.Builder selector = DefaultTrafficSelector
+                    .builder()
+                    .matchInPort(PortNumber.portNumber(h))
+                    .matchEthType(Ethernet.TYPE_IPV4);
+	    TrafficTreatment.Builder treatment;
+	    if (h == 3) {
+	    	treatment = DefaultTrafficTreatment
+                    .builder()
+                    .setOutput(PortNumber.portNumber(4));
+	    }
+	    else if (h == 4) {
+		    treatment = DefaultTrafficTreatment
+                    .builder()
+                    .setOutput(PortNumber.portNumber(3));
+	    }
+	    else {
+		 treatment = DefaultTrafficTreatment
+                    .builder()
+                    .punt();
+	    }
+            //TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                    //.builder()
+         	    //.setOutput(4);
+            FlowRule flowRule = DefaultFlowRule.builder()
+                    .fromApp(appId)
+                    .makePermanent()
+                    .withSelector(selector.build())
+                    .withTreatment(treatment.build())
+                    .forDevice(device.id())
+                    .withPriority(BASE_PRIO + 100)
+                    .build();
+            flowRuleService.applyFlowRules(flowRule);
+            installedFlows.add(flowRule);
+        }*/
+        /*TrafficSelector.Builder selector = DefaultTrafficSelector
+                .builder()
+                .matchEthType(Ethernet.TYPE_IPV4)
+                .matchIPProtocol(IPv4.PROTOCOL_UDP)
+                .matchIPDst(IpPrefix.valueOf("10.0.1.8/32"));
+        TrafficTreatment.Builder treatment = DefaultTrafficTreatment
+                .builder()
+                .punt();
+        FlowRule flowRule = DefaultFlowRule.builder()
+                .fromApp(appId)
+                .makePermanent()
+                .withSelector(selector.build())
+                .withTreatment(treatment.build())
+                .forDevice(device.id())
+                .withPriority(BASE_PRIO + 2000)
+                .build();
+        flowRuleService.applyFlowRules(flowRule);
+        installedFlows.add(flowRule);*/
+  	
+    }
+
     /** Allows application to be started by ONOS controller. */
     @Activate
     public void activate() {
-        init();
         appId = coreService.registerApplication("org.onosproject.dcnet");
-        for (Device d : deviceService.getAvailableDevices()) {
-            setupFlows(d);
+        init();
+	for (Device d : deviceService.getAvailableDevices()) {
+		// TODO: REMOVE INFO
+		log.info("SETTING UP FLOW");
+		setupFlows(d);
         }
         for (Host h : hostService.getHosts()) {
+		// TODO: REMOVE THIS HOST
+		log.info("CONFIGURING A HOST!\n\n");
             configureHost(h);
         }
         packetService.addProcessor(packetProcessor, BASE_PRIO);
@@ -436,7 +921,11 @@ public class DCnet {
                 Optional.empty());
         deviceService.addListener(deviceListener);
         hostService.addListener(hostListener);
-        log.info("Started");
+	for (Host h : hostService.getHosts()) {
+		log.info("CONFIG A HOST!\n\n");
+	}
+	// TODO: GET RID OF NEW LINES
+	log.info("Started\n\n\n");
     }
 
     /** Allows application to be stopped by ONOS controller. */
@@ -450,7 +939,19 @@ public class DCnet {
         for (DeviceId d : addedDevices) {
             groupService.purgeGroupEntries(d);
         }
-        log.info("Stopped");
+
+	// TODO: Remove
+	// Want to remove all flows in the switch except the two flows that connect the hosts....
+	try {
+		Iterable<FlowEntry> flowEntries = flowRuleService.getFlowEntries(DeviceId.deviceId("of:000000000000001a"));
+        	for (FlowEntry entry : flowEntries) {
+                	log.info("REMOVED A FLOW!\n");
+                	flowRuleService.removeFlowRules(entry);
+        	}
+        	flowRuleService.removeFlowRulesById(appId);
+	} catch (Exception e) {
+	}
+	log.info("Stopped");
     }
 
     /**
@@ -810,11 +1311,13 @@ public class DCnet {
         @Override
         public void process(final PacketContext context) {
             Ethernet eth = context.inPacket().parsed();
-            if (eth.getEtherType() == Ethernet.TYPE_IPV4) {
-                IPv4 ipv4 = (IPv4) (eth.getPayload());
+	    // TODO: REMOVE PRINTS THROUGHOUT
+	    if (eth.getEtherType() == Ethernet.TYPE_IPV4) {
+               	IPv4 ipv4 = (IPv4) (eth.getPayload());
                 int ip = ipv4.getDestinationAddress();
                 if (ip == Ip4Address.valueOf("10.0.1.8").toInt()) {
-                    String message = new String(eth.getPayload().getPayload().getPayload().serialize());
+		    log.info("IP IS WHAT WE'RE LOOKING FOR");
+		    String message = new String(eth.getPayload().getPayload().getPayload().serialize());
                     String[] addrs = message.split(":");
                     Ip4Address dstIP = IpPrefix.valueOf(addrs[0]).address().getIp4Address();
                     Ip4Address vmIP = IpPrefix.valueOf(addrs[1]).address().getIp4Address();
@@ -827,6 +1330,7 @@ public class DCnet {
                     context.block();
                 }
                 else {
+		    log.info("IP IS NOT WHAT WE'RE LOOKING FOR");
                     Device device = deviceService.getDevice(context.inPacket()
                             .receivedFrom().deviceId());
                     String id = device.chassisId().toString();
@@ -843,7 +1347,22 @@ public class DCnet {
                         }
                     }
                 }
-            }
+            } else {
+		/*if (eth.getEtherType() == Ethernet.TYPE_LLDP) {
+			log.info("LLDP!");
+			LLDP lldp = (LLDP) (eth.getPayload());
+			log.info(lldp.toString());
+		}
+		if (eth.getEtherType() == Ethernet.TYPE_ARP) {
+			log.info("ARP!");
+		}
+		if (eth.getEtherType() == Ethernet.TYPE_IPV6) {
+			log.info("IPV6");
+		}
+	       	else {
+	    		log.info("NOT LLDP OR ARP ");
+	    	}*/
+	    }
         }
     }
 
@@ -1173,8 +1692,9 @@ public class DCnet {
         String id = device.chassisId().toString();
         SwitchEntry entry = switchDB.get(id);
         int dc = entry.getDc();
-
-        for (int h = 1; h <= lfRadixDown.get(dc) + lfRadixUp.get(dc); h++) {
+	
+	// TODO: UNCOMMENT THIS SO THAT YOU CAN ACTUALLY HAVE IN PORT FLOWS AGAIN
+        /*for (int h = 1; h <= lfRadixDown.get(dc) + lfRadixUp.get(dc); h++) {
             TrafficSelector.Builder selector = DefaultTrafficSelector
                     .builder()
                     .matchInPort(PortNumber.portNumber(h))
@@ -1192,7 +1712,7 @@ public class DCnet {
                     .build();
             flowRuleService.applyFlowRules(flowRule);
             installedFlows.add(flowRule);
-        }
+        }*/
         TrafficSelector.Builder selector = DefaultTrafficSelector
                 .builder()
                 .matchEthType(Ethernet.TYPE_IPV4)
@@ -1223,8 +1743,10 @@ public class DCnet {
      */
     private void configureHost(final Host host) {
         HostLocation location = host.location();
-        Device device = deviceService.getDevice(location.deviceId());
+        log.info("\n\nHost location: " + host.location()); 
+	Device device = deviceService.getDevice(location.deviceId());
         SwitchEntry leaf = switchDB.get(device.chassisId().toString());
+	log.info("\n\nDevice ChassisID: " + device.chassisId().toString());
         int port = (int)(location.port().toLong() - lfRadixUp.get(leaf.getDc()) - 1);
         byte[] rmac = new byte[6];
         rmac[0] = (byte) ((leaf.getDc() >> 4) & 0x3F);
@@ -1234,6 +1756,8 @@ public class DCnet {
         rmac[4] = (byte) (((leaf.getLeaf() & 0xF) << 4) + ((port >> 8) & 0xF));
         rmac[5] = (byte) (port & 0xFF);
         HostEntry hostEntry = new HostEntry(host.id().toString(), rmac, host.mac().toBytes());
+	log.info("CREATING OFFICIAL HOST ENTRY WITH PARAMS: " + host.id().toString() + " " + ((rmac)) + " "
+			+ ((host.mac().toBytes())));
         for (IpAddress ip : host.ipAddresses()) {
             log.info("Host with MAC address " + host.mac().toString()
                     + " and ip address " + ip.getIp4Address().toString()
@@ -1299,6 +1823,8 @@ public class DCnet {
                 case HOST_MOVED:
                     removeHostFlows(hostEvent.subject());
                 case HOST_ADDED:
+		    // TODO: Remove
+		    log.info("IT TRIED TO ADD A HOST\n\n\n\n");
                     configureHost(hostEvent.subject());
                     break;
                 case HOST_REMOVED:

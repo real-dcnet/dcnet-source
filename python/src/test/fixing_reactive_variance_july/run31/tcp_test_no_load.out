@@ -1,0 +1,105 @@
+
+--- TCP Test 0: h1 sending to h2 ---
+Connecting to host 10.0.0.2, port 5250
+[  4] local 10.0.0.1 port 55730 connected to 10.0.0.2 port 5250
+[ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+[  4]   0.00-1.00   sec  1.45 MBytes  12.2 Mbits/sec    0    208 KBytes       
+[  4]   1.00-2.00   sec  1.13 MBytes  9.45 Mbits/sec    0    208 KBytes       
+[  4]   2.00-3.00   sec  1.13 MBytes  9.45 Mbits/sec    0    208 KBytes       
+[  4]   3.00-4.00   sec  1.19 MBytes  9.95 Mbits/sec    0    208 KBytes       
+[  4]   4.00-5.00   sec  1.08 MBytes  9.09 Mbits/sec    0    208 KBytes       
+[  4]   5.00-6.00   sec  1.19 MBytes  9.95 Mbits/sec    0    208 KBytes       
+[  4]   6.00-7.00   sec  1.09 MBytes  9.18 Mbits/sec    0    208 KBytes       
+[  4]   7.00-8.00   sec  1.12 MBytes  9.43 Mbits/sec    0    208 KBytes       
+[  4]   8.00-9.00   sec  1.19 MBytes  9.94 Mbits/sec    0    208 KBytes       
+[  4]   9.00-10.00  sec  1.08 MBytes  9.09 Mbits/sec    0    208 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth       Retr
+[  4]   0.00-10.00  sec  11.6 MBytes  9.77 Mbits/sec    0             sender
+[  4]   0.00-10.00  sec  11.5 MBytes  9.66 Mbits/sec                  receiver
+
+iperf Done.
+
+--- TCP Test 1: h1 sending to h4 ---
+Connecting to host 10.0.0.4, port 5250
+[  4] local 10.0.0.1 port 50920 connected to 10.0.0.4 port 5250
+[ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+[  4]   0.00-1.00   sec  1.16 MBytes  9.69 Mbits/sec    0    127 KBytes       
+[  4]   1.00-2.00   sec   844 KBytes  6.92 Mbits/sec    2    156 KBytes       
+[  4]   2.00-3.00   sec   751 KBytes  6.15 Mbits/sec    0    160 KBytes       
+[  4]   3.00-4.00   sec   786 KBytes  6.44 Mbits/sec    0    164 KBytes       
+[  4]   4.00-5.00   sec   802 KBytes  6.57 Mbits/sec    0    173 KBytes       
+[  4]   5.00-6.00   sec   725 KBytes  5.94 Mbits/sec    0    194 KBytes       
+[  4]   6.00-7.00   sec   790 KBytes  6.47 Mbits/sec    0    221 KBytes       
+[  4]   7.00-8.00   sec   783 KBytes  6.42 Mbits/sec    0    221 KBytes       
+[  4]   8.00-9.00   sec   788 KBytes  6.46 Mbits/sec    0    221 KBytes       
+[  4]   9.00-10.00  sec   785 KBytes  6.43 Mbits/sec    0    221 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth       Retr
+[  4]   0.00-10.00  sec  8.05 MBytes  6.75 Mbits/sec    2             sender
+[  4]   0.00-10.00  sec  7.92 MBytes  6.64 Mbits/sec                  receiver
+
+iperf Done.
+
+--- TCP Test 2: h1 sending to h7 ---
+Connecting to host 10.0.0.7, port 5250
+[  4] local 10.0.0.1 port 59882 connected to 10.0.0.7 port 5250
+[ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+[  4]   0.00-1.00   sec   802 KBytes  6.57 Mbits/sec    0   70.7 KBytes       
+[  4]   1.00-2.00   sec   318 KBytes  2.61 Mbits/sec    0   87.7 KBytes       
+[  4]   2.00-3.00   sec   318 KBytes  2.61 Mbits/sec    0    105 KBytes       
+[  4]   3.00-4.00   sec   318 KBytes  2.61 Mbits/sec    0    120 KBytes       
+[  4]   4.00-5.00   sec   318 KBytes  2.61 Mbits/sec    0    137 KBytes       
+[  4]   5.00-6.00   sec   352 KBytes  2.89 Mbits/sec    0    156 KBytes       
+[  4]   6.00-7.00   sec   319 KBytes  2.61 Mbits/sec    0    209 KBytes       
+[  4]   7.00-8.00   sec   397 KBytes  3.25 Mbits/sec    0    209 KBytes       
+[  4]   8.00-9.00   sec   401 KBytes  3.29 Mbits/sec    0    209 KBytes       
+[  4]   9.00-10.00  sec   399 KBytes  3.27 Mbits/sec    0    209 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth       Retr
+[  4]   0.00-10.00  sec  3.85 MBytes  3.23 Mbits/sec    0             sender
+[  4]   0.00-10.00  sec  3.73 MBytes  3.13 Mbits/sec                  receiver
+
+iperf Done.
+
+--- TCP Test 3: h1 sending to h19 ---
+Connecting to host 10.0.0.19, port 5250
+[  4] local 10.0.0.1 port 56928 connected to 10.0.0.19 port 5250
+[ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+[  4]   0.00-1.00   sec   738 KBytes  6.05 Mbits/sec    0   67.9 KBytes       
+[  4]   1.00-2.00   sec   318 KBytes  2.61 Mbits/sec    0   83.4 KBytes       
+[  4]   2.00-3.00   sec   318 KBytes  2.61 Mbits/sec    0    102 KBytes       
+[  4]   3.00-4.00   sec   382 KBytes  3.13 Mbits/sec    0    122 KBytes       
+[  4]   4.00-5.00   sec   445 KBytes  3.65 Mbits/sec    0    144 KBytes       
+[  4]   5.00-6.00   sec   472 KBytes  3.87 Mbits/sec    0    168 KBytes       
+[  4]   6.00-7.00   sec   546 KBytes  4.48 Mbits/sec    0    205 KBytes       
+[  4]   7.00-8.00   sec   572 KBytes  4.69 Mbits/sec    0    205 KBytes       
+[  4]   8.00-9.00   sec   575 KBytes  4.71 Mbits/sec    0    205 KBytes       
+[  4]   9.00-10.00  sec   575 KBytes  4.71 Mbits/sec    0    205 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth       Retr
+[  4]   0.00-10.00  sec  4.83 MBytes  4.05 Mbits/sec    0             sender
+[  4]   0.00-10.00  sec  4.71 MBytes  3.95 Mbits/sec                  receiver
+
+iperf Done.
+
+--- TCP Test 4: h1 sending to h37 ---
+Connecting to host 10.0.0.37, port 5250
+[  4] local 10.0.0.1 port 35820 connected to 10.0.0.37 port 5250
+[ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+[  4]   0.00-1.00   sec   387 KBytes  3.17 Mbits/sec    0   14.1 KBytes       
+[  4]   1.00-2.00   sec  32.5 KBytes   266 Kbits/sec    0   53.7 KBytes       
+[  4]   2.00-3.00   sec  63.6 KBytes   521 Kbits/sec    0   56.6 KBytes       
+[  4]   3.00-4.00   sec   127 KBytes  1.04 Mbits/sec    0   62.2 KBytes       
+[  4]   4.00-5.00   sec  63.6 KBytes   521 Kbits/sec    0   73.5 KBytes       
+[  4]   5.00-6.00   sec   127 KBytes  1.04 Mbits/sec    0   91.9 KBytes       
+[  4]   6.00-7.00   sec   191 KBytes  1.57 Mbits/sec    0    137 KBytes       
+[  4]   7.00-8.00   sec   130 KBytes  1.06 Mbits/sec    0    173 KBytes       
+[  4]   8.00-9.00   sec   354 KBytes  2.90 Mbits/sec    0    201 KBytes       
+[  4]   9.00-10.00  sec   227 KBytes  1.86 Mbits/sec    0    243 KBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth       Retr
+[  4]   0.00-10.00  sec  1.66 MBytes  1.40 Mbits/sec    0             sender
+[  4]   0.00-10.00  sec  1.54 MBytes  1.29 Mbits/sec                  receiver
+
+iperf Done.

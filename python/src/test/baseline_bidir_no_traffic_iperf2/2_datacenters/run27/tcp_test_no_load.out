@@ -1,0 +1,16 @@
+
+--- TCP Test 0: h1 sending to h2 ---
+WARNING: option -d is not valid for server mode
+error: Address family for hostname not supported
+
+--- TCP Test 1: h1 sending to h4 ---
+WARNING: option -d is not valid for server mode
+error: Address family for hostname not supported
+
+--- TCP Test 2: h1 sending to h7 ---
+WARNING: option -d is not valid for server mode
+error: Address family for hostname not supported
+
+--- TCP Test 3: h1 sending to h19 ---
+WARNING: option -d is not valid for server mode
+error: Address family for hostname not supported
